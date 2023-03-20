@@ -8,4 +8,8 @@
 
     <string name="btn_login">Login</string>
     <string name="btn_create_account">Create an account</string>
+    <string name="btn_forgot_password">Forgot your password?</string>
+
+    <string name="hint_email">Enter email</string>
+    <string name="hint_password">Enter password</string>
 </resources>

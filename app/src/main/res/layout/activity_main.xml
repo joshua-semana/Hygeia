@@ -13,7 +13,7 @@
         android:layout_marginTop="232dp"
         android:contentDescription="@string/logo_desc"
         android:translationY="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtBrandName"
+        app:layout_constraintBottom_toTopOf="@+id/lblBrandName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -22,7 +22,7 @@
         app:srcCompat="@drawable/logo_hygeia" />
 
     <TextView
-        android:id="@+id/txtBrandName"
+        android:id="@+id/lblBrandName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/spoof_bold"
@@ -37,7 +37,7 @@
         app:layout_constraintVertical_bias="0.409" />
 
     <TextView
-        android:id="@+id/txtBrandCatchphrase"
+        android:id="@+id/lblBrandCatchphrase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -47,39 +47,39 @@
         android:textSize="@dimen/body"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBrandName" />
+        app:layout_constraintTop_toBottomOf="@+id/lblBrandName" />
 
     <Button
-        android:id="@+id/btnLogin"
+        android:id="@+id/btnGoToLogin"
         style="@style/PrimaryButton"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
+        android:layout_width="@dimen/control_width"
+        android:layout_height="@dimen/control_height"
         android:text="@string/btn_login"
         android:textStyle="bold"
         app:cornerRadius="@dimen/corner_radius"
-        app:layout_constraintBottom_toTopOf="@+id/btnCreateAccount"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btnCreateAccount"
+        android:id="@+id/btnGoToCreateAccount"
         style="@style/SecondaryButton"
-        android:layout_width="@dimen/button_width"
-        android:layout_height="@dimen/button_height"
+        android:layout_width="@dimen/control_width"
+        android:layout_height="@dimen/control_height"
         android:layout_marginBottom="16dp"
         android:text="@string/btn_create_account"
         android:textColor="@color/neutral_700"
         android:textStyle="bold"
         app:cornerRadius="@dimen/corner_radius"
-        app:layout_constraintBottom_toTopOf="@+id/txtAppVersion"
+        app:layout_constraintBottom_toTopOf="@+id/lblAppVersion"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txtAppVersion"
+        android:id="@+id/lblAppVersion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/app_version"
         android:textAlignment="center"
         android:textColor="@color/neutral_500"

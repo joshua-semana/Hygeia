@@ -7,8 +7,12 @@
     <dimen name="letter_spacing">0.6</dimen>
 
     <!--BUTTONS-->
-    <dimen name="button_width">320dp</dimen>
-    <dimen name="button_height">60dp</dimen>
+    <dimen name="control_width">320dp</dimen>
+    <dimen name="control_height">60dp</dimen>
+
+    <!--INPUT TEXT-->
+    <dimen name="padding_start">20sp</dimen>
+    <dimen name="padding_end">20sp</dimen>
 
     <dimen name="corner_radius">8dp</dimen>
     <dimen name="padding_left">16dp</dimen>
