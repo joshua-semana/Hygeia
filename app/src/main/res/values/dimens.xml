@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--TEXTS-->
+    <dimen name="heading">36sp</dimen>
+    <dimen name="body">18sp</dimen>
+    <dimen name="small">14sp</dimen>
+    <dimen name="letter_spacing">0.6</dimen>
+
+    <!--BUTTONS-->
+    <dimen name="button_width">320dp</dimen>
+    <dimen name="button_height">60dp</dimen>
+
+    <dimen name="corner_radius">8dp</dimen>
+    <dimen name="padding_left">16dp</dimen>
+    <dimen name="padding_right">16dp</dimen>
+</resources>
