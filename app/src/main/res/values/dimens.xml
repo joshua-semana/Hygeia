@@ -2,12 +2,14 @@
 <resources>
     <!--GLOBAL-->
     <dimen name="corner_radius">8dp</dimen>
+    <dimen name="heading_margin_top">72dp</dimen>
 
     <!--TEXTS-->
     <dimen name="heading">36sp</dimen>
     <dimen name="body">18sp</dimen>
     <dimen name="small">14sp</dimen>
     <dimen name="letter_spacing">0.6</dimen>
+    <dimen name="line_spacing">-8dp</dimen>
 
     <!--BUTTONS-->
     <dimen name="control_width">320dp</dimen>
@@ -15,9 +17,17 @@
     <dimen name="inset_top">3dp</dimen>
     <dimen name="inset_bot">3dp</dimen>
     <dimen name="gap">2dp</dimen>
+    <dimen name="margin_x">30dp</dimen>
 
     <!--INPUT TEXT-->
     <dimen name="padding_start">20sp</dimen>
     <dimen name="padding_end">20sp</dimen>
     <dimen name="padding_end_with_icon">55sp</dimen>
+
+    <!--ICONS-->
+    <dimen name="size_icon">32sp</dimen>
+    <dimen name="icon_margin_top">20dp</dimen>
+    <dimen name="icon_margin_start">26dp</dimen>
+    <dimen name="icon_margin_end">14dp</dimen>
+    <dimen name="icon_padding_x">0dp</dimen>
 </resources>

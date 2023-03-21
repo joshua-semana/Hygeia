@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAccountActivity">
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading1"
+        style="@style/TextHeadingRegular"
+        android:text="@string/heading_create_account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading2"
+        style="@style/TextHeadingColored"
+        android:text="@string/account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1" />
+
+    <EditText
+        android:id="@+id/txtNewName"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="16dp"
+        android:autofillHints=""
+        android:background="@drawable/cstm_background_text_field"
+        android:hint="@string/hint_full_name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading2"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/txtNewEmail"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/cstm_background_text_field"
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewName"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/txtNewPhoneNumber"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="8dp"
+        android:autofillHints=""
+        android:background="@drawable/cstm_background_text_field"
+        android:hint="@string/hint_phone_number"
+        android:inputType="phone"
+        android:maxLength="11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNewEmail"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <RelativeLayout
+        android:id="@+id/grpTxtPassword"
+        style="@style/TextFieldWithIconWrapper"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewPhoneNumber">
+
+        <EditText
+            android:id="@+id/txtNewPassword"
+            style="@style/PrimaryTextFieldWithIcon"
+            android:autofillHints=""
+            android:background="@drawable/cstm_background_text_field"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintTextFieldSize" />
+
+        <ToggleButton
+            android:id="@+id/tglShowPassword"
+            style="@style/TextFieldIcon"
+            android:background="@drawable/ic_visibility"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnContinueCreateAccount"
+        style="@style/PrimaryButtonLarge"
+        android:layout_marginBottom="32dp"
+        android:text="@string/btn_continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+    <Button
+        android:id="@+id/btnBackCreateAccount"
+        style="@style/IconButtonBack"
+        android:drawableLeft="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblPgNumCreateAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/pg_num_1"
+        android:textColor="@color/neutral_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

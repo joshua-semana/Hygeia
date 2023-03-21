@@ -20,9 +20,7 @@
 
     <Button
         android:id="@+id/btnGoToCreateAccount"
-        style="@style/SecondaryButton"
-        android:layout_width="@dimen/control_width"
-        android:layout_height="@dimen/control_height"
+        style="@style/SecondaryButtonLarge"
         android:layout_marginBottom="16dp"
         android:text="@string/btn_create_account"
         android:textStyle="bold"
@@ -47,12 +45,9 @@
 
     <Button
         android:id="@+id/btnLogin"
-        style="@style/PrimaryButton"
-        android:layout_width="@dimen/control_width"
-        android:layout_height="@dimen/control_height"
+        style="@style/PrimaryButtonLarge"
         android:layout_marginBottom="@dimen/gap"
         android:text="@string/btn_login"
-        android:textStyle="bold"
         app:cornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccount"
         app:layout_constraintEnd_toEndOf="parent"
@@ -87,51 +82,39 @@
         app:srcCompat="@drawable/logo_hygeia" />
 
     <EditText
-        android:id="@+id/txtEmail"
-        android:layout_width="@dimen/control_width"
-        android:layout_height="@dimen/control_height"
-        android:layout_marginTop="32dp"
+        android:id="@+id/txtNewName"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="16dp"
         android:autofillHints=""
-        android:background="@drawable/rounded_edittext"
+        android:background="@drawable/cstm_background_text_field"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
-        android:paddingStart="@dimen/padding_start"
-        android:paddingEnd="@dimen/padding_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase" />
 
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
-        android:layout_width="@dimen/control_width"
-        android:layout_height="wrap_content"
+        style="@style/TextFieldWithIconWrapper"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+        app:layout_constraintTop_toBottomOf="@+id/txtNewName">
 
         <EditText
             android:id="@+id/txtPassword"
-            android:layout_width="@dimen/control_width"
-            android:layout_height="@dimen/control_height"
+            style="@style/PrimaryTextFieldWithIcon"
             android:autofillHints=""
-            android:background="@drawable/rounded_edittext"
+            android:background="@drawable/cstm_background_text_field"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
-            android:paddingStart="@dimen/padding_start"
-            android:paddingEnd="@dimen/padding_end_with_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
         <ToggleButton
             android:id="@+id/tglShowPassword"
-            android:layout_width="32sp"
-            android:layout_height="32sp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="14dp"
+            style="@style/TextFieldIcon"
             android:background="@drawable/ic_visibility"
-            android:textColor="@android:color/transparent"
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
     </RelativeLayout>
 
