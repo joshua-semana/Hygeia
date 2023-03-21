@@ -6,21 +6,60 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <TextView
+        android:id="@+id/lblBrandCatchphrase"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/app_catchphrase"
+        android:textAlignment="center"
+        android:textColor="@color/neutral_500"
+        android:textSize="@dimen/body"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtBrandName" />
+
+    <Button
+        android:id="@+id/btnGoToCreateAccount"
+        style="@style/SecondaryButton"
+        android:layout_width="@dimen/control_width"
+        android:layout_height="@dimen/control_height"
+        android:layout_marginBottom="16dp"
+        android:text="@string/btn_create_account"
+        android:textStyle="bold"
+        app:cornerRadius="@dimen/corner_radius"
+        app:layout_constraintBottom_toTopOf="@+id/lblAppVersion"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/lblAppVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:text="@string/app_version"
+        android:textAlignment="center"
+        android:textColor="@color/neutral_500"
+        android:textSize="@dimen/small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <Button
         android:id="@+id/btnLogin"
         style="@style/PrimaryButton"
         android:layout_width="@dimen/control_width"
         android:layout_height="@dimen/control_height"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="@dimen/gap"
         android:text="@string/btn_login"
         android:textStyle="bold"
         app:cornerRadius="@dimen/corner_radius"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccount"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/txtBrandNameInLogin"
+        android:id="@+id/txtBrandName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/spoof_bold"
@@ -34,12 +73,12 @@
         app:layout_constraintVertical_bias="0.10" />
 
     <ImageView
-        android:id="@+id/imgBrandLogoInLogin"
+        android:id="@+id/imgBrandLogo"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:contentDescription="@string/logo_desc"
         android:translationY="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtBrandNameInLogin"
+        app:layout_constraintBottom_toTopOf="@+id/txtBrandName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,34 +90,50 @@
         android:id="@+id/txtEmail"
         android:layout_width="@dimen/control_width"
         android:layout_height="@dimen/control_height"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="32dp"
         android:autofillHints=""
         android:background="@drawable/rounded_edittext"
-        android:ems="10"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         android:paddingStart="@dimen/padding_start"
         android:paddingEnd="@dimen/padding_end"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtBrandNameInLogin" />
+        app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase" />
 
-    <EditText
-        android:id="@+id/txtPassword"
+    <RelativeLayout
+        android:id="@+id/grpTxtPassword"
         android:layout_width="@dimen/control_width"
-        android:layout_height="@dimen/control_height"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:autofillHints=""
-        android:background="@drawable/rounded_edittext"
-        android:ems="10"
-        android:hint="@string/hint_password"
-        android:inputType="textPassword"
-        android:paddingStart="@dimen/padding_start"
-        android:paddingEnd="@dimen/padding_end"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail">
+
+        <EditText
+            android:id="@+id/txtPassword"
+            android:layout_width="@dimen/control_width"
+            android:layout_height="@dimen/control_height"
+            android:autofillHints=""
+            android:background="@drawable/rounded_edittext"
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            android:paddingStart="@dimen/padding_start"
+            android:paddingEnd="@dimen/padding_end_with_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ToggleButton
+            android:id="@+id/tglShowPassword"
+            android:layout_width="32sp"
+            android:layout_height="32sp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="14dp"
+            android:background="@drawable/ic_visibility"
+            android:textColor="@android:color/transparent"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btnGoToForgotPassword"
@@ -88,6 +143,6 @@
         android:text="@string/btn_forgot_password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/grpTxtPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
