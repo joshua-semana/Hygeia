@@ -17,5 +17,4 @@
 
     <!-- Default color -->
     <item android:color="@color/accent_500" />
-
 </selector>

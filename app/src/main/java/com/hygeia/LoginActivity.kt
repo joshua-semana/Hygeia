@@ -3,37 +3,25 @@ package com.hygeia
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.PasswordTransformationMethod
-import android.widget.EditText
-import android.widget.ToggleButton
+import com.hygeia.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
-
+    private lateinit var bind: ActivityLoginBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login)
+        bind = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(bind.root)
 
-        //val txtEmail = findViewById<EditText>(R.id.txtEmail)
-        val txtPassword = findViewById<EditText>(R.id.txtPassword)
-        val tglShowPassword = findViewById<ToggleButton>(R.id.tglShowPassword)
-        //val btnLogin = findViewById<Button>(R.id.btnLogin)
-
-        tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
+        bind.tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
-                txtPassword.transformationMethod = null
-                tglShowPassword.setBackgroundResource(R.drawable.ic_visibility_off)
-                txtPassword.setSelection(txtPassword.text.length)
+                bind.txtPassword.transformationMethod = null
+                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility_off)
+                bind.txtPassword.setSelection(bind.txtPassword.text.length)
             } else {
-                txtPassword.transformationMethod = PasswordTransformationMethod()
-                tglShowPassword.setBackgroundResource(R.drawable.ic_visibility)
-                txtPassword.setSelection(txtPassword.text.length)
+                bind.txtPassword.transformationMethod = PasswordTransformationMethod()
+                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility)
+                bind.txtPassword.setSelection(bind.txtPassword.text.length)
             }
         }
-
-//        fun updateButtonLoginState() {
-//            btnLogin.isEnabled = txtEmail.text.isNotEmpty() && txtPassword.text.isNotEmpty()
-//        }
-//
-//        txtEmail.addTextChangedListener { updateButtonLoginState() }
-//        txtPassword.addTextChangedListener { updateButtonLoginState() }
     }
 }
