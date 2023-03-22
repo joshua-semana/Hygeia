@@ -27,7 +27,8 @@
         app:cornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toTopOf="@+id/lblAppVersion"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
 
     <TextView
         android:id="@+id/lblAppVersion"
@@ -51,7 +52,8 @@
         app:cornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccount"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
 
     <TextView
         android:id="@+id/txtBrandName"
@@ -82,16 +84,17 @@
         app:srcCompat="@drawable/logo_hygeia" />
 
     <EditText
-        android:id="@+id/txtNewName"
+        android:id="@+id/txtNewFirstName"
         style="@style/PrimaryTextField"
         android:layout_marginTop="16dp"
         android:autofillHints=""
-        android:background="@drawable/cstm_background_text_field"
+        android:background="@drawable/bg_textfield_default"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase" />
+        app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase"
+        tools:ignore="VisualLintTextFieldSize" />
 
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
@@ -99,17 +102,18 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewName">
+        app:layout_constraintTop_toBottomOf="@+id/txtNewFirstName">
 
         <EditText
             android:id="@+id/txtPassword"
             style="@style/PrimaryTextFieldWithIcon"
             android:autofillHints=""
-            android:background="@drawable/cstm_background_text_field"
+            android:background="@drawable/bg_textfield_default"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintTextFieldSize" />
 
         <ToggleButton
             android:id="@+id/tglShowPassword"

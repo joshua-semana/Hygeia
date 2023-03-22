@@ -6,7 +6,7 @@
 
     <!--TEXTS-->
     <dimen name="heading">36sp</dimen>
-    <dimen name="body">18sp</dimen>
+    <dimen name="body">16sp</dimen>
     <dimen name="small">14sp</dimen>
     <dimen name="letter_spacing">0.6</dimen>
     <dimen name="line_spacing">-8dp</dimen>
@@ -23,6 +23,11 @@
     <dimen name="padding_start">20sp</dimen>
     <dimen name="padding_end">20sp</dimen>
     <dimen name="padding_end_with_icon">55sp</dimen>
+
+    <!--SPINNERS / CMB-->
+    <dimen name="cmb_width_gender">70dp</dimen>
+    <dimen name="cmb_padding_start">12sp</dimen>
+    <dimen name="cmb_padding_end">12sp</dimen>
 
     <!--ICONS-->
     <dimen name="size_icon">32sp</dimen>

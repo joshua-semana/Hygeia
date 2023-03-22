@@ -11,9 +11,14 @@
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_continue">Continue</string>
 
+    <string name="title_personal_info">Enter your personal info</string>
+    <string name="title_account_details">Enter your account details</string>
+
+    <string name="hint_first_name">Enter first name</string>
+    <string name="hint_last_name">Enter last name</string>
+    <string name="hint_birth_date">Enter birth date</string>
     <string name="hint_email">Enter email</string>
     <string name="hint_password">Enter password</string>
-    <string name="hint_full_name">Enter full name</string>
     <string name="hint_phone_number">Enter phone number</string>
 
     <string name="heading_create_account">Let\'s create your</string>
@@ -26,4 +31,9 @@
     <!--CREATE ACCOUNT ACTIVITY-->
     <string name="pg_num_1" tools:ignore="TypographyFractions">1/2</string>
     <string name="pg_num_2">2⁄2</string>
+
+    <string-array name="arr_gender">
+        <item>Mr.</item>
+        <item>Ms.</item>
+    </string-array>
 </resources>

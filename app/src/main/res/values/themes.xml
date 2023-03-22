@@ -3,12 +3,12 @@
     <style name="Theme.Hygeia" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="android:windowFullscreen">false</item>
-<!--        <item name="colorPrimary">@color/accent_500</item>-->
+        <item name="colorPrimary">@color/accent_500</item>
         <item name="colorPrimaryVariant">@color/accent_700</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/teal_200</item>
-        <item name="colorSecondaryVariant">@color/teal_700</item>
+        <item name="colorSecondary">@color/accent_500</item>
+        <item name="colorSecondaryVariant">@color/accent_700</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">@color/accent_500</item>
@@ -32,6 +32,7 @@
         <item name="android:layout_height">@dimen/control_height</item>
         <item name="android:layout_marginStart">@dimen/margin_x</item>
         <item name="android:layout_marginEnd">@dimen/margin_x</item>
+        <item name="rippleColor">@color/ripple_primary</item>
     </style>
 
     <style name="SecondaryButtonLarge" parent="Widget.MaterialComponents.Button">
@@ -47,6 +48,7 @@
         <item name="android:layout_height">@dimen/control_height</item>
         <item name="android:layout_marginStart">@dimen/margin_x</item>
         <item name="android:layout_marginEnd">@dimen/margin_x</item>
+        <item name="rippleColor">@color/ripple_secondary</item>
     </style>
 
     <style name="LabelButton" parent="Widget.MaterialComponents.Button">
@@ -72,6 +74,16 @@
         <item name="android:layout_marginTop">@dimen/icon_margin_top</item>
     </style>
 
+    <!--SPINNERS / CMB-->
+
+    <style name="SpinnerGender">
+        <item name="android:layout_width">@dimen/cmb_width_gender</item>
+        <item name="android:layout_height">@dimen/control_height</item>
+        <item name="android:paddingStart">@dimen/cmb_padding_start</item>
+        <item name="android:paddingEnd">@dimen/cmb_padding_end</item>
+        <item name="android:layout_marginStart">@dimen/margin_x</item>
+    </style>
+
     <!--TEXT FIELDS STYLE-->
 
     <style name="TextFieldWithIconWrapper">
@@ -88,6 +100,7 @@
         <item name="android:layout_centerVertical">true</item>
         <item name="android:layout_marginEnd">@dimen/icon_margin_end</item>
         <item name="android:textColor">@android:color/transparent</item>
+        <item name="backgroundTint">@null</item>
     </style>
 
     <style name="PrimaryTextField" parent="Widget.AppCompat.EditText">
