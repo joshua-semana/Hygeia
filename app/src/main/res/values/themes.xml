@@ -82,6 +82,7 @@
         <item name="android:paddingStart">@dimen/cmb_padding_start</item>
         <item name="android:paddingEnd">@dimen/cmb_padding_end</item>
         <item name="android:layout_marginStart">@dimen/margin_x</item>
+        <item name="android:background">@drawable/bg_dropdown</item>
     </style>
 
     <!--TEXT FIELDS STYLE-->
@@ -110,6 +111,7 @@
         <item name="android:layout_marginEnd">@dimen/margin_x</item>
         <item name="android:paddingStart">@dimen/padding_start</item>
         <item name="android:paddingEnd">@dimen/padding_end</item>
+        <item name="android:background">@drawable/bg_textfield_default</item>
     </style>
 
     <style name="PrimaryTextFieldWithIcon" parent="Widget.AppCompat.EditText">
@@ -117,6 +119,7 @@
         <item name="android:layout_height">@dimen/control_height</item>
         <item name="android:paddingStart">@dimen/padding_start</item>
         <item name="android:paddingEnd">@dimen/padding_end_with_icon</item>
+        <item name="android:background">@drawable/bg_textfield_default</item>
     </style>
 
     <!--LABELS STYLE-->

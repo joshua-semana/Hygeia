@@ -15,11 +15,9 @@ class LoginActivity : AppCompatActivity() {
         bind.tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 bind.txtPassword.transformationMethod = null
-                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility_off)
                 bind.txtPassword.setSelection(bind.txtPassword.text.length)
             } else {
                 bind.txtPassword.transformationMethod = PasswordTransformationMethod()
-                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility)
                 bind.txtPassword.setSelection(bind.txtPassword.text.length)
             }
         }
