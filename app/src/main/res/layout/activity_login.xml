@@ -88,7 +88,6 @@
         style="@style/PrimaryTextField"
         android:layout_marginTop="16dp"
         android:autofillHints=""
-        android:background="@drawable/bg_textfield_default"
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
@@ -108,7 +107,6 @@
             android:id="@+id/txtPassword"
             style="@style/PrimaryTextFieldWithIcon"
             android:autofillHints=""
-            android:background="@drawable/bg_textfield_default"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
             android:textColorHint="#616161"
@@ -119,7 +117,7 @@
         <ToggleButton
             android:id="@+id/tglShowPassword"
             style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility"
+            android:background="@drawable/ic_visibility_selector"
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
     </RelativeLayout>
 

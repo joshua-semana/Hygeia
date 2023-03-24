@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item
+                android:drawable="@drawable/bg_textfield_default"/>
+            <item
+                android:drawable="@drawable/ic_dropdown"
+                android:gravity="center_vertical|end"
+                android:right="10dp"/>
+        </layer-list>
+    </item>
+</selector>

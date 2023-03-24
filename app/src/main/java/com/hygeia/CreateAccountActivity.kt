@@ -50,17 +50,15 @@ class CreateAccountActivity : AppCompatActivity() {
         bind.tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 bind.txtNewPassword.transformationMethod = null
-                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility_off)
                 bind.txtNewPassword.setSelection(bind.txtNewPassword.text.length)
             } else {
                 bind.txtNewPassword.transformationMethod = PasswordTransformationMethod()
-                bind.tglShowPassword.setBackgroundResource(R.drawable.ic_visibility)
                 bind.txtNewPassword.setSelection(bind.txtNewPassword.text.length)
             }
         }
-        bind.btnCalendar.setOnClickListener {
-            showDatePickerDialog()
-        }
+
+        bind.txtNewBirthDate.setOnClickListener { bind.btnCalendar.performClick() }
+        bind.btnCalendar.setOnClickListener { showDatePickerDialog() }
     }
 
     private fun resetTextFields(){
