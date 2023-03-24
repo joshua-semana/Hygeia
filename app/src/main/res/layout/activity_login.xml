@@ -84,7 +84,7 @@
         app:srcCompat="@drawable/logo_hygeia" />
 
     <EditText
-        android:id="@+id/txtNewFirstName"
+        android:id="@+id/txtUsername"
         style="@style/PrimaryTextField"
         android:layout_marginTop="16dp"
         android:autofillHints=""
@@ -102,7 +102,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewFirstName">
+        app:layout_constraintTop_toBottomOf="@+id/txtUsername">
 
         <EditText
             android:id="@+id/txtPassword"
@@ -111,9 +111,10 @@
             android:background="@drawable/bg_textfield_default"
             android:hint="@string/hint_password"
             android:inputType="textPassword"
+            android:textColorHint="#616161"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="VisualLintTextFieldSize" />
+            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
 
         <ToggleButton
             android:id="@+id/tglShowPassword"
