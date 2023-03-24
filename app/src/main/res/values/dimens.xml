@@ -25,12 +25,12 @@
     <dimen name="padding_end_with_icon">55sp</dimen>
 
     <!--SPINNERS / CMB-->
-    <dimen name="cmb_width_gender">70dp</dimen>
+    <dimen name="cmb_width_gender">80dp</dimen>
     <dimen name="cmb_padding_start">12sp</dimen>
     <dimen name="cmb_padding_end">12sp</dimen>
 
     <!--ICONS-->
-    <dimen name="size_icon">32sp</dimen>
+    <dimen name="size_icon">28sp</dimen>
     <dimen name="icon_margin_top">20dp</dimen>
     <dimen name="icon_margin_start">26dp</dimen>
     <dimen name="icon_margin_end">14dp</dimen>
