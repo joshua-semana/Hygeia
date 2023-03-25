@@ -1,15 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_login"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <ImageView
+        android:id="@+id/imgBrandLogo"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/logo_desc"
+        android:translationY="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/txtBrandName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/logo_hygeia" />
+
+    <TextView
+        android:id="@+id/txtBrandName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/spoof_bold"
+        android:text="@string/app_name_lower"
+        android:textColor="@color/accent_500"
+        android:textSize="@dimen/heading"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.10" />
+
     <TextView
         android:id="@+id/lblBrandCatchphrase"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
         android:text="@string/app_catchphrase"
         android:textAlignment="center"
         android:textColor="@color/neutral_500"
@@ -18,12 +48,89 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtBrandName" />
 
+    <EditText
+        android:id="@+id/txtEmail"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="24dp"
+        android:autofillHints=""
+        android:hint="@string/hint_email"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/lblLoginErrorMsg1"
+        style="@style/TextBodyError"
+        android:text="@string/validate_login_email_exists"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmail" />
+
+    <RelativeLayout
+        android:id="@+id/grpTxtPassword"
+        style="@style/TextFieldWithIconWrapper"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblLoginErrorMsg1">
+
+        <EditText
+            android:id="@+id/txtPassword"
+            style="@style/PrimaryTextFieldWithIcon"
+            android:autofillHints=""
+            android:hint="@string/hint_password"
+            android:inputType="textPassword"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+
+        <ToggleButton
+            android:id="@+id/tglShowPassword"
+            style="@style/TextFieldIcon"
+            android:background="@drawable/ic_visibility_selector"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/lblLoginErrorMsg2"
+        style="@style/TextBodyError"
+        android:text="@string/validate_login_password"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grpTxtPassword" />
+
     <Button
-        android:id="@+id/btnGoToCreateAccount"
+        android:id="@+id/btnGoToForgotPassword"
+        style="@style/LabelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_forgot_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblLoginErrorMsg2"
+        tools:ignore="VisualLintButtonSize" />
+
+    <Button
+        android:id="@+id/btnLogin"
+        style="@style/PrimaryButtonLarge"
+        android:layout_marginBottom="@dimen/gap"
+        android:enabled="false"
+        android:text="@string/btn_login"
+        app:cornerRadius="@dimen/corner_radius"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccountPart1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+    <Button
+        android:id="@+id/btnGoToCreateAccountPart1"
         style="@style/SecondaryButtonLarge"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/btn_create_account"
-        android:textStyle="bold"
         app:cornerRadius="@dimen/corner_radius"
         app:layout_constraintBottom_toTopOf="@+id/lblAppVersion"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,94 +148,6 @@
         android:textSize="@dimen/small"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/btnLogin"
-        style="@style/PrimaryButtonLarge"
-        android:layout_marginBottom="@dimen/gap"
-        android:text="@string/btn_login"
-        app:cornerRadius="@dimen/corner_radius"
-        app:layout_constraintBottom_toTopOf="@+id/btnGoToCreateAccount"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="VisualLintButtonSize" />
-
-    <TextView
-        android:id="@+id/txtBrandName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/spoof_bold"
-        android:text="@string/app_name_lower"
-        android:textColor="@color/accent_500"
-        android:textSize="@dimen/heading"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.10" />
-
-    <ImageView
-        android:id="@+id/imgBrandLogo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:contentDescription="@string/logo_desc"
-        android:translationY="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/txtBrandName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/logo_hygeia" />
-
-    <EditText
-        android:id="@+id/txtUsername"
-        style="@style/PrimaryTextField"
-        android:layout_marginTop="16dp"
-        android:autofillHints=""
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase"
-        tools:ignore="VisualLintTextFieldSize" />
-
-    <RelativeLayout
-        android:id="@+id/grpTxtPassword"
-        style="@style/TextFieldWithIconWrapper"
-        android:layout_marginTop="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtUsername">
-
-        <EditText
-            android:id="@+id/txtPassword"
-            style="@style/PrimaryTextFieldWithIcon"
-            android:autofillHints=""
-            android:hint="@string/hint_password"
-            android:inputType="textPassword"
-            android:textColorHint="#616161"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
-
-        <ToggleButton
-            android:id="@+id/tglShowPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
-            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
-    </RelativeLayout>
-
-    <Button
-        android:id="@+id/btnGoToForgotPassword"
-        style="@style/LabelButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_forgot_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/grpTxtPassword" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

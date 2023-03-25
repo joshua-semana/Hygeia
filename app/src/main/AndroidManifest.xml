@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -19,7 +20,13 @@
             android:name=".StandardMainActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountActivity"
+            android:name=".CreateAccountPart1"
+            android:exported="false" />
+        <activity
+            android:name=".CreateAccountPart2"
+            android:exported="false" />
+        <activity
+            android:name=".CreateAccountPart3"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

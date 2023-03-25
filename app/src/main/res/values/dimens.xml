@@ -3,6 +3,8 @@
     <!--GLOBAL-->
     <dimen name="corner_radius">8dp</dimen>
     <dimen name="heading_margin_top">72dp</dimen>
+    <dimen name="margin_x">30dp</dimen>
+    <dimen name="margin_x_error">50dp</dimen>
 
     <!--TEXTS-->
     <dimen name="heading">36sp</dimen>
@@ -17,7 +19,6 @@
     <dimen name="inset_top">3dp</dimen>
     <dimen name="inset_bot">3dp</dimen>
     <dimen name="gap">2dp</dimen>
-    <dimen name="margin_x">30dp</dimen>
 
     <!--INPUT TEXT-->
     <dimen name="padding_start">20sp</dimen>

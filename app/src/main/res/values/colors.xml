@@ -7,7 +7,7 @@
     <color name="neutral_700">#FF575757</color>
     <color name="neutral_900">#FF323232</color>
     <color name="accent_50">#FFF3FFFD</color>
-    <color name="accent_100">#87E0D2</color>
+    <color name="accent_100">#A5D6CE</color>
     <color name="accent_500">#FF0CA688</color>
     <color name="accent_700">#FF00796B</color>
     <color name="teal_200">#FF03DAC5</color>
@@ -17,6 +17,6 @@
     <color name="ripple_secondary">#FFCACACA</color>
 
     <color name="danger_50">#FFFFF6F5</color>
-    <color name="danger_500">#FFF14726</color>
+    <color name="danger_500">#FFDD2C00</color>
     <color name="warning">#FFF9C610</color>
 </resources>

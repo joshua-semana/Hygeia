@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/layout_createAccountPart1"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAccountPart1">
+
+    <Button
+        android:id="@+id/btnBackToLogin"
+        style="@style/IconButtonBack"
+        android:drawableLeft="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblPgNumCreateAccount1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/pg_num_1"
+        android:textColor="@color/neutral_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading1"
+        style="@style/TextHeadingRegular"
+        android:text="@string/heading_create_account1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading1.1"
+        style="@style/TextHeadingColored"
+        android:text="@string/account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart1"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_create_personal_info"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1.1" />
+
+    <Spinner
+        android:id="@+id/cmbGender"
+        style="@style/SpinnerGender"
+        android:layout_marginTop="8dp"
+        android:entries="@array/arr_gender"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart1"
+        tools:ignore="TextSizeCheck" />
+
+    <EditText
+        android:id="@+id/txtNewFirstName"
+        style="@style/PrimaryTextField"
+        android:layout_width="0dp"
+        android:layout_marginStart="8dp"
+        android:autofillHints=""
+        android:hint="@string/hint_first_name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cmbGender"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart1"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/txtNewLastName"
+        style="@style/PrimaryTextField"
+        android:autofillHints=""
+        android:hint="@string/hint_last_name"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewFirstName"
+        tools:ignore="VisualLintTextFieldSize" />
+
+    <RelativeLayout
+        android:id="@+id/grpBirthDate"
+        style="@style/TextFieldWithIconWrapper"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewLastName">
+
+        <EditText
+            android:id="@+id/txtNewBirthDate"
+            style="@style/PrimaryTextFieldWithIcon"
+            android:autofillHints=""
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/hint_birth_date"
+            android:inputType="date"
+            android:longClickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="VisualLintTextFieldSize,TextContrastCheck" />
+
+        <Button
+            android:id="@+id/btnCalendar"
+            style="@style/TextFieldIcon"
+            android:background="@drawable/ic_calendar_month"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,SpeakableTextPresentCheck" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnContinueCreateAccountToPart2"
+        style="@style/PrimaryButtonLarge"
+        android:layout_marginBottom="32dp"
+        android:enabled="false"
+        android:text="@string/btn_continue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
