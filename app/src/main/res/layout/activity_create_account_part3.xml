@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_createAccountPart3"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CreateAccountPart3">
+
+    <Button
+        android:id="@+id/btnBackToCreateAccountPart2"
+        style="@style/IconButtonBack"
+        android:drawableLeft="@drawable/ic_arrow_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblPgNumCreateAccount2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="28dp"
+        android:text="@string/pg_num_3"
+        android:textColor="@color/neutral_500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading1"
+        style="@style/TextHeadingRegular"
+        android:text="@string/heading_create_account3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblCreateAccountHeading2"
+        style="@style/TextHeadingColored"
+        android:text="@string/account"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart3.1"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_review_gender_and_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading2" />
+
+    <EditText
+        android:id="@+id/txtReviewFullNameAndGender"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="4dp"
+        android:autofillHints=""
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.1"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart3.2"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_review_birthdate"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtReviewFullNameAndGender" />
+
+    <EditText
+        android:id="@+id/txtReviewBirthdate"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="4dp"
+        android:autofillHints=""
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.2"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart3.3"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_review_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtReviewBirthdate" />
+
+    <EditText
+        android:id="@+id/txtReviewEmail"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="4dp"
+        android:autofillHints=""
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.3"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart3.4"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_review_phone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtReviewEmail" />
+
+    <EditText
+        android:id="@+id/txtReviewPhoneNumber"
+        style="@style/PrimaryTextField"
+        android:layout_marginTop="4dp"
+        android:autofillHints=""
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:longClickable="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.4"
+        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
+
+    <TextView
+        android:id="@+id/titleOnCreateAccountPart3.5"
+        style="@style/TextBody"
+        android:layout_marginTop="8dp"
+        android:text="@string/title_review_password"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtReviewPhoneNumber" />
+
+    <RelativeLayout
+        android:id="@+id/grpTxtPassword"
+        style="@style/TextFieldWithIconWrapper"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.5">
+
+        <EditText
+            android:id="@+id/txtReviewPassword"
+            style="@style/PrimaryTextFieldWithIcon"
+            android:autofillHints=""
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:inputType="textPassword"
+            android:longClickable="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="LabelFor,SpeakableTextPresentCheck,TextContrastCheck,VisualLintTextFieldSize" />
+
+        <ToggleButton
+            android:id="@+id/tglShowPassword"
+            style="@style/TextFieldIcon"
+            android:background="@drawable/ic_visibility_selector"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btnCreateAccount"
+        style="@style/PrimaryButtonLarge"
+        android:layout_marginBottom="32dp"
+        android:text="@string/btn_create_my_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

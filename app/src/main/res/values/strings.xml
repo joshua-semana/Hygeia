@@ -10,27 +10,50 @@
     <string name="btn_create_account">Create an account</string>
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_continue">Continue</string>
-
-    <string name="title_personal_info">Enter your personal info</string>
-    <string name="title_account_details">Enter your account details</string>
+    <string name="btn_create_my_account">Create my account</string>
 
     <string name="hint_first_name">Enter first name</string>
     <string name="hint_last_name">Enter last name</string>
     <string name="hint_birth_date">Enter birth date</string>
     <string name="hint_email">Enter email</string>
     <string name="hint_password">Enter password</string>
+    <string name="hint_confirm_password">Re-enter password</string>
     <string name="hint_phone_number">Enter phone number</string>
 
-    <string name="heading_create_account">Let\'s create your</string>
+<!--CONTENTS-->
 
-    <!--SINGLE WORD-->
+    <string name="heading_create_account1">Let\'s create your</string>
+    <string name="heading_create_account2">Let\'s secure your</string>
+    <string name="heading_create_account3">Review your</string>
+
+    <string name="title_create_personal_info">Enter your personal information</string>
+    <string name="title_create_account_details">Enter your account details</string>
+    <string name="title_review_gender_and_name">Your gender and full name</string>
+    <string name="title_review_birthdate">Your birthdate</string>
+    <string name="title_review_email">Your email</string>
+    <string name="title_review_phone">Your phone number</string>
+    <string name="title_review_password">Your password</string>
+
+<!--SINGLE WORD-->
     <string name="account">account</string>
 
-    <!--SPECIFIC ACTIVITIES-->
+<!--VALIDATION MESSAGE-->
+    <string name="validate_login_email_exists">The email you entered is not registered in our system.</string>
+    <string name="validate_login_email_format">The email you entered is invalid.</string>
+    <string name="validate_login_password">Incorrect password. Please try again.</string>
 
-    <!--CREATE ACCOUNT ACTIVITY-->
-    <string name="pg_num_1" tools:ignore="TypographyFractions">1/2</string>
-    <string name="pg_num_2">2⁄2</string>
+    <string name="validate_create_account_email_taken">This email is already in use.</string>
+    <string name="validate_create_account_email_format">This email is invalid.</string>
+    <string name="validate_create_account_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols. </string>
+    <string name="validate_create_account_password_matched">Password does not match.</string>
+
+<!--SPECIFIC ACTIVITIES-->
+<!--CREATE ACCOUNT ACTIVITY-->
+    <string name="pg_num_1">1 of 3</string>
+    <string name="pg_num_2">2 of 3</string>
+    <string name="pg_num_3">3 of 3</string>
+
+<!--ARRAYS-->
 
     <string-array name="arr_gender">
         <item>Mr.</item>
