@@ -4,22 +4,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.core.content.getSystemService
-import androidx.core.widget.addTextChangedListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hygeia.databinding.ActivityLoginBinding
-import org.w3c.dom.Text
-
-class LoginActivity : AppCompatActivity() {
+class ActLogin : AppCompatActivity() {
     private lateinit var bind : ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,11 +30,9 @@ class LoginActivity : AppCompatActivity() {
             auth.signInWithEmailAndPassword(bind.txtEmail.text.toString(), bind.txtPassword.text.toString())
                 .addOnCompleteListener(this){ task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(this, "LoginActivity Successfully", Toast.LENGTH_SHORT).show()
-                        startActivity(Intent(this, StandardMainActivity::class.java))
+                        Toast.makeText(this, " Successfully", Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this, ActUserStandard::class.java))
                     } else {
-                        bind.lblLoginErrorMsg1.visibility = View.VISIBLE
-                        bind.lblLoginErrorMsg2.visibility = View.VISIBLE
                         Toast.makeText(this, "Please input correct email or password", Toast.LENGTH_SHORT).show()
                     }
                 }
@@ -47,19 +40,17 @@ class LoginActivity : AppCompatActivity() {
 
         with(bind) {
             //ELEMENT BEHAVIOR
-            layoutLogin.setOnClickListener {
+            mainLayout.setOnClickListener {
                 getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                layoutLogin.requestFocus()
+                mainLayout.requestFocus()
                 currentFocus?.clearFocus()
             }
 
             tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    txtPassword.transformationMethod = null
-                    txtPassword.setSelection(txtPassword.text.length)
-                } else {
-                    txtPassword.transformationMethod = PasswordTransformationMethod()
-                    txtPassword.setSelection(txtPassword.text.length)
+                val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
+                with(txtPassword) {
+                    this.transformationMethod = passwordDisplay
+                    setSelection(text.length)
                 }
             }
 
@@ -77,8 +68,12 @@ class LoginActivity : AppCompatActivity() {
             txtPassword.addTextChangedListener(textWatcher)
         }
         //NAVIGATION
+        bind.btnGoToForgotPassword.setOnClickListener {
+            startActivity(Intent(this, ActForgotPassword::class.java))
+        }
+
         bind.btnGoToCreateAccountPart1.setOnClickListener {
-            startActivity(Intent(this, CreateAccountPart1::class.java))
+            startActivity(Intent(this, ActCreateAccount::class.java))
         }
     }
 }

@@ -11,6 +11,7 @@
     <string name="btn_forgot_password">Forgot your password?</string>
     <string name="btn_continue">Continue</string>
     <string name="btn_create_my_account">Create my account</string>
+    <string name="btn_update_password">Update my password</string>
 
     <string name="hint_first_name">Enter first name</string>
     <string name="hint_last_name">Enter last name</string>
@@ -19,12 +20,15 @@
     <string name="hint_password">Enter password</string>
     <string name="hint_confirm_password">Re-enter password</string>
     <string name="hint_phone_number">Enter phone number</string>
+    <string name="hint_password_new">Enter your new password</string>
+    <string name="hint_confirm_password_new">Re-enter your new password</string>
 
-<!--CONTENTS-->
-
+    <!--CONTENTS-->
     <string name="heading_create_account1">Let\'s create your</string>
     <string name="heading_create_account2">Let\'s secure your</string>
     <string name="heading_create_account3">Review your</string>
+    <string name="heading_forgot_password">Let\'s recover your</string>
+    <string name="heading_reset_password">Create your new</string>
 
     <string name="title_create_personal_info">Enter your personal information</string>
     <string name="title_create_account_details">Enter your account details</string>
@@ -33,30 +37,34 @@
     <string name="title_review_email">Your email</string>
     <string name="title_review_phone">Your phone number</string>
     <string name="title_review_password">Your password</string>
+    <string name="title_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia</string>
 
-<!--SINGLE WORD-->
+    <!--SINGLE WORD-->
     <string name="account">account</string>
+    <string name="password">password</string>
 
-<!--VALIDATION MESSAGE-->
-    <string name="validate_login_email_exists">The email you entered is not registered in our system.</string>
-    <string name="validate_login_email_format">The email you entered is invalid.</string>
-    <string name="validate_login_password">Incorrect password. Please try again.</string>
+    <!--VALIDATION MESSAGE-->
+    <string name="validate_placeholder_msg_for_multi_error">This is a placeholder for an error message</string>
+    <string name="validate_email_exists">The email you entered is not registered in our system.</string>
+    <string name="validate_email_format">The email you entered is invalid.</string>
+    <string name="validate_email_taken">This email is already in use.</string>
+    <string name="validate_password_incorrect">Incorrect password. Please try again.</string>
+    <string name="validate_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+    <string name="validate_password_matched">Passwords do not match.</string>
+    <string name="validate_password_criteria">Password does not match the criteria.</string>
 
-    <string name="validate_create_account_email_taken">This email is already in use.</string>
-    <string name="validate_create_account_email_format">This email is invalid.</string>
-    <string name="validate_create_account_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols. </string>
-    <string name="validate_create_account_password_matched">Password does not match.</string>
-
-<!--SPECIFIC ACTIVITIES-->
-<!--CREATE ACCOUNT ACTIVITY-->
+    <!--SPECIFIC ACTIVITIES-->
+    <!--CREATE ACCOUNT ACTIVITY-->
     <string name="pg_num_1">1 of 3</string>
     <string name="pg_num_2">2 of 3</string>
     <string name="pg_num_3">3 of 3</string>
 
-<!--ARRAYS-->
+    <!--ARRAYS-->
 
     <string-array name="arr_gender">
         <item>Mr.</item>
         <item>Ms.</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
