@@ -1,32 +1,34 @@
 package com.hygeia
 
 import android.app.DatePickerDialog
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
-import com.hygeia.databinding.ActivityCreateAccountPart1Binding
+import androidx.navigation.Navigation
+import com.hygeia.databinding.FrgCreateAccountPart1Binding
 import java.util.*
 
-class CreateAccountPart1 : AppCompatActivity() {
-    private lateinit var bind: ActivityCreateAccountPart1Binding
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        bind = ActivityCreateAccountPart1Binding.inflate(layoutInflater)
-        setContentView(bind.root)
+class FrgCreateAccountPart1 : Fragment() {
+    private lateinit var bind : FrgCreateAccountPart1Binding
 
-        bind.txtNewBirthDate.setOnClickListener { bind.btnCalendar.performClick() }
-        bind.btnCalendar.setOnClickListener { showDatePickerDialog() }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        bind = FrgCreateAccountPart1Binding.inflate(inflater, container, false)
 
         with(bind) {
+            txtNewBirthDate.setOnClickListener { btnCalendar.performClick() }
+            btnCalendar.setOnClickListener { showDatePickerDialog() }
+
             //ELEMENT BEHAVIOR
-            layoutCreateAccountPart1.setOnClickListener {
-                getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
-                layoutCreateAccountPart1.requestFocus()
-                currentFocus?.clearFocus()
+            mainLayout.setOnClickListener {
+                requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                mainLayout.requestFocus()
+                requireView().findFocus()?.clearFocus()
             }
 
             //VALIDATION
@@ -39,27 +41,30 @@ class CreateAccountPart1 : AppCompatActivity() {
                             txtNewBirthDate.text.isNotEmpty()
                 }
             }
-
             txtNewFirstName.addTextChangedListener(textWatcher)
             txtNewLastName.addTextChangedListener(textWatcher)
             txtNewBirthDate.addTextChangedListener(textWatcher)
         }
+
         //NAVIGATION
-        bind.btnBackToLogin.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+        bind.btnContinueCreateAccountToPart2.setOnClickListener {
+            Navigation.findNavController(bind.root).navigate(R.id.CreateAccountPart1ToPart2)
         }
 
-        bind.btnContinueCreateAccountToPart2.setOnClickListener {
-            startActivity(Intent(this, CreateAccountPart2::class.java))
+        bind.btnBackToLogin.setOnClickListener {
+            activity?.onBackPressed()
         }
+
+        return bind.root
     }
+
     private fun showDatePickerDialog() {
         val calendar = Calendar.getInstance()
         val calMonth = calendar.get(Calendar.MONTH)
         val calDay = calendar.get(Calendar.DAY_OF_MONTH)
         val calYear = calendar.get(Calendar.YEAR)
         val dlgDatePicker = DatePickerDialog(
-            this,
+            requireContext(),
             { _, year, monthOfYear, dayOfMonth ->
                 val date = (dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year)
                 bind.txtNewBirthDate.setText(date)
@@ -67,13 +72,5 @@ class CreateAccountPart1 : AppCompatActivity() {
             calYear, calMonth, calDay
         )
         dlgDatePicker.show()
-    }
-    private fun resetTextFields(){
-        with(bind) {
-            cmbGender.setSelection(1)
-            txtNewFirstName.text.clear()
-            txtNewLastName.text.clear()
-            txtNewBirthDate.text.clear()
-        }
     }
 }

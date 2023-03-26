@@ -1,5 +1,4 @@
 package com.hygeia
-
 data class User(val id : String,
                 val gender : String,
                 val firstname : String,

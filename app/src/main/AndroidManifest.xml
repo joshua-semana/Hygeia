@@ -14,22 +14,19 @@
         android:theme="@style/Theme.Hygeia"
         tools:targetApi="31">
         <activity
-            android:name=".AdministratorMainActivity"
+            android:name=".ActForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".StandardMainActivity"
+            android:name=".ActCreateAccount"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountPart1"
+            android:name=".ActUserAdmin"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountPart2"
+            android:name=".ActUserStandard"
             android:exported="false" />
         <activity
-            android:name=".CreateAccountPart3"
-            android:exported="false" />
-        <activity
-            android:name=".LoginActivity"
+            android:name=".ActLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

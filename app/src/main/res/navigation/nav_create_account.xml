@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_create_account"
+    app:startDestination="@id/frgCreateAccountPart1">
+
+    <fragment
+        android:id="@+id/frgCreateAccountPart1"
+        android:name="com.hygeia.FrgCreateAccountPart1"
+        android:label="fragment_create_account_part1"
+        tools:layout="@layout/frg_create_account_part1" >
+        <action
+            android:id="@+id/CreateAccountPart1ToPart2"
+            app:destination="@id/frgCreateAccountPart2"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/frgCreateAccountPart2"
+        android:name="com.hygeia.FrgCreateAccountPart2"
+        android:label="fragment_frg_create_account_part2"
+        tools:layout="@layout/frg_create_account_part2" >
+        <action
+            android:id="@+id/CreateAccountPart2ToPart3"
+            app:destination="@id/frgCreateAccountPart3"
+            app:enterAnim="@anim/nav_default_enter_anim" />
+    </fragment>
+    <fragment
+        android:id="@+id/frgCreateAccountPart3"
+        android:name="com.hygeia.FrgCreateAccountPart3"
+        android:label="frg_create_account_part3"
+        tools:layout="@layout/frg_create_account_part3" />
+</navigation>
