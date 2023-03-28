@@ -11,72 +11,37 @@ import android.text.method.PasswordTransformationMethod
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.core.content.getSystemService
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.Utilities.msg
+import com.hygeia.Utilities.msgDlg
 import com.hygeia.databinding.ActivityLoginBinding
+
 class ActLogin : AppCompatActivity() {
     private lateinit var bind : ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
-    private lateinit var ics : InternetConnectionStatus
+    private var loginAttemptCount = 0
     @SuppressLint("ServiceCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityLoginBinding.inflate(layoutInflater)
-        setContentView(bind.root)
         auth = Firebase.auth
-        checkNetworkStatus()
-        var attempt = 0
-        bind.btnLogin.setOnClickListener {
-            //TODO: "Validate email and password, if email doesn't exist in our system, or format
-            // is incorrect, set lblLoginErrorMsg1.visibility to View.visible or View.gone"
-            val emailPattern = "[a-zA-Z\\d._-]+@[a-z]+\\.+[a-z]+".toRegex()
-            if (emailPattern.matches(bind.txtEmail.text.toString())){
-                bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_default)
-                bind.txtPassword.setBackgroundResource(R.drawable.bg_textfield_default)
-                bind.lblLoginErrorMsg1.visibility = View.GONE
-                bind.lblLoginErrorMsg2.visibility = View.GONE
-                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(bind.txtEmail.text.toString())
-                    .addOnCompleteListener{ task ->
-                        try {
-                            val signInMethodFirebase = task.result?.signInMethods ?: emptyList<String>()
-                            if (task.isSuccessful && signInMethodFirebase.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)){
-                                auth.signInWithEmailAndPassword(bind.txtEmail.text.toString(), bind.txtPassword.text.toString())
-                                    .addOnCompleteListener(this){ signInTask ->
-                                        if (signInTask.isSuccessful) {
-                                            attempt = 0
-                                            Toast.makeText(this, "Login Successfully", Toast.LENGTH_SHORT).show()
-                                            startActivity(Intent(this, ActUserStandard::class.java))
-                                        } else {
-                                            if(attempt >= 3){
-                                                Toast.makeText(this, "3 times attempt", Toast.LENGTH_SHORT).show()
-                                                //Take action after 3 times attempt
-                                            } else{
-                                                attempt++
-                                                bind.txtPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                                                bind.lblLoginErrorMsg2.visibility = View.VISIBLE
-                                            }
-                                        }
-                                    }
-                            } else {
-                                bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                                bind.lblLoginErrorMsg1.visibility = View.VISIBLE
-                                bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_exists)
-                            }
-                        } catch (e : java.lang.Exception){
-                            Log.e(TAG, "Error checking email registration", e)
-                        }
-                    }
-            }else {
-                bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                bind.lblLoginErrorMsg1.visibility = View.VISIBLE
-                bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_format)
-            }
-        }
+        setContentView(bind.root)
+
         with(bind) {
+            //MAIN FUNCTIONS
+            btnLogin.setOnClickListener {
+                if (isInternetConnected(applicationContext)) {
+                    login(txtEmail.text.toString(), txtPassword.text.toString())
+                } else {
+                    msgDlg(this@ActLogin, "no-wifi", "No internet connection", getString(R.string.dlg_no_wifi))
+                }
+            }
+
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
@@ -114,11 +79,48 @@ class ActLogin : AppCompatActivity() {
             startActivity(Intent(this, ActCreateAccount::class.java))
         }
     }
-    private fun checkNetworkStatus() {
-        ics = InternetConnectionStatus(this)
-        ics.observe(this){isConnected ->
-            if (isConnected) Toast.makeText(this, "Internet is connected", Toast.LENGTH_SHORT).show()
-            else Toast.makeText(this, "Internet is not connected", Toast.LENGTH_SHORT).show()
+
+    private fun login(email : String, password : String) {
+        if (Utilities.emailPattern.matches(email)) {
+            with(bind) {
+                txtEmail.setBackgroundResource(R.drawable.bg_textfield_default)
+                txtPassword.setBackgroundResource(R.drawable.bg_textfield_default)
+                lblLoginErrorMsg1.visibility = View.GONE
+                lblLoginErrorMsg2.visibility = View.GONE
+            }
+            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
+                try {
+                    val signInMethod = task.result?.signInMethods?:emptyList<String>()
+                    if (signInMethod.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
+                        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { signInTask ->
+                            if (signInTask.isSuccessful) {
+                                //TODO: Check if user is Standard or Admin, get role of current user
+                                loginAttemptCount = 0
+                                msg("Login successfully!")
+                                startActivity(Intent(this, ActUserStandard::class.java))
+                            } else {
+                                if (loginAttemptCount >= 3) {
+                                    msg("You've attempted to login 3 times.")
+                                } else {
+                                    loginAttemptCount++
+                                    bind.txtPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                                    bind.lblLoginErrorMsg2.visibility = View.VISIBLE
+                                }
+                            }
+                        }
+                    } else {
+                        bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                        bind.lblLoginErrorMsg1.visibility = View.VISIBLE
+                        bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_exists)
+                    }
+                } catch (e : java.lang.Exception){
+                    Log.e(TAG, "Error checking email registration", e)
+                }
+            }
+        } else {
+            bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+            bind.lblLoginErrorMsg1.visibility = View.VISIBLE
+            bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_format)
         }
     }
 }

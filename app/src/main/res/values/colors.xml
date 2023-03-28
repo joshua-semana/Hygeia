@@ -17,6 +17,7 @@
     <color name="ripple_secondary">#FFCACACA</color>
 
     <color name="danger_50">#FFFFF6F5</color>
+    <color name="danger_200">#E77366</color>
     <color name="danger_500">#FFDD2C00</color>
     <color name="warning">#FFF9C610</color>
 </resources>

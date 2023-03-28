@@ -12,6 +12,7 @@
     <string name="btn_continue">Continue</string>
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
+    <string name="btn_okay">Okay</string>
 
     <string name="hint_first_name">Enter first name</string>
     <string name="hint_last_name">Enter last name</string>
@@ -52,6 +53,11 @@
     <string name="validate_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="validate_password_matched">Passwords do not match.</string>
     <string name="validate_password_criteria">Password does not match the criteria.</string>
+
+    <!--DIALOG-->
+    <string name="placeholder_dialog_title">Dialog Title</string>
+    <string name="placeholder_dialog_body">Dialog content</string>
+    <string name="dlg_no_wifi">It looks like you are not connected to the internet. Be sure to connect to your Wi-Fi in order to log in.</string>
 
     <!--SPECIFIC ACTIVITIES-->
     <!--CREATE ACCOUNT ACTIVITY-->
