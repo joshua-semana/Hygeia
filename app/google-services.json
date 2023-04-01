@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "661426594554",
+    "firebase_url": "https://hygeia-testing-default-rtdb.firebaseio.com",
     "project_id": "hygeia-testing",
     "storage_bucket": "hygeia-testing.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "661426594554-6t0b0a8to7d749n7trjc36987i0pfm8d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hygeia",
+            "certificate_hash": "3c48f2ef7dc665f720dfb7038a32f133d7710a54"
+          }
+        },
         {
           "client_id": "661426594554-ft0tj35dp8nlok1r5q0d4ig258eqivr8.apps.googleusercontent.com",
           "client_type": 3
