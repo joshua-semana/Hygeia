@@ -1,4 +1,4 @@
-package com.hygeia
+package com.hygeia.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import androidx.navigation.Navigation
+import com.hygeia.R
 import com.hygeia.databinding.FrgForgotPasswordBinding
 
 class FrgForgotPassword : Fragment() {
