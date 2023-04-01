@@ -53,24 +53,22 @@ class FrgCreateAccountPart3 : Fragment() {
                     "password" to password,
                     "role" to "standard"
                 )
-                try {
-                    FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.toString(), password.toString())
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                val userFirebase = task.result?.user
-                                if (userFirebase != null) {
-                                    cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
-                                        .addOnSuccessListener {
-                                            requireActivity().msg("Successfully registered")
-                                        }.addOnFailureListener{
-                                            requireActivity().msg("failed")
-                                        }
-                                }
+                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.toString(), password.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            val userFirebase = task.result?.user
+                            if (userFirebase != null) {
+                                cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
+                                    .addOnSuccessListener {
+                                        requireActivity().msg("Successfully registered")
+                                    }.addOnFailureListener{
+                                        requireActivity().msg("failed")
+                                    }
                             }
+                        } else {
+                            requireActivity().msg("FAILED")
                         }
-                } catch (_: java.lang.Exception){
-
-                }
+                    }
             }
             //ELEMENT BEHAVIOR
             tglShowPassword.setOnCheckedChangeListener{ _, isChecked ->

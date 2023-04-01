@@ -115,8 +115,6 @@ class ActLogin : AppCompatActivity() {
                                             msg("Error getting user data")
                                         }
                                     }
-                                msg("Login successfully!")
-                                startActivity(Intent(this, ActUserStandard::class.java))
                             } else {
                                 if (loginAttemptCount >= 3) {
                                     msg("You've attempted to login 3 times.")
