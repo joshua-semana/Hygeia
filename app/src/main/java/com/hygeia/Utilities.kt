@@ -11,6 +11,8 @@ import com.hygeia.databinding.DlgMessageBinding
 object Utilities {
 
     val emailPattern = "[a-zA-Z\\d._-]+@[a-z]+\\.+[a-z]+".toRegex()
+    val phoneNumberPattern = "^(09)\\d{9}$".toRegex()
+    val passwordPattern = "^(?=.[A-Z])(?=.[a-z])(?=.\\d)(?=.[@$!%?&])[A-Za-z\\d@$!%?&]{8,}$".toRegex()
 
     fun Context.msg(message: CharSequence) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()

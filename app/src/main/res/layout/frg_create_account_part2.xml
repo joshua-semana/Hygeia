@@ -82,12 +82,21 @@
         app:layout_constraintTop_toBottomOf="@id/lblCreateAccountErrorMsg1"
         tools:ignore="VisualLintTextFieldSize" />
 
+    <TextView
+        android:id="@+id/lblCreateAccountErrorMsg2"
+        style="@style/TextBodyError"
+        android:text="@string/validate_phone_taken"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNewPhoneNumber" />
+
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
         style="@style/TextFieldWithIconWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtNewPhoneNumber">
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountErrorMsg2">
 
         <EditText
             android:id="@+id/txtNewPassword"
@@ -107,7 +116,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/lblCreateAccountErrorMsg2"
+        android:id="@+id/lblCreateAccountErrorMsg3"
         style="@style/TextBodyError"
         android:text="@string/validate_password_format"
         android:visibility="gone"
@@ -120,7 +129,7 @@
         style="@style/TextFieldWithIconWrapper"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountErrorMsg2">
+        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountErrorMsg3">
 
         <EditText
             android:id="@+id/txtNewConfirmPassword"
@@ -140,7 +149,7 @@
     </RelativeLayout>
 
     <TextView
-        android:id="@+id/lblCreateAccountErrorMsg3"
+        android:id="@+id/lblCreateAccountErrorMsg4"
         style="@style/TextBodyError"
         android:text="@string/validate_password_matched"
         android:visibility="gone"

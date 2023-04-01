@@ -1,4 +1,4 @@
-package com.hygeia
+package com.hygeia.fragments
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,25 +10,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
-import androidx.navigation.Navigation
-import com.hygeia.databinding.FrgCreateAccountPart2Binding
+import com.hygeia.databinding.FrgResetPasswordBinding
 
-class FrgCreateAccountPart2 : Fragment() {
-    private lateinit var bind : FrgCreateAccountPart2Binding
+class FrgResetPassword : Fragment() {
+    private lateinit var bind : FrgResetPasswordBinding
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        bind = FrgCreateAccountPart2Binding.inflate(inflater, container, false)
+        bind = FrgResetPasswordBinding.inflate(inflater, container, false)
 
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
                 mainLayout.requestFocus()
-                requireView().findFocus()?.clearFocus()
+                requireView().findFocus().clearFocus()
             }
 
             tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
                 val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
-                with(txtNewPassword) {
+                with(txtResetPassword) {
                     this.transformationMethod = passwordDisplay
                     setSelection(text.length)
                 }
@@ -36,7 +35,7 @@ class FrgCreateAccountPart2 : Fragment() {
 
             tglShowConfirmPassword.setOnCheckedChangeListener { _, isChecked ->
                 val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
-                with(txtNewConfirmPassword) {
+                with(txtResetConfirmPassword) {
                     this.transformationMethod = passwordDisplay
                     setSelection(text.length)
                 }
@@ -47,26 +46,17 @@ class FrgCreateAccountPart2 : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart3.isEnabled = txtNewEmail.text.isNotEmpty() and
-                            txtNewPhoneNumber.text.isNotEmpty() and
-                            txtNewPassword.text.isNotEmpty() and
-                            txtNewConfirmPassword.text.isNotEmpty()
-
+                    btnUpdatePassword.isEnabled = txtResetPassword.text.isNotEmpty() and
+                            txtResetConfirmPassword.text.isNotEmpty()
                 }
             }
 
-            txtNewEmail.addTextChangedListener(textWatcher)
-            txtNewPhoneNumber.addTextChangedListener(textWatcher)
-            txtNewPassword.addTextChangedListener(textWatcher)
-            txtNewConfirmPassword.addTextChangedListener(textWatcher)
+            txtResetPassword.addTextChangedListener(textWatcher)
+            txtResetConfirmPassword.addTextChangedListener(textWatcher)
         }
 
         //NAVIGATION
-        bind.btnContinueCreateAccountToPart3.setOnClickListener {
-            Navigation.findNavController(bind.root).navigate(R.id.CreateAccountPart2ToPart3)
-        }
-
-        bind.btnBackToCreateAccountPart1.setOnClickListener {
+        bind.btnBack.setOnClickListener {
             activity?.onBackPressed()
         }
 

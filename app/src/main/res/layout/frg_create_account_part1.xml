@@ -109,6 +109,15 @@
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,SpeakableTextPresentCheck" />
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/lblCreateAccountErrorMsg1"
+        style="@style/TextBodyError"
+        android:text="@string/validate_age_permission"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/grpBirthDate"/>
+
     <Button
         android:id="@+id/btnContinueCreateAccountToPart2"
         style="@style/PrimaryButtonLarge"

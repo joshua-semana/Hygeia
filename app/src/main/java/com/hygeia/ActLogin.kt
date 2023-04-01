@@ -15,6 +15,7 @@ import androidx.core.content.getSystemService
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.msg
@@ -25,6 +26,7 @@ class ActLogin : AppCompatActivity() {
     private lateinit var bind : ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
     private var loginAttemptCount = 0
+    private var cloudFirestore = Firebase.firestore
     @SuppressLint("ServiceCast")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,8 +96,25 @@ class ActLogin : AppCompatActivity() {
                     if (signInMethod.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
                         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { signInTask ->
                             if (signInTask.isSuccessful) {
-                                //TODO: Check if user is Standard or Admin, get role of current user
                                 loginAttemptCount = 0
+                                cloudFirestore.collection("User").document(auth.currentUser!!.uid).get()
+                                    .addOnCompleteListener{ userTask ->
+                                        if (userTask.isSuccessful){
+                                            val userField = userTask.result
+                                            if (userField != null){
+                                                val userRole = userField.get("role").toString()
+                                                if (userRole == "standard"){
+                                                    msg("Login successfully!")
+                                                    startActivity(Intent(this, ActUserStandard::class.java))
+                                                }else if (userRole == "admin"){
+                                                    msg("Login successfully!")
+                                                    startActivity(Intent(this, ActUserAdmin::class.java))
+                                                }
+                                            }
+                                        } else {
+                                            msg("Error getting user data")
+                                        }
+                                    }
                                 msg("Login successfully!")
                                 startActivity(Intent(this, ActUserStandard::class.java))
                             } else {
