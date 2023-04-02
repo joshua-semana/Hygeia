@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.getSystemService
 import com.hygeia.R
+import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgCreateAccountPart1Binding
 import java.util.*
 
@@ -21,6 +23,7 @@ class FrgCreateAccountPart1 : Fragment() {
         bind = FrgCreateAccountPart1Binding.inflate(inflater, container, false)
 
         with(bind) {
+            //MAIN FUNCTIONS
             txtNewBirthDate.setOnClickListener { btnCalendar.performClick() }
             btnCalendar.setOnClickListener { showDatePickerDialog() }
 
@@ -31,19 +34,10 @@ class FrgCreateAccountPart1 : Fragment() {
                 requireView().findFocus()?.clearFocus()
             }
 
-            //VALIDATION
-            val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart2.isEnabled = txtNewFirstName.text.isNotEmpty() and
-                            txtNewLastName.text.isNotEmpty() and
-                            txtNewBirthDate.text.isNotEmpty()
-                }
-            }
-            txtNewFirstName.addTextChangedListener(textWatcher)
-            txtNewLastName.addTextChangedListener(textWatcher)
-            txtNewBirthDate.addTextChangedListener(textWatcher)
+            //INPUT VALIDATION
+            textWatcher1(txtNewFirstName)
+            textWatcher1(txtNewLastName)
+            textWatcher2(txtNewBirthDate)
 
             //NAVIGATION
             btnContinueCreateAccountToPart2.setOnClickListener {
@@ -51,7 +45,7 @@ class FrgCreateAccountPart1 : Fragment() {
             }
 
             btnBackToLogin.setOnClickListener {
-                activity?.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
             }
         }
         return bind.root
@@ -66,11 +60,11 @@ class FrgCreateAccountPart1 : Fragment() {
                 putString("birthdate", txtNewBirthDate.text.toString())
             }
             val fragment = FrgCreateAccountPart2().apply { arguments = bundle }
-            fragmentManager?.beginTransaction()
-                ?.setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
-                ?.replace(R.id.containerCreateAccount, fragment)
-                ?.addToBackStack(null)
-                ?.commit()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                .replace(R.id.containerCreateAccount, fragment)
+                .addToBackStack(null)
+                .commit()
         }
     }
 
@@ -93,5 +87,46 @@ class FrgCreateAccountPart1 : Fragment() {
             }
         }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
         datePicker.show()
+    }
+
+    //INPUT VALIDATOR
+    private fun textWatcher1(textField : EditText) {
+        with(bind) {
+            textField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                    if (s.toString().isNotEmpty()) {
+                        if (!s.toString().matches("[a-zA-Z ]+".toRegex())) {
+                            textField.apply {
+                                setText(text.substring(0, text.length - 1))
+                                setSelection(text.length)
+                            }
+                            activity?.msg("Only alphabetic characters are allowed.")
+                        }
+                    }
+                }
+                override fun afterTextChanged(s: Editable?) {
+                    btnContinueCreateAccountToPart2.isEnabled =
+                        txtNewFirstName.text.isNotEmpty() and
+                        txtNewLastName.text.isNotEmpty() and
+                        txtNewBirthDate.text.isNotEmpty()
+                }
+            })
+        }
+    }
+
+    private fun textWatcher2(textField : EditText) {
+        with(bind) {
+            textField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    btnContinueCreateAccountToPart2.isEnabled =
+                        txtNewFirstName.text.isNotEmpty() and
+                        txtNewLastName.text.isNotEmpty() and
+                        txtNewBirthDate.text.isNotEmpty()
+                }
+            })
+        }
     }
 }

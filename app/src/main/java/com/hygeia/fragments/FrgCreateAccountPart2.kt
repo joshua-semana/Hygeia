@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.getSystemService
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -47,23 +48,11 @@ class FrgCreateAccountPart2 : Fragment() {
                 }
             }
 
-            //VALIDATION
-            val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart3.isEnabled = txtNewEmail.text.isNotEmpty() and
-                            txtNewPhoneNumber.text.isNotEmpty() and
-                            txtNewPassword.text.isNotEmpty() and
-                            txtNewConfirmPassword.text.isNotEmpty()
-
-                }
-            }
-
-            txtNewEmail.addTextChangedListener(textWatcher)
-            txtNewPhoneNumber.addTextChangedListener(textWatcher)
-            txtNewPassword.addTextChangedListener(textWatcher)
-            txtNewConfirmPassword.addTextChangedListener(textWatcher)
+            //INPUT VALIDATION
+            textWatcher(txtNewEmail)
+            textWatcher(txtNewPhoneNumber)
+            textWatcher(txtNewPassword)
+            textWatcher(txtNewConfirmPassword)
 
             //NAVIGATION
             btnContinueCreateAccountToPart3.setOnClickListener {
@@ -76,17 +65,16 @@ class FrgCreateAccountPart2 : Fragment() {
             }
 
             bind.btnBackToCreateAccountPart1.setOnClickListener {
-                activity?.onBackPressed()
+                activity?.onBackPressedDispatcher?.onBackPressed()
             }
         }
-
         return bind.root
     }
 
     private fun validateInputs(email : String, phoneNumber : String, password : String, confirmPassword : String) {
         var errors = 0
         with(bind) {
-            val txtFields = arrayOf(txtNewEmail, txtNewPhoneNumber, txtNewPhoneNumber, txtNewConfirmPassword)
+            val txtFields = arrayOf(txtNewEmail, txtNewPhoneNumber, txtNewPassword, txtNewConfirmPassword)
             val lblErrors = arrayOf(lblCreateAccountErrorMsg1, lblCreateAccountErrorMsg2, lblCreateAccountErrorMsg3, lblCreateAccountErrorMsg4)
             txtFields.forEach { it.setBackgroundResource(R.drawable.bg_textfield_default) }
             lblErrors.forEach { it.visibility = View.GONE }
@@ -113,14 +101,16 @@ class FrgCreateAccountPart2 : Fragment() {
                 lblCreateAccountErrorMsg2.visibility = View.VISIBLE
                 lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
                 errors += 1
+            } else {
+                //TODO: CHECK IF NUMBER IS TAKEN
             }
 
-//            if (!Utilities.passwordPattern.matches(password)){
-//                txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-//                lblCreateAccountErrorMsg3.visibility = View.VISIBLE
-//                lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
-//                errors += 1
-//            }
+            if (!Utilities.passwordPattern.matches(password)){
+                txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg3.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
+                errors += 1
+            }
 
             if (confirmPassword != password){
                 txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
@@ -147,12 +137,28 @@ class FrgCreateAccountPart2 : Fragment() {
                 putString("password", txtNewPassword.text.toString())
             }
             val fragment = FrgCreateAccountPart3().apply { arguments = bundle }
-            fragmentManager?.beginTransaction()
-                ?.setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in,androidx.appcompat.R.anim.abc_fade_out)
-                ?.replace(R.id.containerCreateAccount, fragment)
-                ?.addToBackStack(null)
-                ?.commit()
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in,androidx.appcompat.R.anim.abc_fade_out)
+                .replace(R.id.containerCreateAccount, fragment)
+                .addToBackStack(null)
+                .commit()
         }
+    }
 
+    //INPUT VALIDATOR
+    private fun textWatcher(textField : EditText) {
+        with(bind) {
+            textField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+                override fun afterTextChanged(s: Editable?) {
+                    btnContinueCreateAccountToPart3.isEnabled =
+                        txtNewEmail.text.isNotEmpty() and
+                        txtNewPhoneNumber.text.isNotEmpty() and
+                        txtNewPassword.text.isNotEmpty() and
+                        txtNewConfirmPassword.text.isNotEmpty()
+                }
+            })
+        }
     }
 }
