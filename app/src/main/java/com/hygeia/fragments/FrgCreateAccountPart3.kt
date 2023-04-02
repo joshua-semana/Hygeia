@@ -10,7 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.R
 import com.hygeia.Utilities.msg
+import com.hygeia.Utilities.msgDlg
 
 import com.hygeia.databinding.FrgCreateAccountPart3Binding
 
@@ -24,15 +26,14 @@ class FrgCreateAccountPart3 : Fragment() {
 
         val cloudFirestore = FirebaseFirestore.getInstance()
 
-        val args = requireArguments()
-        val gender = args.getString("gender")
-        val firstname = args.getString("firstname")
-        val lastname = args.getString("lastname")
+        val gender = arguments?.getString("gender")
+        val firstname = arguments?.getString("firstname")
+        val lastname = arguments?.getString("lastname")
         val fullname = "$gender $firstname $lastname"
-        val birthdate = args.getString("birthdate")
-        val email = args.getString("email")
-        val phoneNumber = args.getString("phoneNumber")
-        val password = args.getString("password")
+        val birthdate = arguments?.getString("birthdate")
+        val email = arguments?.getString("email")
+        val phoneNumber = arguments?.getString("phoneNumber")
+        val password = arguments?.getString("password")
 
         with(bind) {
             txtReviewFullNameAndGender.setText(fullname)
@@ -43,6 +44,7 @@ class FrgCreateAccountPart3 : Fragment() {
 
             //MAIN FUNCTION
             btnCreateAccount.setOnClickListener {
+                // TODO: ADD LOADING DIALOG HERE
                 val userData = hashMapOf(
                     "gender" to gender,
                     "firstname" to firstname,
@@ -60,31 +62,35 @@ class FrgCreateAccountPart3 : Fragment() {
                             if (userFirebase != null) {
                                 cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
                                     .addOnSuccessListener {
-                                        requireActivity().msg("Successfully registered")
+                                        // IF SUCCESS, HIDE LOADING, SHOW MESSAGE, GO BACK TO LOGIN
+                                        msgDlg(requireContext(), "success", "Successfully registered!", getString(R.string.dlg_success_create_account))
                                     }.addOnFailureListener{
+                                        // IF NOT SUCCESS, CHECK IF THERE IS INTERNET CONNECTION
+                                        // ELSE SHOW ERROR ICON, ERROR MESSAGE AND TRY AGAIN BUTTON
                                         requireActivity().msg("failed")
                                     }
                             }
                         } else {
+                            // MAKE A LOCAL FUNCTION TO CHECK INTERNET CONNECTION
+                            // AND SHOW THE ERROR MESSAGE TO TRY AGAIN
                             requireActivity().msg("FAILED")
                         }
                     }
             }
             //ELEMENT BEHAVIOR
             tglShowPassword.setOnCheckedChangeListener{ _, isChecked ->
-                if (isChecked) {
-                    txtReviewPassword.transformationMethod = null
-                } else {
-                    txtReviewPassword.transformationMethod = PasswordTransformationMethod()
+                val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
+                with(txtReviewPassword) {
+                    this.transformationMethod = passwordDisplay
+                    setSelection(text.length)
                 }
             }
         }
 
         //NAVIGATION
         bind.btnBackToCreateAccountPart2.setOnClickListener {
-            activity?.onBackPressed()
+            activity?.onBackPressedDispatcher?.onBackPressed()
         }
-
         return bind.root
     }
 }

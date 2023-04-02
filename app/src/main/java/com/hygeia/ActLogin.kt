@@ -82,6 +82,7 @@ class ActLogin : AppCompatActivity() {
         }
     }
 
+    //TODO: CREATE VALIDATE INPUT FUNCTION BEFORE LOGIN
     private fun login(email : String, password : String) {
         if (Utilities.emailPattern.matches(email)) {
             with(bind) {
