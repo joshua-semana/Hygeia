@@ -18,7 +18,6 @@ import java.util.*
 
 class FrgCreateAccountPart1 : Fragment() {
     private lateinit var bind : FrgCreateAccountPart1Binding
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgCreateAccountPart1Binding.inflate(inflater, container, false)
 
@@ -47,8 +46,9 @@ class FrgCreateAccountPart1 : Fragment() {
             btnBackToLogin.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
+
+            return root
         }
-        return bind.root
     }
 
     private fun sendArguments() {

@@ -11,8 +11,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.msg
-import com.hygeia.Utilities.msgDlg
+import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.isInternetConnected
 
 import com.hygeia.databinding.FrgCreateAccountPart3Binding
 
@@ -24,58 +26,38 @@ class FrgCreateAccountPart3 : Fragment() {
         bind = FrgCreateAccountPart3Binding.inflate(inflater, container, false)
         auth = Firebase.auth
 
-        val cloudFirestore = FirebaseFirestore.getInstance()
+        val userInfo = mapOf(
+            "gender" to arguments?.getString("gender"),
+            "firstname" to arguments?.getString("firstname"),
+            "lastname" to arguments?.getString("lastname"),
+            "birthdate" to arguments?.getString("birthdate"),
+            "email" to arguments?.getString("email"),
+            "phoneNumber" to arguments?.getString("phoneNumber"),
+            "password" to arguments?.getString("password")
+        )
 
-        val gender = arguments?.getString("gender")
-        val firstname = arguments?.getString("firstname")
-        val lastname = arguments?.getString("lastname")
-        val fullname = "$gender $firstname $lastname"
-        val birthdate = arguments?.getString("birthdate")
-        val email = arguments?.getString("email")
-        val phoneNumber = arguments?.getString("phoneNumber")
-        val password = arguments?.getString("password")
+        val fullname = "${userInfo["gender"]} ${userInfo["firstname"]} ${userInfo["lastname"]}"
 
         with(bind) {
             txtReviewFullNameAndGender.setText(fullname)
-            txtReviewBirthdate.setText(birthdate)
-            txtReviewEmail.setText(email)
-            txtReviewPhoneNumber.setText(phoneNumber)
-            txtReviewPassword.setText(password)
+            txtReviewBirthdate.setText(userInfo["birthdate"])
+            txtReviewEmail.setText(userInfo["email"])
+            txtReviewPhoneNumber.setText(userInfo["phoneNumber"])
+            txtReviewPassword.setText(userInfo["password"])
 
             //MAIN FUNCTION
             btnCreateAccount.setOnClickListener {
-                // TODO: ADD LOADING DIALOG HERE
-                val userData = hashMapOf(
-                    "gender" to gender,
-                    "firstname" to firstname,
-                    "lastname" to lastname,
-                    "birthdate" to birthdate,
-                    "email" to email,
-                    "phoneNumber" to phoneNumber,
-                    "password" to password,
-                    "role" to "standard"
-                )
-                FirebaseAuth.getInstance().createUserWithEmailAndPassword(email.toString(), password.toString())
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val userFirebase = task.result?.user
-                            if (userFirebase != null) {
-                                cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
-                                    .addOnSuccessListener {
-                                        // IF SUCCESS, HIDE LOADING, SHOW MESSAGE, GO BACK TO LOGIN
-                                        msgDlg(requireContext(), "success", "Successfully registered!", getString(R.string.dlg_success_create_account))
-                                    }.addOnFailureListener{
-                                        // IF NOT SUCCESS, CHECK IF THERE IS INTERNET CONNECTION
-                                        // ELSE SHOW ERROR ICON, ERROR MESSAGE AND TRY AGAIN BUTTON
-                                        requireActivity().msg("failed")
-                                    }
-                            }
-                        } else {
-                            // MAKE A LOCAL FUNCTION TO CHECK INTERNET CONNECTION
-                            // AND SHOW THE ERROR MESSAGE TO TRY AGAIN
-                            requireActivity().msg("FAILED")
-                        }
-                    }
+                if (isInternetConnected(requireContext())) {
+                    createAccount(userInfo)
+                } else {
+                    dlgMessage(
+                        requireContext(),
+                        "no-wifi",
+                        "No internet connection",
+                        getString(R.string.dlg_no_wifi),
+                        "Okay"
+                    )
+                }
             }
             //ELEMENT BEHAVIOR
             tglShowPassword.setOnCheckedChangeListener{ _, isChecked ->
@@ -85,12 +67,58 @@ class FrgCreateAccountPart3 : Fragment() {
                     setSelection(text.length)
                 }
             }
-        }
+            //NAVIGATION
+            btnBackToCreateAccountPart2.setOnClickListener {
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
 
-        //NAVIGATION
-        bind.btnBackToCreateAccountPart2.setOnClickListener {
-            activity?.onBackPressedDispatcher?.onBackPressed()
+            return root
         }
-        return bind.root
+    }
+
+    private fun createAccount(data : Map<String, String?>) {
+        val loading = dlgLoading(requireContext())
+        val cloudFirestore = FirebaseFirestore.getInstance()
+        loading.show()
+
+        val userData = hashMapOf(
+            "gender" to data["gender"],
+            "firstname" to data["firstname"],
+            "lastname" to data["lastname"],
+            "birthdate" to data["birthdate"],
+            "email" to data["email"],
+            "phoneNumber" to data["phoneNumber"],
+            "password" to data["password"],
+            "role" to "standard"
+        )
+
+        FirebaseAuth.getInstance().createUserWithEmailAndPassword(data["email"].toString(), data["password"].toString())
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val userFirebase = task.result?.user
+                    if (userFirebase != null) {
+                        cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
+                            .addOnSuccessListener {
+                                loading.dismiss()
+                                dlgMessage(
+                                    requireContext(),
+                                    "success",
+                                    "Successfully registered!",
+                                    getString(R.string.dlg_success_create_account),
+                                    "Go back to login"
+                                ).apply {
+                                    setOnDismissListener {
+                                        requireActivity().finish()
+                                    }
+                                    show()
+                                }
+                            }
+                    }
+                } else {
+                    loading.dismiss()
+                    requireActivity().msg("Please try again")
+                }
+            }
+
     }
 }

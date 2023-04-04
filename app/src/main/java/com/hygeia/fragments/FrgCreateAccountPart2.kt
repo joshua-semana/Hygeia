@@ -16,6 +16,10 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities
+import com.hygeia.Utilities.dlgLoading
+import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgCreateAccountPart2Binding
 
 class FrgCreateAccountPart2 : Fragment() {
@@ -24,6 +28,7 @@ class FrgCreateAccountPart2 : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgCreateAccountPart2Binding.inflate(inflater, container, false)
         auth = Firebase.auth
+
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
@@ -56,71 +61,84 @@ class FrgCreateAccountPart2 : Fragment() {
 
             //NAVIGATION
             btnContinueCreateAccountToPart3.setOnClickListener {
-                validateInputs(
-                    txtNewEmail.text.toString(),
-                    txtNewPhoneNumber.text.toString(),
-                    txtNewPassword.text.toString(),
-                    txtNewConfirmPassword.text.toString()
-                )
+                if (isInternetConnected(requireContext())) {
+                    validateInputs(txtNewEmail.text.toString(),
+                        txtNewPhoneNumber.text.toString(),
+                        txtNewPassword.text.toString(),
+                        txtNewConfirmPassword.text.toString())
+                } else {
+                    dlgMessage(
+                        requireContext(),
+                        "no-wifi",
+                        "No internet connection",
+                        getString(R.string.dlg_no_wifi),
+                        "Okay"
+                    ).show()
+                }
             }
 
-            bind.btnBackToCreateAccountPart1.setOnClickListener {
+            btnBackToCreateAccountPart1.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
+
+            return root
         }
-        return bind.root
     }
 
     private fun validateInputs(email : String, phoneNumber : String, password : String, confirmPassword : String) {
+        val loading = dlgLoading(requireContext())
         var errors = 0
+        loading.show()
         with(bind) {
             val txtFields = arrayOf(txtNewEmail, txtNewPhoneNumber, txtNewPassword, txtNewConfirmPassword)
             val lblErrors = arrayOf(lblCreateAccountErrorMsg1, lblCreateAccountErrorMsg2, lblCreateAccountErrorMsg3, lblCreateAccountErrorMsg4)
             txtFields.forEach { it.setBackgroundResource(R.drawable.bg_textfield_default) }
             lblErrors.forEach { it.visibility = View.GONE }
 
-            if (!Utilities.emailPattern.matches(email)){
-                txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblCreateAccountErrorMsg1.visibility = View.VISIBLE
-                lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
-                errors += 1
-            } else {
-                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
-                    val signInMethod = task.result?.signInMethods ?: emptyList<String>()
-                    if (signInMethod.isNotEmpty()) {
+            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val accounts = task.result?.signInMethods ?: emptyList<String>()
+
+                    if (!Utilities.emailPattern.matches(email)) {
+                        txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblCreateAccountErrorMsg1.visibility = View.VISIBLE
+                        lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
+                    } else if (accounts.isNotEmpty()) {
                         txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
                         lblCreateAccountErrorMsg1.visibility = View.VISIBLE
                         lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_taken)
-                        errors += 1
                     }
+
+                    if (!Utilities.phoneNumberPattern.matches(phoneNumber)){
+                        txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblCreateAccountErrorMsg2.visibility = View.VISIBLE
+                        lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
+                    } else {
+                        // TODO: CHECK IF NUMBER IS TAKEN
+                    }
+
+                    if (!Utilities.passwordPattern.matches(password)){
+                        txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblCreateAccountErrorMsg3.visibility = View.VISIBLE
+                        lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
+                    }
+
+                    if (confirmPassword != password){
+                        txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblCreateAccountErrorMsg4.visibility = View.VISIBLE
+                        lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
+                    }
+
+                    lblErrors.forEach {
+                        if (it.visibility == View.VISIBLE) errors += 1
+                    }
+
+                    if (errors == 0) sendArguments()
+
+                } else {
+                    requireActivity().msg("Please try again")
                 }
-            }
-
-            if (!Utilities.phoneNumberPattern.matches(phoneNumber)){
-                txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblCreateAccountErrorMsg2.visibility = View.VISIBLE
-                lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
-                errors += 1
-            } else {
-                //TODO: CHECK IF NUMBER IS TAKEN
-            }
-
-            if (!Utilities.passwordPattern.matches(password)){
-                txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblCreateAccountErrorMsg3.visibility = View.VISIBLE
-                lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
-                errors += 1
-            }
-
-            if (confirmPassword != password){
-                txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblCreateAccountErrorMsg4.visibility = View.VISIBLE
-                lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
-                errors += 1
-            }
-
-            if (errors <= 0) {
-                sendArguments()
+                loading.dismiss()
             }
         }
     }
