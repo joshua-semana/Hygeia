@@ -1,6 +1,5 @@
 package com.hygeia
 
-import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -17,9 +16,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.Utilities.dlgMessage
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.msg
-import com.hygeia.Utilities.msgDlg
 import com.hygeia.databinding.ActivityLoginBinding
 
 class ActLogin : AppCompatActivity() {
@@ -27,7 +26,7 @@ class ActLogin : AppCompatActivity() {
     private lateinit var auth : FirebaseAuth
     private var loginAttemptCount = 0
     private var cloudFirestore = Firebase.firestore
-    @SuppressLint("ServiceCast")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityLoginBinding.inflate(layoutInflater)
@@ -37,10 +36,16 @@ class ActLogin : AppCompatActivity() {
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
-                if (isInternetConnected(applicationContext)) {
+                if (!isInternetConnected(applicationContext)) {
                     login(txtEmail.text.toString(), txtPassword.text.toString())
                 } else {
-                    msgDlg(this@ActLogin, "no-wifi", "No internet connection", getString(R.string.dlg_no_wifi))
+                    dlgMessage(
+                        this@ActLogin,
+                        "no-wifi",
+                        "No internet connection",
+                        getString(R.string.dlg_no_wifi),
+                        "Okay"
+                    ).show()
                 }
             }
 
@@ -65,7 +70,7 @@ class ActLogin : AppCompatActivity() {
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     btnLogin.isEnabled = txtEmail.text.isNotEmpty() and
-                            txtPassword.text.isNotEmpty()
+                        txtPassword.text.isNotEmpty()
                 }
             }
 
