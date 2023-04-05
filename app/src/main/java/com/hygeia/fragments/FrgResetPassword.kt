@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.core.content.getSystemService
 import com.hygeia.databinding.FrgResetPasswordBinding
 
@@ -20,9 +21,11 @@ class FrgResetPassword : Fragment() {
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                requireContext().getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                }
                 mainLayout.requestFocus()
-                requireView().findFocus().clearFocus()
+                requireView().findFocus()?.clearFocus()
             }
 
             tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
@@ -41,25 +44,31 @@ class FrgResetPassword : Fragment() {
                 }
             }
 
-            //VALIDATION
-            val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
+            //INPUT VALIDATION
+            textWatcher(txtResetPassword)
+            textWatcher(txtResetConfirmPassword)
+
+            //NAVIGATION
+            btnBack.setOnClickListener {
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
+
+            return root
+        }
+    }
+
+    //INPUT VALIDATOR
+    private fun textWatcher(textField : EditText) {
+        textField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun afterTextChanged(s: Editable?) {
+                with(bind) {
                     btnUpdatePassword.isEnabled = txtResetPassword.text.isNotEmpty() and
                             txtResetConfirmPassword.text.isNotEmpty()
                 }
             }
-
-            txtResetPassword.addTextChangedListener(textWatcher)
-            txtResetConfirmPassword.addTextChangedListener(textWatcher)
-        }
-
-        //NAVIGATION
-        bind.btnBack.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        return bind.root
+        })
     }
 }
+

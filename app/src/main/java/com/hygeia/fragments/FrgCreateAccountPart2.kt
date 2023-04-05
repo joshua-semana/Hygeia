@@ -32,7 +32,9 @@ class FrgCreateAccountPart2 : Fragment() {
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                requireContext().getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                }
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
@@ -70,11 +72,12 @@ class FrgCreateAccountPart2 : Fragment() {
                     dlgMessage(
                         requireContext(),
                         "no-wifi",
-                        "No internet connection",
-                        getString(R.string.dlg_no_wifi),
+                        getString(R.string.dlg_title_wifi),
+                        getString(R.string.dlg_body_wifi),
                         "Okay"
                     ).show()
                 }
+
             }
 
             btnBackToCreateAccountPart1.setOnClickListener {
@@ -88,57 +91,58 @@ class FrgCreateAccountPart2 : Fragment() {
     private fun validateInputs(email : String, phoneNumber : String, password : String, confirmPassword : String) {
         val loading = dlgLoading(requireContext())
         var errors = 0
-        loading.show()
         with(bind) {
             val txtFields = arrayOf(txtNewEmail, txtNewPhoneNumber, txtNewPassword, txtNewConfirmPassword)
             val lblErrors = arrayOf(lblCreateAccountErrorMsg1, lblCreateAccountErrorMsg2, lblCreateAccountErrorMsg3, lblCreateAccountErrorMsg4)
             txtFields.forEach { it.setBackgroundResource(R.drawable.bg_textfield_default) }
             lblErrors.forEach { it.visibility = View.GONE }
 
-            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val accounts = task.result?.signInMethods ?: emptyList<String>()
+            if (!Utilities.emailPattern.matches(email)) {
+                txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg1.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
+            } else {
+                loading.show()
+                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val accounts = task.result?.signInMethods ?: emptyList<String>()
+                        if (accounts.isNotEmpty()) {
+                            txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                            lblCreateAccountErrorMsg1.visibility = View.VISIBLE
+                            lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_taken)
+                        }
 
-                    if (!Utilities.emailPattern.matches(email)) {
-                        txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblCreateAccountErrorMsg1.visibility = View.VISIBLE
-                        lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
-                    } else if (accounts.isNotEmpty()) {
-                        txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblCreateAccountErrorMsg1.visibility = View.VISIBLE
-                        lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_taken)
-                    }
+                        if (!Utilities.phoneNumberPattern.matches(phoneNumber)){
+                            txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
+                            lblCreateAccountErrorMsg2.visibility = View.VISIBLE
+                            lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
+                        } else {
+                            // TODO: CHECK IF NUMBER IS TAKEN
+                        }
 
-                    if (!Utilities.phoneNumberPattern.matches(phoneNumber)){
-                        txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblCreateAccountErrorMsg2.visibility = View.VISIBLE
-                        lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
+                        if (!Utilities.passwordPattern.matches(password)){
+                            txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                            lblCreateAccountErrorMsg3.visibility = View.VISIBLE
+                            lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
+                        }
+
+                        if (confirmPassword != password){
+                            txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                            lblCreateAccountErrorMsg4.visibility = View.VISIBLE
+                            lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
+                        }
+
+                        lblErrors.forEach {
+                            if (it.visibility == View.VISIBLE) errors += 1
+                        }
+
+                        loading.dismiss()
+
+                        if (errors == 0) sendArguments()
                     } else {
-                        // TODO: CHECK IF NUMBER IS TAKEN
+                        requireActivity().msg("Please try again")
                     }
-
-                    if (!Utilities.passwordPattern.matches(password)){
-                        txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblCreateAccountErrorMsg3.visibility = View.VISIBLE
-                        lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
-                    }
-
-                    if (confirmPassword != password){
-                        txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblCreateAccountErrorMsg4.visibility = View.VISIBLE
-                        lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
-                    }
-
-                    lblErrors.forEach {
-                        if (it.visibility == View.VISIBLE) errors += 1
-                    }
-
-                    if (errors == 0) sendArguments()
-
-                } else {
-                    requireActivity().msg("Please try again")
                 }
-                loading.dismiss()
             }
         }
     }

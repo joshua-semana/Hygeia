@@ -28,7 +28,9 @@ class FrgCreateAccountPart1 : Fragment() {
 
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                requireContext().getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                }
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }

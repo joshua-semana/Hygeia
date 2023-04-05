@@ -36,14 +36,14 @@ class ActLogin : AppCompatActivity() {
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
-                if (!isInternetConnected(applicationContext)) {
+                if (isInternetConnected(applicationContext)) {
                     login(txtEmail.text.toString(), txtPassword.text.toString())
                 } else {
                     dlgMessage(
                         this@ActLogin,
                         "no-wifi",
-                        "No internet connection",
-                        getString(R.string.dlg_no_wifi),
+                        getString(R.string.dlg_title_wifi),
+                        getString(R.string.dlg_body_wifi),
                         "Okay"
                     ).show()
                 }
@@ -51,7 +51,9 @@ class ActLogin : AppCompatActivity() {
 
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                }
                 mainLayout.requestFocus()
                 currentFocus?.clearFocus()
             }
@@ -76,14 +78,15 @@ class ActLogin : AppCompatActivity() {
 
             txtEmail.addTextChangedListener(textWatcher)
             txtPassword.addTextChangedListener(textWatcher)
-        }
-        //NAVIGATION
-        bind.btnGoToForgotPassword.setOnClickListener {
-            startActivity(Intent(this, ActForgotPassword::class.java))
-        }
 
-        bind.btnGoToCreateAccountPart1.setOnClickListener {
-            startActivity(Intent(this, ActCreateAccount::class.java))
+            //NAVIGATION
+            btnGoToForgotPassword.setOnClickListener {
+                startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
+            }
+
+            btnGoToCreateAccountPart1.setOnClickListener {
+                startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
+            }
         }
     }
 
