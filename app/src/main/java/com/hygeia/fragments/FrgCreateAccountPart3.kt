@@ -39,6 +39,7 @@ class FrgCreateAccountPart3 : Fragment() {
         val fullname = "${userInfo["gender"]} ${userInfo["firstname"]} ${userInfo["lastname"]}"
 
         with(bind) {
+            //POPULATE
             txtReviewFullNameAndGender.setText(fullname)
             txtReviewBirthdate.setText(userInfo["birthdate"])
             txtReviewEmail.setText(userInfo["email"])
@@ -53,8 +54,8 @@ class FrgCreateAccountPart3 : Fragment() {
                     dlgMessage(
                         requireContext(),
                         "no-wifi",
-                        "No internet connection",
-                        getString(R.string.dlg_no_wifi),
+                        getString(R.string.dlg_title_wifi),
+                        getString(R.string.dlg_body_wifi),
                         "Okay"
                     )
                 }
@@ -103,8 +104,8 @@ class FrgCreateAccountPart3 : Fragment() {
                                 dlgMessage(
                                     requireContext(),
                                     "success",
-                                    "Successfully registered!",
-                                    getString(R.string.dlg_success_create_account),
+                                    getString(R.string.dlg_title_create_account),
+                                    getString(R.string.dlg_body_create_account),
                                     "Go back to login"
                                 ).apply {
                                     setOnDismissListener {

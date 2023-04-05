@@ -43,7 +43,6 @@
             style="@style/TextBody"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
             android:layout_marginTop="4dp"
             android:gravity="center"
             android:text="@string/placeholder_dialog_body"
@@ -52,7 +51,7 @@
             app:layout_constraintTop_toBottomOf="@id/lblDialogTitle" />
 
         <Button
-            android:id="@+id/btnDialogOkay"
+            android:id="@+id/btnDialogPrimary"
             style="@style/LabelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

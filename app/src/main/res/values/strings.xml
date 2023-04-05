@@ -13,6 +13,9 @@
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
     <string name="btn_okay">Okay</string>
+    <string name="btn_verify">Verify</string>
+    <string name="btn_send">Send Code</string>
+    <string name="btn_resend">Resend Code</string>
 
     <string name="hint_first_name">Enter first name</string>
     <string name="hint_last_name">Enter last name</string>
@@ -23,6 +26,7 @@
     <string name="hint_phone_number">Enter phone number</string>
     <string name="hint_password_new">Enter your new password</string>
     <string name="hint_confirm_password_new">Re-enter your new password</string>
+    <string name="hint_otp">Enter OTP</string>
 
     <!--CONTENTS-->
     <string name="heading_create_account1">Let\'s create your</string>
@@ -30,6 +34,7 @@
     <string name="heading_create_account3">Review your</string>
     <string name="heading_forgot_password">Let\'s recover your</string>
     <string name="heading_reset_password">Create your new</string>
+    <string name="heading_otp">One-Time</string>
 
     <string name="title_create_personal_info">Enter your personal information</string>
     <string name="title_create_account_details">Enter your account details</string>
@@ -39,10 +44,12 @@
     <string name="title_review_phone">Your phone number</string>
     <string name="title_review_password">Your password</string>
     <string name="title_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia</string>
+    <string name="title_otp">Please enter the one-time PIN (OTP) that we sent to your number ending in</string>
 
     <!--SINGLE WORD-->
     <string name="account">account</string>
     <string name="password">password</string>
+    <string name="pin">PIN</string>
 
     <!--VALIDATION MESSAGE-->
     <string name="validate_placeholder_msg_for_multi_error">This is a placeholder for an error message</string>
@@ -56,12 +63,17 @@
     <string name="validate_age_permission">Sorry, you must be at least 11 years old to use this application.</string>
     <string name="validate_phone_format">The phone number you entered is invalid.</string>
     <string name="validate_phone_taken">This phone number is already in use.</string>
+    <string name="validate_otp_incorrect">The one-time pin you entered is incorrect.</string>
 
     <!--DIALOG-->
     <string name="placeholder_dialog_title">Dialog Title</string>
     <string name="placeholder_dialog_body">Dialog content</string>
-    <string name="dlg_no_wifi">It looks like you are not connected to the internet. Be sure to connect to your Wi-Fi in order to log in.</string>
-    <string name="dlg_success_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
+    <string name="dlg_title_wifi">No internet connection</string>
+    <string name="dlg_body_wifi">It looks like you are not connected to the internet. Be sure to connect to your Wi-Fi in order to log in.</string>
+    <string name="dlg_title_create_account">Successfully registered!</string>
+    <string name="dlg_body_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
+    <string name="dlg_title_otp">One-Time PIN</string>
+
 
     <!--SPECIFIC ACTIVITIES-->
     <!--CREATE ACCOUNT ACTIVITY-->

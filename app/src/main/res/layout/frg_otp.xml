@@ -7,7 +7,7 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/btnBackToLogin"
+        android:id="@+id/btnBack"
         style="@style/IconButtonBack"
         android:drawableLeft="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
@@ -15,55 +15,71 @@
         tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/lblForgotPasswordHeading1"
+        android:id="@+id/lblOTPHeading1"
         style="@style/TextHeadingRegular"
-        android:text="@string/heading_forgot_password"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_width="wrap_content"
+        android:text="@string/heading_otp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/lblForgotPasswordHeading2"
+        android:id="@+id/lblOTPHeading2"
         style="@style/TextHeadingColored"
-        android:text="@string/account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblForgotPasswordHeading1" />
+        android:layout_width="wrap_content"
+        android:layout_marginStart="6dp"
+        android:layout_marginTop="80dp"
+        android:text="@string/pin"
+        app:layout_constraintStart_toEndOf="@+id/lblOTPHeading1"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/titleForgotPassword"
+        android:id="@+id/titleOTP"
         style="@style/TextBody"
         android:layout_marginTop="8dp"
-        android:text="@string/title_forgot_password"
+        android:text="@string/title_otp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblForgotPasswordHeading2" />
+        app:layout_constraintTop_toBottomOf="@+id/lblOTPHeading2" />
 
     <EditText
-        android:id="@+id/txtForgotEmail"
+        android:id="@+id/txtOTP"
         style="@style/PrimaryTextField"
         android:autofillHints=""
-        android:hint="@string/hint_email"
-        android:inputType="textEmailAddress"
+        android:hint="@string/hint_otp"
+        android:inputType="number"
+        android:maxLength="6"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleForgotPassword"
+        app:layout_constraintTop_toBottomOf="@+id/titleOTP"
         tools:ignore="VisualLintTextFieldSize" />
 
     <TextView
-        android:id="@+id/lblForgotPasswordErrorMsg1"
+        android:id="@+id/lblOTPErrorMsg1"
         style="@style/TextBodyError"
-        android:text="@string/validate_email_exists"
+        android:text="@string/validate_otp_incorrect"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtForgotEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/txtOTP" />
 
     <Button
-        android:id="@+id/btnContinue"
+        android:id="@+id/btnResend"
+        style="@style/LabelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:enabled="false"
+        android:text="@string/btn_resend"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/lblOTPErrorMsg1"
+        tools:ignore="VisualLintButtonSize" />
+
+    <Button
+        android:id="@+id/btnVerify"
         style="@style/PrimaryButtonLarge"
         android:layout_marginBottom="32dp"
         android:enabled="false"
-        android:text="@string/btn_continue"
+        android:text="@string/btn_verify"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

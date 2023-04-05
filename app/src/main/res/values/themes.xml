@@ -169,4 +169,13 @@
         <item name="android:layout_marginTop">2dp</item>
     </style>
 
+    <!--ICON STYLE-->
+
+    <style name="IconStyle">
+        <item name="android:layout_width">@dimen/size_icon</item>
+        <item name="android:layout_height">@dimen/size_icon</item>
+        <item name="android:textColor">@android:color/transparent</item>
+        <item name="backgroundTint">@null</item>
+    </style>
+
 </resources>

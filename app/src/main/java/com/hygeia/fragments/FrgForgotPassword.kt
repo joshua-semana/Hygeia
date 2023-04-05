@@ -8,46 +8,120 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.getSystemService
-import androidx.navigation.Navigation
+import android.widget.EditText
+import com.google.firebase.auth.FirebaseAuth
 import com.hygeia.R
+import com.hygeia.Utilities.dlgLoading
+import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.emailPattern
+import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgForgotPasswordBinding
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind : FrgForgotPasswordBinding
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgForgotPasswordBinding.inflate(inflater, container, false)
 
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                requireActivity().getSystemService<InputMethodManager>()?.hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                requireContext().getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+                }
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
 
             //VALIDATION
-            val textWatcher = object : TextWatcher {
+            textWatcher(txtForgotEmail)
+
+            //NAVIGATION
+            btnContinue.setOnClickListener {
+                if (isInternetConnected(requireContext())) {
+                    validateInput(txtForgotEmail.text.toString())
+                } else {
+                    dlgMessage(
+                        requireContext(),
+                        "no-wifi",
+                        getString(R.string.dlg_title_wifi),
+                        getString(R.string.dlg_body_wifi),
+                        "Okay"
+                    )
+                }
+            }
+
+            btnBackToLogin.setOnClickListener {
+                activity?.onBackPressedDispatcher?.onBackPressed()
+            }
+
+            return root
+        }
+    }
+
+    private fun validateInput(email : String) {
+        val loading = dlgLoading(requireContext())
+        with(bind) {
+            txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblForgotPasswordErrorMsg1.visibility = View.GONE
+
+            if (!emailPattern.matches(email)) {
+                txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
+                lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_format)
+            } else {
+                loading.show()
+                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener{ task ->
+                    if (task.isSuccessful) {
+                        val accounts = task.result?.signInMethods?: emptyList<String>()
+                        if (accounts.isEmpty()) {
+                            txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                            lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
+                            lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
+                        } else {
+                            sendOTP()
+                            sendArguments(getPhoneNumber())
+                        }
+                    }
+                    loading.dismiss()
+                }
+            }
+        }
+    }
+
+    private fun sendOTP() {
+        //TODO : SEND OTP FUNCTION, ADD 30 SECONDS GLOBAL OTP TIME COUNTER
+    }
+
+    private fun getPhoneNumber(): String {
+        //TODO : GET THE LAST 4 DIGITS OF PHONE NUMBER
+        val phoneNumber = "09087788795"
+        return phoneNumber.substring(7, 11)
+    }
+
+    private fun sendArguments(phoneNumber : String) {
+        with(bind) {
+            val bundle = Bundle().apply {
+                putString("phoneNumber", phoneNumber)
+            }
+            val fragment = FrgOTP().apply { arguments = bundle }
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                .replace(R.id.containerForgotPassword, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
+
+    //INPUT VALIDATOR
+    private fun textWatcher(textField : EditText) {
+        with(bind) {
+            textField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
                     btnContinue.isEnabled = txtForgotEmail.text.isNotEmpty()
                 }
-            }
-
-            txtForgotEmail.addTextChangedListener(textWatcher)
+            })
         }
-
-        //NAVIGATION
-        bind.btnContinue.setOnClickListener {
-            Navigation.findNavController(bind.root).navigate(R.id.ForgotPasswordToResetPassword)
-        }
-
-        bind.btnBackToLogin.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        return bind.root
     }
 }
