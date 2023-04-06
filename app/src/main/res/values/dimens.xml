@@ -1,22 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--WHEN CHANGING MARGIN_X, BACK ICON, PAGE NUMBER, & MARGIN_X_ERROR ARE PLUS OR MINUS 6-->
+
     <!--GLOBAL-->
     <dimen name="corner_radius">8dp</dimen>
     <dimen name="corner_rounded">100dp</dimen>
     <dimen name="heading_margin_top">80dp</dimen>
-    <dimen name="margin_x">30dp</dimen>
-    <dimen name="margin_x_error">50dp</dimen>
+    <dimen name="margin_x">24dp</dimen>
+    <dimen name="margin_x_error">44dp</dimen>
 
     <!--TEXTS-->
-    <dimen name="heading">36sp</dimen>
-    <dimen name="body">16sp</dimen>
-    <dimen name="small">14sp</dimen>
+    <dimen name="heading">32sp</dimen>
+    <dimen name="body">14sp</dimen>
+    <dimen name="small">12sp</dimen>
     <dimen name="letter_spacing">0.6</dimen>
-    <dimen name="line_spacing">-8dp</dimen>
+    <dimen name="line_spacing">-6dp</dimen>
+    <dimen name="body_top_gap">6dp</dimen>
 
     <!--BUTTONS-->
     <dimen name="control_width">320dp</dimen>
     <dimen name="control_height">60dp</dimen>
+    <dimen name="btn_margin_bottom">24dp</dimen>
     <dimen name="inset_top">3dp</dimen>
     <dimen name="inset_bot">3dp</dimen>
     <dimen name="gap">2dp</dimen>
@@ -32,11 +36,15 @@
     <dimen name="cmb_padding_end">12sp</dimen>
 
     <!--ICONS-->
-    <dimen name="size_icon">28sp</dimen>
+    <dimen name="size_icon">26sp</dimen>
     <dimen name="dialog_icon_size">34dp</dimen>
     <dimen name="dialog_icon_padding">10dp</dimen>
     <dimen name="icon_margin_top">20dp</dimen>
-    <dimen name="icon_margin_start">26dp</dimen>
+    <dimen name="icon_margin_start">20dp</dimen>
     <dimen name="icon_margin_end">14dp</dimen>
     <dimen name="icon_padding_x">0dp</dimen>
+
+    <!--PAGE NUMBERS-->
+    <dimen name="pg_num_top">24dp</dimen>
+    <dimen name="pg_num_end">22dp</dimen>
 </resources>
