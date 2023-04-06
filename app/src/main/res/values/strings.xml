@@ -53,6 +53,7 @@
 
     <!--VALIDATION MESSAGE-->
     <string name="validate_placeholder_msg_for_multi_error">This is a placeholder for an error message</string>
+    <string name="validate_required">This field is required</string>
     <string name="validate_email_exists">The email you entered is not registered in our system.</string>
     <string name="validate_email_format">The email you entered is invalid.</string>
     <string name="validate_email_taken">This email is already in use.</string>

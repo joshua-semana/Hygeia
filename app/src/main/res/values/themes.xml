@@ -32,6 +32,7 @@
         <item name="android:layout_height">@dimen/control_height</item>
         <item name="android:layout_marginStart">@dimen/margin_x</item>
         <item name="android:layout_marginEnd">@dimen/margin_x</item>
+        <item name="android:layout_marginBottom">@dimen/btn_margin_bottom</item>
         <item name="rippleColor">@color/ripple_primary</item>
     </style>
 
@@ -153,6 +154,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/margin_x</item>
         <item name="android:layout_marginEnd">@dimen/margin_x</item>
+        <item name="android:layout_marginTop">@dimen/body_top_gap</item>
         <item name="android:fontFamily">@font/roboto</item>
         <item name="android:textSize">@dimen/body</item>
         <item name="android:textColor">@color/neutral_500</item>
@@ -167,6 +169,14 @@
         <item name="android:textSize">@dimen/small</item>
         <item name="android:textColor">@color/danger_500</item>
         <item name="android:layout_marginTop">2dp</item>
+    </style>
+
+    <style name="PageNumber" parent="Widget.AppCompat.TextView">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">@dimen/pg_num_top</item>
+        <item name="android:layout_marginEnd">@dimen/pg_num_end</item>
+        <item name="android:textColor">@color/neutral_500</item>
     </style>
 
     <!--ICON STYLE-->

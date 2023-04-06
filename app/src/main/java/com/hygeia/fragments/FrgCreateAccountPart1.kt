@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.core.content.getSystemService
 import com.hygeia.R
 import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgCreateAccountPart1Binding

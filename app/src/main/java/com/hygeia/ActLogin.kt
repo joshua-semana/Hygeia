@@ -1,43 +1,43 @@
 package com.hygeia
 
-import android.content.ContentValues.TAG
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.text.method.PasswordTransformationMethod
-import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.core.content.getSystemService
-import com.google.firebase.auth.EmailAuthProvider
+import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.Utilities.msg
 import com.hygeia.databinding.ActivityLoginBinding
 
 class ActLogin : AppCompatActivity() {
     private lateinit var bind : ActivityLoginBinding
     private lateinit var auth : FirebaseAuth
-    private var loginAttemptCount = 0
+    private lateinit var loading : Dialog
     private var cloudFirestore = Firebase.firestore
-
+    //private var loginAttemptCount = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActivityLoginBinding.inflate(layoutInflater)
         auth = Firebase.auth
+        loading = dlgLoading(this@ActLogin)
         setContentView(bind.root)
 
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
                 if (isInternetConnected(applicationContext)) {
-                    login(txtEmail.text.toString(), txtPassword.text.toString())
+                    validateInputs(txtEmail.text.toString(), txtPassword.text.toString())
                 } else {
                     dlgMessage(
                         this@ActLogin,
@@ -66,18 +66,9 @@ class ActLogin : AppCompatActivity() {
                 }
             }
 
-            //VALIDATION
-            val textWatcher = object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnLogin.isEnabled = txtEmail.text.isNotEmpty() and
-                        txtPassword.text.isNotEmpty()
-                }
-            }
-
-            txtEmail.addTextChangedListener(textWatcher)
-            txtPassword.addTextChangedListener(textWatcher)
+            //INPUT VALIDATION
+            textWatcher(txtEmail)
+            textWatcher(txtPassword)
 
             //NAVIGATION
             btnGoToForgotPassword.setOnClickListener {
@@ -89,64 +80,67 @@ class ActLogin : AppCompatActivity() {
             }
         }
     }
+    private fun validateInputs(email : String, password : String) {
+        loading.show()
+        with(bind) {
+            txtEmail.setBackgroundResource(R.drawable.bg_textfield_default)
+            txtPassword.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblLoginErrorMsg1.visibility = View.GONE
+            lblLoginErrorMsg2.visibility = View.GONE
 
-    //TODO: CREATE VALIDATE INPUT FUNCTION BEFORE LOGIN
-    private fun login(email : String, password : String) {
-        if (Utilities.emailPattern.matches(email)) {
-            with(bind) {
-                txtEmail.setBackgroundResource(R.drawable.bg_textfield_default)
-                txtPassword.setBackgroundResource(R.drawable.bg_textfield_default)
-                lblLoginErrorMsg1.visibility = View.GONE
-                lblLoginErrorMsg2.visibility = View.GONE
-            }
-            FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
-                try {
-                    val signInMethod = task.result?.signInMethods?:emptyList<String>()
-                    if (signInMethod.contains(EmailAuthProvider.EMAIL_PASSWORD_SIGN_IN_METHOD)) {
-                        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { signInTask ->
-                            if (signInTask.isSuccessful) {
-                                loginAttemptCount = 0
-                                cloudFirestore.collection("User").document(auth.currentUser!!.uid).get()
-                                    .addOnCompleteListener{ userTask ->
-                                        if (userTask.isSuccessful){
-                                            val userField = userTask.result
-                                            if (userField != null){
-                                                val userRole = userField.get("role").toString()
-                                                if (userRole == "standard"){
-                                                    msg("Login successfully!")
-                                                    startActivity(Intent(this, ActUserStandard::class.java))
-                                                }else if (userRole == "admin"){
-                                                    msg("Login successfully!")
-                                                    startActivity(Intent(this, ActUserAdmin::class.java))
-                                                }
-                                            }
-                                        } else {
-                                            msg("Error getting user data")
-                                        }
-                                    }
-                            } else {
-                                if (loginAttemptCount >= 3) {
-                                    msg("You've attempted to login 3 times.")
-                                } else {
-                                    loginAttemptCount++
-                                    bind.txtPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                                    bind.lblLoginErrorMsg2.visibility = View.VISIBLE
-                                }
-                            }
-                        }
+            if (emailPattern.matches(email)) {
+                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener { getEmailList ->
+                    if (getEmailList.signInMethods?.isNotEmpty() == true) {
+                        attemptLogin(email, password)
                     } else {
-                        bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                        bind.lblLoginErrorMsg1.visibility = View.VISIBLE
-                        bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_exists)
+                        loading.dismiss()
+                        txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblLoginErrorMsg1.visibility = View.VISIBLE
+                        lblLoginErrorMsg1.text = getString(R.string.validate_email_exists)
                     }
-                } catch (e : java.lang.Exception){
-                    Log.e(TAG, "Error checking email registration", e)
+                }
+            } else {
+                loading.dismiss()
+                txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblLoginErrorMsg1.visibility = View.VISIBLE
+                lblLoginErrorMsg1.text = getString(R.string.validate_email_format)
+            }
+        }
+    }
+
+    private fun attemptLogin(email : String, password : String) {
+        auth.signInWithEmailAndPassword(email, password).apply {
+            addOnSuccessListener {
+                cloudFirestore.collection("User").document(auth.currentUser!!.uid).get()
+                    .addOnSuccessListener { userInfo ->
+                        loading.dismiss()
+                        val intent = when (userInfo.get("role")) {
+                            "standard" -> Intent(this@ActLogin, ActUserStandard::class.java)
+                            "admin" -> Intent(this@ActLogin, ActUserAdmin::class.java)
+                            else -> null
+                        }
+                        startActivity(intent)
+                    }
+            }
+            addOnFailureListener {
+                loading.dismiss()
+                bind.txtPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                bind.lblLoginErrorMsg2.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    //INPUT VALIDATOR
+    private fun textWatcher(textField : EditText) {
+        textField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
+            override fun afterTextChanged(s: Editable?) {
+                with(bind) {
+                    btnLogin.isEnabled = txtEmail.text.isNotEmpty() and
+                            txtPassword.text.isNotEmpty()
                 }
             }
-        } else {
-            bind.txtEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-            bind.lblLoginErrorMsg1.visibility = View.VISIBLE
-            bind.lblLoginErrorMsg1.text = getString(R.string.validate_email_format)
-        }
+        })
     }
 }

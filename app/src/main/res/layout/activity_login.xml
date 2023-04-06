@@ -8,10 +8,10 @@
 
     <ImageView
         android:id="@+id/imgBrandLogo"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp"
         android:contentDescription="@string/logo_desc"
-        android:translationY="18dp"
+        android:translationY="17dp"
         app:layout_constraintBottom_toTopOf="@+id/txtBrandName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.501"

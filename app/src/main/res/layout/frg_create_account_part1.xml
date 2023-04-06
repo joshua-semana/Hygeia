@@ -16,12 +16,8 @@
 
     <TextView
         android:id="@+id/lblPgNumCreateAccount1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="28dp"
+        style="@style/PageNumber"
         android:text="@string/pg_num_1"
-        android:textColor="@color/neutral_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,7 +40,6 @@
     <TextView
         android:id="@+id/titleOnCreateAccountPart1"
         style="@style/TextBody"
-        android:layout_marginTop="8dp"
         android:text="@string/title_create_personal_info"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1.1" />
@@ -121,7 +116,6 @@
     <Button
         android:id="@+id/btnContinueCreateAccountToPart2"
         style="@style/PrimaryButtonLarge"
-        android:layout_marginBottom="32dp"
         android:enabled="false"
         android:text="@string/btn_continue"
         app:layout_constraintBottom_toBottomOf="parent"

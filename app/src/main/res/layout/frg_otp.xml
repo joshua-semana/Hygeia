@@ -26,7 +26,7 @@
         android:id="@+id/lblOTPHeading2"
         style="@style/TextHeadingColored"
         android:layout_width="wrap_content"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="80dp"
         android:text="@string/pin"
         app:layout_constraintStart_toEndOf="@+id/lblOTPHeading1"
@@ -35,7 +35,6 @@
     <TextView
         android:id="@+id/titleOTP"
         style="@style/TextBody"
-        android:layout_marginTop="8dp"
         android:text="@string/title_otp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblOTPHeading2" />
@@ -77,7 +76,6 @@
     <Button
         android:id="@+id/btnVerify"
         style="@style/PrimaryButtonLarge"
-        android:layout_marginBottom="32dp"
         android:enabled="false"
         android:text="@string/btn_verify"
         app:layout_constraintBottom_toBottomOf="parent"
