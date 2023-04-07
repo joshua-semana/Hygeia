@@ -10,6 +10,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.dlgMessage
@@ -19,9 +21,10 @@ import com.hygeia.databinding.FrgForgotPasswordBinding
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind : FrgForgotPasswordBinding
+    private lateinit var auth : FirebaseAuth
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgForgotPasswordBinding.inflate(inflater, container, false)
-
+        auth = Firebase.auth
         with(bind) {
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
@@ -70,17 +73,14 @@ class FrgForgotPassword : Fragment() {
                 lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_format)
             } else {
                 loading.show()
-                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener{ task ->
-                    if (task.isSuccessful) {
-                        val accounts = task.result?.signInMethods?: emptyList<String>()
-                        if (accounts.isEmpty()) {
-                            txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                            lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
-                            lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
-                        } else {
-                            sendOTP()
-                            sendArguments(getPhoneNumber())
-                        }
+                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener{ getEmailList ->
+                    if (getEmailList.signInMethods?.isEmpty() == true) {
+                        txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
+                        lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
+                    } else {
+                        sendOTP()
+                        sendArguments(getPhoneNumber())
                     }
                     loading.dismiss()
                 }
@@ -99,17 +99,15 @@ class FrgForgotPassword : Fragment() {
     }
 
     private fun sendArguments(phoneNumber : String) {
-        with(bind) {
-            val bundle = Bundle().apply {
-                putString("phoneNumber", phoneNumber)
-            }
-            val fragment = FrgOTP().apply { arguments = bundle }
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
-                .replace(R.id.containerForgotPassword, fragment)
-                .addToBackStack(null)
-                .commit()
+        val bundle = Bundle().apply {
+            putString("phoneNumber", phoneNumber)
         }
+        val fragment = FrgOTP().apply { arguments = bundle }
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+            .replace(R.id.containerForgotPassword, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     //INPUT VALIDATOR

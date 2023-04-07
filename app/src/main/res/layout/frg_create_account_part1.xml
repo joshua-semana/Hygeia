@@ -44,7 +44,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1.1" />
 
-    <Spinner
+    r<Spinner
         android:id="@+id/cmbGender"
         style="@style/SpinnerGender"
         android:layout_marginTop="8dp"
@@ -60,7 +60,7 @@
         android:layout_marginStart="8dp"
         android:autofillHints=""
         android:hint="@string/hint_first_name"
-        android:inputType="text|textCapSentences"
+        android:inputType="textPersonName|textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cmbGender"
         app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart1"
@@ -71,7 +71,7 @@
         style="@style/PrimaryTextField"
         android:autofillHints=""
         android:hint="@string/hint_last_name"
-        android:inputType="text|textCapSentences"
+        android:inputType="textPersonName|textCapSentences"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNewFirstName"

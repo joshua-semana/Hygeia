@@ -137,8 +137,10 @@ class ActLogin : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable?) {
                 with(bind) {
-                    btnLogin.isEnabled = txtEmail.text.isNotEmpty() and
-                            txtPassword.text.isNotEmpty()
+                    btnLogin.isEnabled = listOf(
+                        txtEmail,
+                        txtPassword
+                    ).all { it.text.isNotEmpty() }
                 }
             }
         })
