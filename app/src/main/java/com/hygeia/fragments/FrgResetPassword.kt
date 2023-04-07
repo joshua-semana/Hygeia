@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.core.content.getSystemService
 import com.hygeia.databinding.FrgResetPasswordBinding
 
 class FrgResetPassword : Fragment() {
@@ -64,8 +63,10 @@ class FrgResetPassword : Fragment() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
             override fun afterTextChanged(s: Editable?) {
                 with(bind) {
-                    btnUpdatePassword.isEnabled = txtResetPassword.text.isNotEmpty() and
-                            txtResetConfirmPassword.text.isNotEmpty()
+                    btnUpdatePassword.isEnabled = listOf(
+                        txtResetPassword,
+                        txtResetConfirmPassword
+                    ).all { it.text.isNotEmpty() }
                 }
             }
         })

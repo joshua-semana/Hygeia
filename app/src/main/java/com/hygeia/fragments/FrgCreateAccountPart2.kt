@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
@@ -22,13 +23,16 @@ import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.passwordPattern
 import com.hygeia.Utilities.phoneNumberPattern
 import com.hygeia.databinding.FrgCreateAccountPart2Binding
+import java.util.concurrent.CompletableFuture
 
 class FrgCreateAccountPart2 : Fragment() {
     private lateinit var bind : FrgCreateAccountPart2Binding
     private lateinit var auth: FirebaseAuth
+    private lateinit var loading : Dialog
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgCreateAccountPart2Binding.inflate(inflater, container, false)
         auth = Firebase.auth
+        loading = dlgLoading(requireContext())
 
         with(bind) {
             //ELEMENT BEHAVIOR
@@ -65,10 +69,28 @@ class FrgCreateAccountPart2 : Fragment() {
             //NAVIGATION
             btnContinueCreateAccountToPart3.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
-                    validateInputs(txtNewEmail.text.toString(),
-                        txtNewPhoneNumber.text.toString(),
-                        txtNewPassword.text.toString(),
-                        txtNewConfirmPassword.text.toString())
+                    loading.show()
+                    val isEmailValid = validateEmail(txtNewEmail.text.toString())
+                    val isPhoneNumberValid = validatePhoneNumber(txtNewPhoneNumber.text.toString())
+                    val isPasswordValid = validatePassword(txtNewPassword.text.toString())
+                    val isConfirmPasswordValid = validateConfirmPassword(
+                        txtNewConfirmPassword.text.toString(),
+                        txtNewPassword.text.toString()
+                    )
+                    val futures = arrayOf(
+                        isEmailValid,
+                        isPhoneNumberValid,
+                        isPasswordValid,
+                        isConfirmPasswordValid
+                    )
+                    CompletableFuture.allOf(*futures).thenRunAsync {
+                        if (futures.all { it.get() }) {
+                            loading.dismiss()
+                            sendArguments()
+                        } else {
+                            loading.dismiss()
+                        }
+                    }
                 } else {
                     dlgMessage(
                         requireContext(),
@@ -86,6 +108,95 @@ class FrgCreateAccountPart2 : Fragment() {
 
             return root
         }
+    }
+
+    private fun validateEmail(email : String) : CompletableFuture<Boolean> {
+        val future = CompletableFuture<Boolean>()
+        with(bind) {
+            txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblCreateAccountErrorMsg1.visibility = View.GONE
+            if (email.matches(emailPattern)) {
+                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener { getEmailList ->
+                    if (getEmailList.signInMethods?.isEmpty() == true) {
+                        future.complete(true)
+                    } else {
+                        txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                        lblCreateAccountErrorMsg1.visibility = View.VISIBLE
+                        lblCreateAccountErrorMsg1.text =getString(R.string.validate_email_taken)
+                        future.complete(false)
+                    }
+                }
+            } else {
+                txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg1.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
+                future.complete(false)
+            }
+        }
+        return future
+    }
+
+    private fun validatePhoneNumber(phoneNumber: String) : CompletableFuture<Boolean> {
+        val future = CompletableFuture<Boolean>()
+        with(bind) {
+            txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblCreateAccountErrorMsg2.visibility = View.GONE
+            if (phoneNumber.matches(phoneNumberPattern)) {
+                FirebaseFirestore.getInstance().collection("User").apply {
+                    whereEqualTo("phoneNumber", phoneNumber).get()
+                        .addOnSuccessListener { getPhoneNumbers ->
+                            if (getPhoneNumbers.isEmpty){
+                                future.complete(true)
+                            } else {
+                                txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
+                                lblCreateAccountErrorMsg2.visibility = View.VISIBLE
+                                lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_taken)
+                                future.complete(false)
+                            }
+                        }
+                }
+            } else {
+                txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg2.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
+                future.complete(false)
+            }
+        }
+        return future
+    }
+
+    private fun validatePassword(password : String) : CompletableFuture<Boolean> {
+        val future = CompletableFuture<Boolean>()
+        with(bind) {
+            txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblCreateAccountErrorMsg3.visibility = View.GONE
+            if (password.matches(passwordPattern)) {
+                future.complete(true)
+            } else {
+                txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg3.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
+                future.complete(false)
+            }
+        }
+        return future
+    }
+
+    private fun validateConfirmPassword(confirmPassword: String, password: String) : CompletableFuture<Boolean> {
+        val future = CompletableFuture<Boolean>()
+        with(bind) {
+            txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_default)
+            lblCreateAccountErrorMsg4.visibility = View.GONE
+            if (confirmPassword == password) {
+                future.complete(true)
+            } else {
+                txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
+                lblCreateAccountErrorMsg4.visibility = View.VISIBLE
+                lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
+                future.complete(false)
+            }
+        }
+        return future
     }
 
     private fun sendArguments() {
@@ -107,62 +218,6 @@ class FrgCreateAccountPart2 : Fragment() {
                 .commit()
         }
     }
-    private fun validateInputs(email : String, phoneNumber : String, password : String, confirmPassword : String) {
-        val loading = dlgLoading(requireContext())
-        var errors = 0
-        with(bind) {
-            val txtFields = arrayOf(txtNewEmail, txtNewPhoneNumber, txtNewPassword, txtNewConfirmPassword)
-            val lblErrors = arrayOf(lblCreateAccountErrorMsg1, lblCreateAccountErrorMsg2, lblCreateAccountErrorMsg3, lblCreateAccountErrorMsg4)
-            txtFields.forEach { it.setBackgroundResource(R.drawable.bg_textfield_default) }
-            lblErrors.forEach { it.visibility = View.GONE }
-
-            if (emailPattern.matches(email)) {
-                txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblCreateAccountErrorMsg1.visibility = View.VISIBLE
-                lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_format)
-            } else {
-                loading.show()
-                FirebaseAuth.getInstance().fetchSignInMethodsForEmail(email).addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val accounts = task.result?.signInMethods ?: emptyList<String>()
-                        if (accounts.isNotEmpty()) {
-                            txtNewEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                            lblCreateAccountErrorMsg1.visibility = View.VISIBLE
-                            lblCreateAccountErrorMsg1.text = getString(R.string.validate_email_taken)
-                        }
-
-                        if (phoneNumberPattern.matches(phoneNumber)){
-                            txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
-                            lblCreateAccountErrorMsg2.visibility = View.VISIBLE
-                            lblCreateAccountErrorMsg2.text = getString(R.string.validate_phone_format)
-                        } else {
-                            // TODO: CHECK IF NUMBER IS TAKEN
-                        }
-
-                        if (passwordPattern.matches(password)){
-                            txtNewPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                            lblCreateAccountErrorMsg3.visibility = View.VISIBLE
-                            lblCreateAccountErrorMsg3.text = getString(R.string.validate_password_format)
-                        }
-
-                        if (confirmPassword != password){
-                            txtNewConfirmPassword.setBackgroundResource(R.drawable.bg_textfield_error)
-                            lblCreateAccountErrorMsg4.visibility = View.VISIBLE
-                            lblCreateAccountErrorMsg4.text = getString(R.string.validate_password_matched)
-                        }
-
-                        lblErrors.forEach {
-                            if (it.visibility == View.VISIBLE) errors += 1
-                        }
-
-                        loading.dismiss()
-
-                        if (errors == 0) sendArguments()
-                    }
-                }
-            }
-        }
-    }
 
     //INPUT VALIDATOR
     private fun textWatcher(textField : EditText) {
@@ -171,11 +226,12 @@ class FrgCreateAccountPart2 : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
                 override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart3.isEnabled =
-                        txtNewEmail.text.isNotEmpty() and
-                                txtNewPhoneNumber.text.isNotEmpty() and
-                                txtNewPassword.text.isNotEmpty() and
-                                txtNewConfirmPassword.text.isNotEmpty()
+                    btnContinueCreateAccountToPart3.isEnabled = listOf(
+                        txtNewEmail,
+                        txtNewPhoneNumber,
+                        txtNewPassword,
+                        txtNewConfirmPassword
+                    ).all { it.text.isNotEmpty() }
                 }
             })
         }

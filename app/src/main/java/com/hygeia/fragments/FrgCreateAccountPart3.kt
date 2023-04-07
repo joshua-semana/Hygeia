@@ -12,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.msg
 import com.hygeia.Utilities.dlgMessage
 import com.hygeia.Utilities.isInternetConnected
 
@@ -93,31 +92,26 @@ class FrgCreateAccountPart3 : Fragment() {
             "role" to "standard"
         )
 
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(data["email"].toString(), data["password"].toString())
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    val userFirebase = task.result?.user
-                    if (userFirebase != null) {
-                        cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
-                            .addOnSuccessListener {
-                                loading.dismiss()
-                                dlgMessage(
-                                    requireContext(),
-                                    "success",
-                                    getString(R.string.dlg_title_create_account),
-                                    getString(R.string.dlg_body_create_account),
-                                    "Go back to login"
-                                ).apply {
-                                    setOnDismissListener {
-                                        requireActivity().finish()
-                                    }
-                                    show()
+        auth.createUserWithEmailAndPassword(data["email"].toString(), data["password"].toString())
+            .addOnSuccessListener { getUser ->
+                val userFirebase = getUser.user
+                if (userFirebase != null) {
+                    cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
+                        .addOnSuccessListener {
+                            loading.dismiss()
+                            dlgMessage(
+                                requireContext(),
+                                "success",
+                                getString(R.string.dlg_title_create_account),
+                                getString(R.string.dlg_body_create_account),
+                                "Go back to login"
+                            ).apply {
+                                setOnDismissListener {
+                                    requireActivity().finish()
                                 }
+                                show()
                             }
-                    }
-                } else {
-                    loading.dismiss()
-                    requireActivity().msg("Please try again")
+                        }
                 }
             }
 

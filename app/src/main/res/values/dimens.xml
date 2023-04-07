@@ -31,7 +31,7 @@
     <dimen name="padding_end_with_icon">55sp</dimen>
 
     <!--SPINNERS / CMB-->
-    <dimen name="cmb_width_gender">80dp</dimen>
+    <dimen name="cmb_width_gender">72dp</dimen>
     <dimen name="cmb_padding_start">12sp</dimen>
     <dimen name="cmb_padding_end">12sp</dimen>
 

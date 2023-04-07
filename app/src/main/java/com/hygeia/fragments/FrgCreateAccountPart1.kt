@@ -22,22 +22,21 @@ class FrgCreateAccountPart1 : Fragment() {
 
         with(bind) {
             //MAIN FUNCTIONS
-            txtNewBirthDate.setOnClickListener { btnCalendar.performClick() }
+            txtNewBirthDate.setOnClickListener {
+                btnCalendar.performClick()
+                clearElementFocus()
+            }
             btnCalendar.setOnClickListener { showDatePickerDialog() }
 
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
-                requireContext().getSystemService(InputMethodManager::class.java).apply {
-                    hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
-                }
-                mainLayout.requestFocus()
-                requireView().findFocus()?.clearFocus()
+                clearElementFocus()
             }
 
             //INPUT VALIDATION
-            textWatcher1(txtNewFirstName)
-            textWatcher1(txtNewLastName)
-            textWatcher2(txtNewBirthDate)
+            textWatcher(txtNewFirstName)
+            textWatcher(txtNewLastName)
+            textWatcher(txtNewBirthDate)
 
             //NAVIGATION
             btnContinueCreateAccountToPart2.setOnClickListener {
@@ -71,61 +70,53 @@ class FrgCreateAccountPart1 : Fragment() {
 
     private fun showDatePickerDialog() {
         val currentDate = Calendar.getInstance()
-        val datePicker = DatePickerDialog(requireContext(), { _, year, month, day ->
+        DatePickerDialog(requireContext(), { _, year, month, day ->
             val selectedDate = Calendar.getInstance().apply { set(year, month, day) }
             val age = currentDate.get(Calendar.YEAR) - selectedDate.get(Calendar.YEAR) -
                     if (selectedDate.get(Calendar.DAY_OF_YEAR) > currentDate.get(Calendar.DAY_OF_YEAR)) 1 else 0
             with(bind) {
-                val date = "$day/${month+1}/$year"
+                val date = "$day/${month + 1}/$year"
                 if (age >= 11) {
                     txtNewBirthDate.setText(date)
                     txtNewBirthDate.setBackgroundResource(R.drawable.bg_textfield_default)
                     lblCreateAccountErrorMsg1.visibility = View.GONE
                 } else {
+                    txtNewBirthDate.text.clear()
                     txtNewBirthDate.setBackgroundResource(R.drawable.bg_textfield_error)
                     lblCreateAccountErrorMsg1.visibility = View.VISIBLE
                 }
             }
-        }, currentDate.get(Calendar.YEAR), currentDate.get(Calendar.MONTH), currentDate.get(Calendar.DAY_OF_MONTH))
-        datePicker.show()
+        }, currentDate.get(Calendar.YEAR) - 11, 0 , 1).show()
+    }
+
+    private fun clearElementFocus() {
+        requireContext().getSystemService(InputMethodManager::class.java).apply {
+            hideSoftInputFromWindow(requireView().findFocus()?.windowToken, 0)
+        }
+        bind.mainLayout.requestFocus()
+        requireView().findFocus()?.clearFocus()
     }
 
     //INPUT VALIDATOR
-    private fun textWatcher1(textField : EditText) {
+    private fun textWatcher(textField : EditText) {
         with(bind) {
             textField.addTextChangedListener(object : TextWatcher {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                    if (s.toString().isNotEmpty()) {
-                        if (!s.toString().matches("[a-zA-Z ]+".toRegex())) {
-                            textField.apply {
-                                setText(text.substring(0, text.length - 1))
-                                setSelection(text.length)
-                            }
+                    if (textField.hint.toString() == "Enter first name" && textField.hint.toString() == "Enter last name") {
+                        if (s.toString().isNotEmpty() && !s.toString().matches("[a-zA-Z ]+".toRegex())) {
+                            textField.setText(s?.substring(0, s.length - 1))
+                            textField.setSelection(textField.text.length)
                             activity?.msg("Only alphabetic characters are allowed.")
                         }
                     }
                 }
                 override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart2.isEnabled =
-                        txtNewFirstName.text.isNotEmpty() and
-                        txtNewLastName.text.isNotEmpty() and
-                        txtNewBirthDate.text.isNotEmpty()
-                }
-            })
-        }
-    }
-
-    private fun textWatcher2(textField : EditText) {
-        with(bind) {
-            textField.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnContinueCreateAccountToPart2.isEnabled =
-                        txtNewFirstName.text.isNotEmpty() and
-                        txtNewLastName.text.isNotEmpty() and
-                        txtNewBirthDate.text.isNotEmpty()
+                    btnContinueCreateAccountToPart2.isEnabled = listOf(
+                        txtNewFirstName,
+                        txtNewLastName,
+                        txtNewBirthDate
+                    ).all { it.text.isNotEmpty() }
                 }
             })
         }
