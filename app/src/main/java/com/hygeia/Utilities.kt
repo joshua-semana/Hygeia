@@ -56,8 +56,8 @@ object Utilities {
             window?.setBackgroundDrawable(shape)
             with(bindDlg) {
                 //DISPLAY
-                if (dialogIcon == "no-wifi") imgDialogLogo.setImageResource(R.drawable.ic_wifi_not_connected)
-                else if (dialogIcon == "success") imgDialogLogo.setImageResource(R.drawable.ic_check)
+                if (dialogIcon == "no-wifi") imgDialogLogo.setImageResource(R.drawable.ic_wifi_off)
+                else if (dialogIcon == "success") imgDialogLogo.setImageResource(R.drawable.ic_success)
                 lblDialogTitle.text = dialogTitle
                 lblDialogBody.text = dialogContent
                 btnDialogPrimary.text = dialogOkay

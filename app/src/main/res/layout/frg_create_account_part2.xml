@@ -6,20 +6,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnBackToCreateAccountPart1"
-        style="@style/IconButtonBack"
-        android:drawableLeft="@drawable/ic_arrow_back"
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/lblPgNumCreateAccount2"
-        style="@style/PageNumber"
+        style="@style/Lbl_PageNumber"
         android:text="@string/pg_num_2"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
     <TextView
         android:id="@+id/lblCreateAccountHeading1"
@@ -40,6 +40,7 @@
     <TextView
         android:id="@+id/titleOnCreateAccountPart2"
         style="@style/TextBody"
+        android:layout_marginTop="@dimen/body_top_gap"
         android:text="@string/title_create_account_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +48,7 @@
 
     <EditText
         android:id="@+id/txtNewEmail"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:autofillHints=""
         android:hint="@string/hint_email"
         android:inputType="textEmailAddress"
@@ -67,7 +68,7 @@
 
     <EditText
         android:id="@+id/txtNewPhoneNumber"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:autofillHints=""
         android:hint="@string/hint_phone_number"
         android:inputType="number"
@@ -88,14 +89,14 @@
 
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
-        style="@style/TextFieldWithIconWrapper"
+        style="@style/Txt_Container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountErrorMsg2">
 
         <EditText
             android:id="@+id/txtNewPassword"
-            style="@style/PrimaryTextFieldWithIcon"
+            style="@style/Txt_With_Icon"
             android:autofillHints=""
             android:hint="@string/hint_password"
             android:inputType="textPassword"
@@ -105,8 +106,8 @@
 
         <ToggleButton
             android:id="@+id/tglShowPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
+            style="@style/Tgl_Md_0"
+            android:drawableTop="@drawable/ic_visibility_selector"
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
     </RelativeLayout>
 
@@ -121,14 +122,14 @@
 
     <RelativeLayout
         android:id="@+id/grpTxtConfirmPassword"
-        style="@style/TextFieldWithIconWrapper"
+        style="@style/Txt_Container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountErrorMsg3">
 
         <EditText
             android:id="@+id/txtNewConfirmPassword"
-            style="@style/PrimaryTextFieldWithIcon"
+            style="@style/Txt_With_Icon"
             android:autofillHints=""
             android:hint="@string/hint_confirm_password"
             android:inputType="textPassword"
@@ -138,8 +139,8 @@
 
         <ToggleButton
             android:id="@+id/tglShowConfirmPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
+            style="@style/Tgl_Md_0"
+            android:drawableTop="@drawable/ic_visibility_selector"
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
     </RelativeLayout>
 
@@ -154,8 +155,9 @@
 
     <Button
         android:id="@+id/btnContinueCreateAccountToPart3"
-        style="@style/PrimaryButtonLarge"
+        style="@style/Btn_Primary"
         android:enabled="false"
+        android:layout_width="match_parent"
         android:text="@string/btn_continue"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

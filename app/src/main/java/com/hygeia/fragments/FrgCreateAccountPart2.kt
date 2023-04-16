@@ -102,7 +102,7 @@ class FrgCreateAccountPart2 : Fragment() {
                 }
             }
 
-            btnBackToCreateAccountPart1.setOnClickListener {
+            btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
 
@@ -142,8 +142,8 @@ class FrgCreateAccountPart2 : Fragment() {
             txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_default)
             lblCreateAccountErrorMsg2.visibility = View.GONE
             if (phoneNumber.matches(phoneNumberPattern)) {
-                FirebaseFirestore.getInstance().collection("User").apply {
-                    whereEqualTo("phoneNumber", phoneNumber).get()
+                FirebaseFirestore.getInstance().collection("User")
+                    .whereEqualTo("phoneNumber", phoneNumber).get()
                         .addOnSuccessListener { getPhoneNumbers ->
                             if (getPhoneNumbers.isEmpty){
                                 future.complete(true)
@@ -154,7 +154,6 @@ class FrgCreateAccountPart2 : Fragment() {
                                 future.complete(false)
                             }
                         }
-                }
             } else {
                 txtNewPhoneNumber.setBackgroundResource(R.drawable.bg_textfield_error)
                 lblCreateAccountErrorMsg2.visibility = View.VISIBLE

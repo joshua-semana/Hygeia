@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,7 +27,7 @@
         android:fontFamily="@font/spoof_bold"
         android:text="@string/app_name_lower"
         android:textColor="@color/accent_500"
-        android:textSize="@dimen/heading"
+        android:textSize="@dimen/text_xl"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,14 +42,14 @@
         android:text="@string/app_catchphrase"
         android:textAlignment="center"
         android:textColor="@color/neutral_500"
-        android:textSize="@dimen/body"
+        android:textSize="@dimen/text_md"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtBrandName" />
 
     <EditText
         android:id="@+id/txtEmail"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:layout_marginTop="24dp"
         android:autofillHints=""
         android:hint="@string/hint_email"
@@ -70,7 +70,7 @@
 
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
-        style="@style/TextFieldWithIconWrapper"
+        style="@style/Txt_Container"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -78,7 +78,7 @@
 
         <EditText
             android:id="@+id/txtPassword"
-            style="@style/PrimaryTextFieldWithIcon"
+            style="@style/Txt_With_Icon"
             android:autofillHints=""
             android:hint="@string/hint_password"
             android:inputType="textPassword"
@@ -88,8 +88,8 @@
 
         <ToggleButton
             android:id="@+id/tglShowPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
+            style="@style/Tgl_Md_0"
+            android:drawableTop="@drawable/ic_visibility_selector"
             tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
     </RelativeLayout>
 
@@ -104,7 +104,7 @@
 
     <Button
         android:id="@+id/btnGoToForgotPassword"
-        style="@style/LabelButton"
+        style="@style/Btn_Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/btn_forgot_password"
@@ -115,8 +115,9 @@
 
     <Button
         android:id="@+id/btnLogin"
-        style="@style/PrimaryButtonLarge"
-        android:layout_marginBottom="@dimen/gap"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/btn_stack_mb"
         android:enabled="false"
         android:text="@string/btn_login"
         app:cornerRadius="@dimen/corner_radius"
@@ -127,7 +128,8 @@
 
     <Button
         android:id="@+id/btnGoToCreateAccountPart1"
-        style="@style/SecondaryButtonLarge"
+        style="@style/Btn_Secondary"
+        android:layout_width="match_parent"
         android:layout_marginBottom="8dp"
         android:text="@string/btn_create_account"
         app:cornerRadius="@dimen/corner_radius"
@@ -144,7 +146,7 @@
         android:text="@string/app_version"
         android:textAlignment="center"
         android:textColor="@color/neutral_500"
-        android:textSize="@dimen/small"
+        android:textSize="@dimen/text_sm"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

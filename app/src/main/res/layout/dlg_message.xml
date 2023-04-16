@@ -14,21 +14,17 @@
 
         <ImageView
             android:id="@+id/imgDialogLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Circle_Lg_50"
             android:layout_marginTop="24dp"
-            android:background="@drawable/ic_bg_dlg_default"
-            android:padding="@dimen/dialog_icon_padding"
+            android:src="@drawable/ic_success"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_wifi_not_connected"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/lblDialogTitle"
             style="@style/TextBody"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
             android:fontFamily="@font/roboto_bold"
@@ -41,7 +37,6 @@
         <TextView
             android:id="@+id/lblDialogBody"
             style="@style/TextBody"
-            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:gravity="center"
@@ -52,7 +47,7 @@
 
         <Button
             android:id="@+id/btnDialogPrimary"
-            style="@style/LabelButton"
+            style="@style/Btn_Label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"

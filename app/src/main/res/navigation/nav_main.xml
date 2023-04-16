@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/frgMainHome">
+
+    <fragment
+        android:id="@+id/frgMainHome"
+        android:name="com.hygeia.fragments.FrgMainHome"
+        android:label="FrgMainHome"
+        tools:layout="@layout/frg_main_home"/>
+    <fragment
+        android:id="@+id/frgMainQR"
+        android:name="com.hygeia.fragments.FrgMainQR"
+        android:label="FrgMainQR"
+        tools:layout="@layout/frg_main_qr"/>
+    <fragment
+        android:id="@+id/frgMainSettings"
+        android:name="com.hygeia.fragments.FrgMainSettings"
+        android:label="FrgMainSettings"
+        tools:layout="@layout/frg_main_settings"/>
+</navigation>

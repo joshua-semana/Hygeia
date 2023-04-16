@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActTopUp">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblPageTitle"
+        style="@style/Lbl_PageTitle"
+        android:layout_height="wrap_content"
+        android:text="@string/page_title_top_up"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/balanceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginTop="@dimen/heading_margin_top"
+        android:background="@drawable/bg_squircle_50"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/lblTitleBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/title_top_up_balance"
+            android:textSize="@dimen/text_sm"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/lblBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="14dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/data_balance"
+            android:textColor="@color/neutral_900"
+            android:textSize="@dimen/text_xl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/lblTitleBalance"
+            app:layout_constraintStart_toStartOf="@+id/lblTitleBalance"
+            app:layout_constraintTop_toBottomOf="@+id/lblTitleBalance" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/lblEnterAmount"
+        style="@style/TextBody"
+        android:layout_marginTop="16dp"
+        android:text="@string/title_top_up_enter_amount"
+        app:layout_constraintEnd_toEndOf="@+id/balanceLayout"
+        app:layout_constraintStart_toStartOf="@+id/balanceLayout"
+        app:layout_constraintTop_toBottomOf="@+id/balanceLayout" />
+
+    <EditText
+        android:id="@+id/txtAmount"
+        style="@style/Txt_Primary"
+        android:autofillHints=""
+        android:hint="@string/hint_amount"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/lblEnterAmount"
+        app:layout_constraintStart_toStartOf="@+id/lblEnterAmount"
+        app:layout_constraintTop_toBottomOf="@+id/lblEnterAmount"
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
+
+    <Button
+        android:id="@+id/btnTopUp"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
+        android:enabled="false"
+        android:text="@string/btn_add_money"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize,DuplicateSpeakableTextCheck" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

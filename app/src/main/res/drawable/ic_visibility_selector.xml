@@ -4,6 +4,6 @@
         android:state_checked="true"
         android:drawable="@drawable/ic_visibility_off"/>
     <item
-        android:drawable="@drawable/ic_visibility"/>
+        android:drawable="@drawable/ic_visibility_on"/>
 
 </selector>

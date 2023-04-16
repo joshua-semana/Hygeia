@@ -16,7 +16,12 @@
     <string name="btn_verify">Verify</string>
     <string name="btn_send">Send Code</string>
     <string name="btn_resend">Resend Code</string>
+    <string name="btn_send_money">Send</string>
+    <string name="btn_request_money">Request</string>
+    <string name="btn_add_money">Top Up</string>
+    <string name="btn_view_all_transactions">View all</string>
 
+    <string name="hint_email_or_number">Enter email or phone number</string>
     <string name="hint_first_name">Enter first name</string>
     <string name="hint_last_name">Enter last name</string>
     <string name="hint_birth_date">Enter birth date</string>
@@ -27,17 +32,34 @@
     <string name="hint_password_new">Enter your new password</string>
     <string name="hint_confirm_password_new">Re-enter your new password</string>
     <string name="hint_otp">Enter OTP</string>
+    <string name="hint_amount">Enter amount</string>
+    <string name="hint_message">Enter message</string>
+    <string name="hint_message_optional">Enter message (Optional)</string>
+
+    <string name="btn_hint_send_money">Send</string>
+    <string name="btn_hint_request_money">Request</string>
+    <string name="btn_hint_add_money">Top Up</string>
 
     <!--CONTENTS-->
     <string name="heading_create_account1">Let\'s create your</string>
-    <string name="heading_create_account2">Let\'s secure your</string>
+    <string name="heading_create_account2">Now, let\'s secure your</string>
     <string name="heading_create_account3">Review your</string>
     <string name="heading_forgot_password">Let\'s recover your</string>
     <string name="heading_reset_password">Create your new</string>
     <string name="heading_otp">One-Time</string>
 
-    <string name="title_create_personal_info">Enter your personal information</string>
-    <string name="title_create_account_details">Enter your account details</string>
+    <string name="page_title_home_greetings">Hey,</string>
+    <string name="page_title_home_name">John Doe</string>
+    <string name="page_title_send_money">Send Money</string>
+    <string name="page_title_request_money">Request Money</string>
+    <string name="page_title_top_up">Top Up</string>
+    <string name="page_title_notifications">Notifications</string>
+    <string name="page_title_transactions">All Transactions</string>
+
+    <string name="title_enter_required">Please enter the required details</string>
+
+    <string name="title_create_personal_info">Please provide your personal information</string>
+    <string name="title_create_account_details">Please enter your account details</string>
     <string name="title_review_gender_and_name">Your gender and full name</string>
     <string name="title_review_birthdate">Your birthdate</string>
     <string name="title_review_email">Your email</string>
@@ -45,6 +67,16 @@
     <string name="title_review_password">Your password</string>
     <string name="title_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia</string>
     <string name="title_otp">Please enter the one-time PIN (OTP) that we sent to your number ending in</string>
+    <string name="title_home_balance">Your balance</string>
+    <string name="title_home_transactions">Latest transactions</string>
+    <string name="title_send_money_balance">Available balance</string>
+    <string name="title_top_up_balance">Your current balance</string>
+    <string name="title_top_up_enter_amount">Please enter the amount you want to top up</string>
+
+    <string name="data_balance">₱1,000.00</string>
+    <string name="data_balance_unit">₱</string>
+    <string name="data_balance_amount">1,000</string>
+    <string name="data_balance_decimal">.00</string>
 
     <!--SINGLE WORD-->
     <string name="account">account</string>
@@ -75,6 +107,10 @@
     <string name="dlg_body_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
     <string name="dlg_title_otp">One-Time PIN</string>
 
+    <!--BOTTOM MENU NAVIGATION-->
+    <string name="nav_home">Home</string>
+    <string name="nav_qr">Scan QR</string>
+    <string name="nav_settings">Settings</string>
 
     <!--SPECIFIC ACTIVITIES-->
     <!--CREATE ACCOUNT ACTIVITY-->
@@ -87,6 +123,11 @@
         <item>Mr.</item>
         <item>Ms.</item>
     </string-array>
+
+    <!--LIST TRANSACTION-->
+    <string name="t1">Send Money</string>
+    <string name="t2">April 19 | 7:00 AM</string>
+    <string name="t3">- ₱10.00</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -68,7 +68,7 @@ class FrgCreateAccountPart3 : Fragment() {
                 }
             }
             //NAVIGATION
-            btnBackToCreateAccountPart2.setOnClickListener {
+            btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
 

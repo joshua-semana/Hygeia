@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="@dimen/ic_md"
+        android:layout_height="@dimen/ic_md"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/mx"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_lotus"
+        app:tint="@color/accent_500"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/lblPageTitleHomeGreeting"
+        style="@style/Lbl_PageTitle"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="@string/page_title_home_greetings"
+        app:layout_constraintBottom_toBottomOf="@+id/imgLogo"
+        app:layout_constraintStart_toEndOf="@id/imgLogo"
+        app:layout_constraintTop_toTopOf="@+id/imgLogo" />
+
+    <TextView
+        android:id="@+id/lblPageTitleHomeName"
+        style="@style/Lbl_PageTitle"
+        android:layout_marginStart="4dp"
+        android:text="@string/page_title_home_name"
+        android:textColor="@color/accent_500"
+        app:layout_constraintBottom_toBottomOf="@+id/lblPageTitleHomeGreeting"
+        app:layout_constraintStart_toEndOf="@id/lblPageTitleHomeGreeting"
+        app:layout_constraintTop_toTopOf="@+id/lblPageTitleHomeGreeting"
+        tools:ignore="TextContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/btnNotification"
+        style="@style/Circle_Md_50"
+        android:layout_marginEnd="@dimen/mx"
+        android:src="@drawable/ic_notifications"
+        app:layout_constraintBottom_toBottomOf="@+id/imgLogo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imgLogo"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck,ImageContrastCheck" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/balanceLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="@dimen/mx"
+        android:background="@drawable/bg_squircle_300"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgLogo">
+
+        <TextView
+            android:id="@+id/lblMainHomeTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/mx"
+            android:layout_marginTop="@dimen/mx"
+            android:text="@string/title_home_balance"
+            android:textSize="@dimen/text_sm"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/lblDataBalanceUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/mx"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/data_balance_unit"
+            android:textColor="@color/neutral_900"
+            android:textSize="@dimen/text_lg"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/lblBalance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="20dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/data_balance_amount"
+            android:textColor="@color/neutral_900"
+            android:textSize="@dimen/text_xl"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lblDataBalanceUnit"
+            app:layout_constraintTop_toBottomOf="@+id/lblMainHomeTitle" />
+
+        <TextView
+            android:id="@+id/lblDataBalanceDecimal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:fontFamily="@font/roboto"
+            android:text="@string/data_balance_decimal"
+            android:textColor="@color/neutral_900"
+            android:textSize="@dimen/text_lg"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/lblBalance" />
+
+        <ToggleButton
+            android:id="@+id/tglShowBalance"
+            style="@style/Tgl_Md_0"
+            android:layout_marginEnd="10dp"
+            android:drawableTop="@drawable/ic_visibility_selector"
+            app:layout_constraintBottom_toBottomOf="@+id/lblBalance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/lblBalance"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageButton
+        android:id="@+id/btnSendMoney"
+        style="@style/Circle_Lg_500"
+        android:layout_marginTop="24dp"
+        android:src="@drawable/ic_money_send"
+        app:layout_constraintEnd_toStartOf="@+id/btnRequestMoney"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/balanceLayout"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnRequestMoney"
+        style="@style/Circle_Lg_500"
+        android:src="@drawable/ic_money_request"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintEnd_toStartOf="@+id/btnAddMoney"
+        app:layout_constraintStart_toEndOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnAddMoney"
+        style="@style/Circle_Lg_500"
+        android:src="@drawable/ic_money_add"
+        app:layout_constraintBottom_toBottomOf="@+id/btnRequestMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnRequestMoney"
+        app:layout_constraintTop_toTopOf="@+id/btnRequestMoney"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/lblSendMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_hint_send_money"
+        android:textSize="@dimen/text_sm"
+        app:layout_constraintEnd_toEndOf="@+id/btnSendMoney"
+        app:layout_constraintStart_toStartOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toBottomOf="@+id/btnSendMoney"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblRequestMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_hint_request_money"
+        android:textSize="@dimen/text_sm"
+        app:layout_constraintEnd_toEndOf="@+id/btnRequestMoney"
+        app:layout_constraintStart_toStartOf="@+id/btnRequestMoney"
+        app:layout_constraintTop_toBottomOf="@+id/btnRequestMoney"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblAddMoney"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_hint_add_money"
+        android:textSize="@dimen/text_sm"
+        app:layout_constraintEnd_toEndOf="@+id/btnAddMoney"
+        app:layout_constraintStart_toStartOf="@+id/btnAddMoney"
+        app:layout_constraintTop_toBottomOf="@+id/btnAddMoney"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/titleOnMainHome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/roboto_bold"
+        android:text="@string/title_home_transactions"
+        android:textColor="@color/neutral_900"
+        android:textSize="@dimen/text_md"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblSendMoney"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblViewAllTransactions"
+        style="@style/TextBody"
+        android:layout_width="wrap_content"
+        android:layout_marginEnd="6dp"
+        android:text="@string/btn_view_all_transactions"
+        app:layout_constraintBottom_toBottomOf="@+id/titleOnMainHome"
+        app:layout_constraintEnd_toStartOf="@+id/btnViewAllTransactions"
+        app:layout_constraintTop_toTopOf="@+id/titleOnMainHome"
+        tools:ignore="TextContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/btnViewAllTransactions"
+        style="@style/Circle_Sm_300"
+        android:layout_marginEnd="@dimen/mx"
+        android:src="@drawable/ic_next"
+        app:layout_constraintBottom_toBottomOf="@+id/lblViewAllTransactions"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lblViewAllTransactions"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <ListView
+        android:id="@+id/listViewTransactions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleOnMainHome" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

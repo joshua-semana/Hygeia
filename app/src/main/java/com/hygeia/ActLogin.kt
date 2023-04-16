@@ -18,17 +18,17 @@ import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.dlgMessage
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.databinding.ActivityLoginBinding
+import com.hygeia.databinding.ActLoginBinding
 
 class ActLogin : AppCompatActivity() {
-    private lateinit var bind : ActivityLoginBinding
+    private lateinit var bind : ActLoginBinding
     private lateinit var auth : FirebaseAuth
     private lateinit var loading : Dialog
     private var cloudFirestore = Firebase.firestore
     //private var loginAttemptCount = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bind = ActivityLoginBinding.inflate(layoutInflater)
+        bind = ActLoginBinding.inflate(layoutInflater)
         auth = Firebase.auth
         loading = dlgLoading(this@ActLogin)
         setContentView(bind.root)
@@ -114,12 +114,13 @@ class ActLogin : AppCompatActivity() {
                 cloudFirestore.collection("User").document(auth.currentUser!!.uid).get()
                     .addOnSuccessListener { userInfo ->
                         loading.dismiss()
-                        val intent = when (userInfo.get("role")) {
-                            "standard" -> Intent(this@ActLogin, ActUserStandard::class.java)
-                            "admin" -> Intent(this@ActLogin, ActUserAdmin::class.java)
-                            else -> null
-                        }
-                        startActivity(intent)
+                        startActivity(
+                            when (userInfo.get("role")) {
+                                "standard" -> Intent(this@ActLogin, ActMain::class.java)
+//                                "admin" -> Intent(this@ActLogin, ActUserAdmin::class.java)
+                                else -> null
+                            }
+                        )
                     }
             }
             addOnFailureListener {

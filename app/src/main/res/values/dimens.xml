@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--WHEN CHANGING MARGIN_X, BACK ICON, PAGE NUMBER, & MARGIN_X_ERROR ARE PLUS OR MINUS 6-->
+    <resources>
+    <!--WHEN CHANGING MARGIN_X, PAGE NUMBER, & MARGIN_X_ERROR ARE PLUS OR MINUS 6-->
 
     <!--GLOBAL-->
-    <dimen name="corner_radius">8dp</dimen>
-    <dimen name="corner_rounded">100dp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
     <dimen name="heading_margin_top">80dp</dimen>
-    <dimen name="margin_x">24dp</dimen>
-    <dimen name="margin_x_error">44dp</dimen>
+    <dimen name="mx">24dp</dimen>
+    <dimen name="mx_err">44dp</dimen>
+
+    <dimen name="circle_lg">50dp</dimen>
+    <dimen name="circle_md">34dp</dimen>
+    <dimen name="circle_sm">26dp</dimen>
 
     <!--TEXTS-->
-    <dimen name="heading">32sp</dimen>
-    <dimen name="body">14sp</dimen>
-    <dimen name="small">12sp</dimen>
+    <dimen name="text_xl">32sp</dimen>
+    <dimen name="text_lg">18sp</dimen>
+    <dimen name="text_md">14sp</dimen>
+    <dimen name="text_sm">12sp</dimen>
+
     <dimen name="letter_spacing">0.6</dimen>
     <dimen name="line_spacing">-6dp</dimen>
     <dimen name="body_top_gap">6dp</dimen>
 
     <!--BUTTONS-->
-    <dimen name="control_width">320dp</dimen>
-    <dimen name="control_height">60dp</dimen>
-    <dimen name="btn_margin_bottom">24dp</dimen>
-    <dimen name="inset_top">3dp</dimen>
-    <dimen name="inset_bot">3dp</dimen>
-    <dimen name="gap">2dp</dimen>
+    <dimen name="elmnt_y">60dp</dimen>
+    <dimen name="btn_inset_x">3dp</dimen>
+
+    <dimen name="btn_mb">24dp</dimen>
+    <dimen name="btn_stack_mb">2dp</dimen>
+
+    <dimen name="btn_back_mt">13dp</dimen>
+    <dimen name="btn_back_ml">11dp</dimen>
 
     <!--INPUT TEXT-->
-    <dimen name="padding_start">20sp</dimen>
-    <dimen name="padding_end">20sp</dimen>
-    <dimen name="padding_end_with_icon">55sp</dimen>
+    <dimen name="txt_px">20sp</dimen>
+    <dimen name="txt_pr">55sp</dimen>
+    <dimen name="txt_ic_mr">4dp</dimen>
 
     <!--SPINNERS / CMB-->
-    <dimen name="cmb_width_gender">72dp</dimen>
-    <dimen name="cmb_padding_start">12sp</dimen>
-    <dimen name="cmb_padding_end">12sp</dimen>
+    <dimen name="cmb_px">12sp</dimen>
 
     <!--ICONS-->
-    <dimen name="size_icon">26sp</dimen>
-    <dimen name="dialog_icon_size">34dp</dimen>
-    <dimen name="dialog_icon_padding">10dp</dimen>
-    <dimen name="icon_margin_top">20dp</dimen>
-    <dimen name="icon_margin_start">20dp</dimen>
-    <dimen name="icon_margin_end">14dp</dimen>
-    <dimen name="icon_padding_x">0dp</dimen>
+    <dimen name="ic_lg">34sp</dimen>
+    <dimen name="ic_md">26sp</dimen>
+    <dimen name="ic_sm">22sp</dimen>
 
     <!--PAGE NUMBERS-->
-    <dimen name="pg_num_top">24dp</dimen>
     <dimen name="pg_num_end">22dp</dimen>
 </resources>

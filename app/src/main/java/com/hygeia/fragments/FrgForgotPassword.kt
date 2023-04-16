@@ -53,7 +53,7 @@ class FrgForgotPassword : Fragment() {
                 }
             }
 
-            btnBackToLogin.setOnClickListener {
+            btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
 

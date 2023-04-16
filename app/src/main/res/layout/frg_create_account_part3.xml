@@ -5,40 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnBackToCreateAccountPart2"
-        style="@style/IconButtonBack"
-        android:drawableLeft="@drawable/ic_arrow_back"
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
         android:id="@+id/lblPgNumCreateAccount2"
-        style="@style/PageNumber"
+        style="@style/Lbl_PageNumber"
         android:text="@string/pg_num_3"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
 
     <TextView
         android:id="@+id/lblCreateAccountHeading1"
         style="@style/TextHeadingRegular"
+        android:layout_width="wrap_content"
         android:text="@string/heading_create_account3"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lblCreateAccountHeading2"
-        style="@style/TextHeadingColored"
+        style="@style/TextHeadingColoredInline"
+        android:layout_width="wrap_content"
         android:text="@string/account"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1" />
+        app:layout_constraintBottom_toBottomOf="@+id/lblCreateAccountHeading1"
+        app:layout_constraintStart_toEndOf="@+id/lblCreateAccountHeading1"
+        app:layout_constraintTop_toTopOf="@+id/lblCreateAccountHeading1" />
 
     <TextView
         android:id="@+id/titleOnCreateAccountPart3.1"
         style="@style/TextBody"
+        android:layout_marginTop="@dimen/body_top_gap"
         android:text="@string/title_review_gender_and_name"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +48,7 @@
 
     <EditText
         android:id="@+id/txtReviewFullNameAndGender"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:layout_marginTop="4dp"
         android:autofillHints=""
         android:focusable="false"
@@ -68,7 +70,7 @@
 
     <EditText
         android:id="@+id/txtReviewBirthdate"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:layout_marginTop="4dp"
         android:autofillHints=""
         android:focusable="false"
@@ -90,7 +92,7 @@
 
     <EditText
         android:id="@+id/txtReviewEmail"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:layout_marginTop="4dp"
         android:autofillHints=""
         android:focusable="false"
@@ -112,7 +114,7 @@
 
     <EditText
         android:id="@+id/txtReviewPhoneNumber"
-        style="@style/PrimaryTextField"
+        style="@style/Txt_Primary"
         android:layout_marginTop="4dp"
         android:autofillHints=""
         android:focusable="false"
@@ -134,7 +136,7 @@
 
     <RelativeLayout
         android:id="@+id/grpTxtPassword"
-        style="@style/TextFieldWithIconWrapper"
+        style="@style/Txt_Container"
         android:layout_marginTop="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -142,7 +144,7 @@
 
         <EditText
             android:id="@+id/txtReviewPassword"
-            style="@style/PrimaryTextFieldWithIcon"
+            style="@style/Txt_With_Icon"
             android:autofillHints=""
             android:focusable="false"
             android:focusableInTouchMode="false"
@@ -154,14 +156,15 @@
 
         <ToggleButton
             android:id="@+id/tglShowPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
-            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
+            style="@style/Tgl_Md_0"
+            android:drawableTop="@drawable/ic_visibility_selector"
+            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/btnCreateAccount"
-        style="@style/PrimaryButtonLarge"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
         android:text="@string/btn_create_my_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
