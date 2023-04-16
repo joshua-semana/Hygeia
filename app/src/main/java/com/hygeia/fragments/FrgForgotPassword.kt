@@ -9,15 +9,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.dlgMessage
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgForgotPasswordBinding
+import java.util.concurrent.TimeUnit
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind : FrgForgotPasswordBinding
@@ -79,25 +84,111 @@ class FrgForgotPassword : Fragment() {
                         lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
                         lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
                     } else {
-                        sendOTP()
-                        sendArguments(getPhoneNumber())
+//                        FirebaseAuth.getInstance().sendPasswordResetEmail(email)
+//                            .addOnCompleteListener{emailCheck ->
+//                                if (emailCheck.isSuccessful){
+//                                    requireActivity().msg("Check your email")
+//                                } else {
+//                                    requireActivity().msg("Message Failed")
+//                                }
+//                            }
+                        getPhoneNumber()
                     }
                     loading.dismiss()
                 }
             }
         }
     }
-
     private fun sendOTP() {
         //TODO : SEND OTP FUNCTION, ADD 30 SECONDS GLOBAL OTP TIME COUNTER
     }
-
-    private fun getPhoneNumber(): String {
+    private data class UserData(val phoneNumber: String)
+    private fun getPhoneNumber(): UserData {
         //TODO : GET THE LAST 4 DIGITS OF PHONE NUMBER
-        val phoneNumber = "09087788795"
-        return phoneNumber.substring(7, 11)
+        var phoneNumber = UserData("")
+        with(bind) {
+            FirebaseFirestore.getInstance().collection("User")
+                .whereEqualTo("email", txtForgotEmail.text.toString())
+                .get()
+                .addOnSuccessListener { getPhoneNumberList ->
+                    phoneNumber = UserData(getPhoneNumberList.documents[0].getString("phoneNumber").toString())
+                    val options = PhoneAuthOptions.newBuilder(auth)
+                        .setPhoneNumber(phoneNumber.phoneNumber)   // Phone number to verify
+                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+                        .setActivity(requireActivity())           // Activity (for callback binding)
+                        .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
+                        .build()
+                    PhoneAuthProvider.verifyPhoneNumber(options)
+                }
+                .addOnFailureListener {
+                    // handle Firestore query failure
+                    requireActivity().msg("Error getting phone number")
+                }
+        }
+        return phoneNumber
     }
-
+    private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
+        auth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    // Sign in success, update UI with the signed-in user's information
+                    requireActivity().msg("Success")
+                } else {
+                    // Sign in failed, display a message and update the UI
+                    if (task.exception is FirebaseAuthInvalidCredentialsException) {
+                        // The verification code entered was invalid
+                        requireActivity().msg("Invalid")
+                    }
+                    // Update UI
+                }
+            }
+    }
+    private val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+        val userData = getPhoneNumber()
+        val phoneNumber = userData.phoneNumber
+        val censorPhoneNumber = "*****${phoneNumber.substring(7)}"
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            // This callback will be invoked in two situations:
+            // 1 - Instant verification. In some cases the phone number can be instantly
+            //     verified without needing to send or enter a verification code.
+            // 2 - Auto-retrieval. On some devices Google Play services can automatically
+            //     detect the incoming verification SMS and perform verification without
+            //     user action.
+            signInWithPhoneAuthCredential(credential)
+        }
+        override fun onVerificationFailed(e: FirebaseException) {
+            // This callback is invoked in an invalid request for verification is made,
+            // for instance if the the phone number format is not valid.
+            if (e is FirebaseAuthInvalidCredentialsException) {
+                // Invalid request
+                requireActivity().msg("Invalid request")
+            } else if (e is FirebaseTooManyRequestsException) {
+                // The SMS quota for the project has been exceeded
+                requireActivity().msg("Too many request")
+            }
+            // Show a message and update the UI
+        }
+        override fun onCodeSent(
+            verificationId: String,
+            token: PhoneAuthProvider.ForceResendingToken
+        ) {
+            // The SMS verification code has been sent to the provided phone number, we
+            // now need to ask the user to enter the code and then construct a credential
+            // by combining the code with a verification ID.
+            // Save verification ID and resending token so we can use them later
+            val bundle = Bundle().apply {
+                putString("phoneNumber", censorPhoneNumber)
+                putString("OTP", verificationId)
+                putParcelable("resendToken", token)
+            }
+            val fragment = FrgOTP().apply { arguments = bundle }
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                .replace(R.id.containerForgotPassword, fragment)
+                .addToBackStack(null)
+                .commit()
+        }
+    }
     private fun sendArguments(phoneNumber : String) {
         val bundle = Bundle().apply {
             putString("phoneNumber", phoneNumber)

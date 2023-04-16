@@ -86,7 +86,9 @@ class FrgCreateAccountPart1 : Fragment() {
                     lblCreateAccountErrorMsg1.visibility = View.VISIBLE
                 }
             }
-        }, currentDate.get(Calendar.YEAR) - 11, 0 , 1).show()
+        }, currentDate.get(Calendar.YEAR) - 11,
+            currentDate.get(Calendar.MONTH),
+            currentDate.get(Calendar.DAY_OF_MONTH) - 1).show()
     }
 
     private fun clearElementFocus() {
