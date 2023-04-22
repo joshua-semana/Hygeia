@@ -2,9 +2,6 @@ package com.hygeia.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
-import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -24,15 +21,30 @@ import com.hygeia.databinding.FrgResetPasswordBinding
 import java.util.concurrent.CompletableFuture
 
 class FrgResetPassword : Fragment() {
+
     private lateinit var bind : FrgResetPasswordBinding
     private lateinit var auth : FirebaseAuth
     private lateinit var loading : Dialog
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
         bind = FrgResetPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
         loading = dlgLoading(requireContext())
 
         with(bind) {
+            //MAIN FUNCTIONS
+            btnUpdatePassword.setOnClickListener {
+                if (txtPassword.text!!.isNotEmpty() or txtConfirmPassword.text!!.isNotEmpty()) {
+                    dlgRequiredFields(requireContext()).show()
+                } else {
+                    if (isInternetConnected(requireContext())) {
+                        // TODO: VALIDATE RESET PASSWORD INPUTS
+                    } else {
+                        dlgNoInternet(requireContext()).show()
+                    }
+                }
+            }
+
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireContext().getSystemService(InputMethodManager::class.java).apply {
@@ -41,6 +53,7 @@ class FrgResetPassword : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
+
 
             tglShowPassword.setOnCheckedChangeListener { _, isChecked ->
                 val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
@@ -81,10 +94,6 @@ class FrgResetPassword : Fragment() {
                 }
             }
 
-            //INPUT VALIDATION
-            textWatcher(txtResetPassword)
-            textWatcher(txtResetConfirmPassword)
-
             //NAVIGATION
             btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
@@ -92,6 +101,7 @@ class FrgResetPassword : Fragment() {
             return root
         }
     }
+
     private fun updatingNewPassword(newPassword : String){
         val email = arguments?.getString("email").toString()
         val password = arguments?.getString("password").toString()
@@ -147,21 +157,6 @@ class FrgResetPassword : Fragment() {
             }
         }
         return future
-    }
-    //INPUT VALIDATOR
-    private fun textWatcher(textField : EditText) {
-        textField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-            override fun afterTextChanged(s: Editable?) {
-                with(bind) {
-                    btnUpdatePassword.isEnabled = listOf(
-                        txtResetPassword,
-                        txtResetConfirmPassword
-                    ).all { it.text.isNotEmpty() }
-                }
-            }
-        })
     }
 }
 

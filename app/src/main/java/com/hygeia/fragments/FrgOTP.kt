@@ -2,6 +2,7 @@ package com.hygeia.fragments
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+
 import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
@@ -28,6 +29,7 @@ class FrgOTP : Fragment() {
     private lateinit var argOtp : String
     private lateinit var argPhoneNumber : String
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+
         bind = FrgOtpBinding.inflate(inflater, container, false)
         auth = Firebase.auth
 
@@ -35,13 +37,18 @@ class FrgOTP : Fragment() {
             timerForResendOTP()
             val title = "${titleOTP.text} +63 9** *** ${arguments?.getString("phoneNumber")?.substring(9)}"
             //POPULATE
-            titleOTP.text = title
+            lblDescription.text = title
             argOtp = arguments?.getString("otp").toString()
             argToken = arguments?.getParcelable("resendToken")
             argPhoneNumber = arguments?.getString("phoneNumber").toString()
+
             //MAIN FUNCTIONS
             btnVerify.setOnClickListener {
-                validateInput(txtOTP.text.toString())
+                if (txtOtp.text!!.isNotEmpty()) {
+                    validateInput(txtOtp.text.toString())
+                } else {
+                    dlgRequiredFields(requireContext()).show()
+                }
             }
             btnResend.setOnClickListener {
                 resendOTP()
@@ -54,10 +61,6 @@ class FrgOTP : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
-
-            //INPUT VALIDATIONS
-            textWatcher(txtOTP)
-
             //NAVIGATION
             btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
@@ -65,6 +68,7 @@ class FrgOTP : Fragment() {
             return root
         }
     }
+
     private fun timerForResendOTP(){
         with(bind){
             val countDownTimer = object: CountDownTimer(120000, 1000) {
@@ -87,6 +91,7 @@ class FrgOTP : Fragment() {
     private fun validateInput(otp : String) {
         val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(argOtp, otp)
         signInWithPhoneAuthCredential(credential)
+
     }
     private fun resendOTP() {
         timerForResendOTP()
@@ -133,21 +138,6 @@ class FrgOTP : Fragment() {
             addOnFailureListener {
                 requireActivity().msg("Invalid")
             }
-        }
-    }
-//    private fun sendArguments() {
-//        //TODO : GET EMAIL AND PHONE NUMBER FROM FrgForgotPassword.kt
-//    }
-    //INPUT VALIDATOR
-    private fun textWatcher(textField : EditText) {
-        with(bind) {
-            textField.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnVerify.isEnabled = txtOTP.text.length == 6
-                }
-            })
         }
     }
 }

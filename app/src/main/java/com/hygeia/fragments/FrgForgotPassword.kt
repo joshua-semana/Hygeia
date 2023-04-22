@@ -9,17 +9,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+
 import android.widget.EditText
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
+
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.dlgNoInternet
+import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.msg
@@ -27,13 +30,30 @@ import com.hygeia.databinding.FrgForgotPasswordBinding
 import java.util.concurrent.TimeUnit
 
 class FrgForgotPassword : Fragment() {
-    private lateinit var bind : FrgForgotPasswordBinding
-    private lateinit var auth : FirebaseAuth
-    private var phoneNumber: String = ""
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private lateinit var bind: FrgForgotPasswordBinding
+    private lateinit var auth: FirebaseAuth
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         bind = FrgForgotPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
         with(bind) {
+            //MAIN FUNCTIONS
+            btnContinue.setOnClickListener {
+                if (txtEmail.text!!.isEmpty()) {
+                    dlgRequiredFields(requireContext()).show()
+                    clearTextError()
+                } else {
+                    if (isInternetConnected(requireContext())) {
+                        validateInput(txtEmail.text.toString())
+                    } else {
+                        dlgNoInternet(requireContext()).show()
+                    }
+                }
+            }
+
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireContext().getSystemService(InputMethodManager::class.java).apply {
@@ -42,39 +62,23 @@ class FrgForgotPassword : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
-            //VALIDATION
-            textWatcher(txtForgotEmail)
+
             //NAVIGATION
-            btnContinue.setOnClickListener {
-                if (isInternetConnected(requireContext())) {
-                    validateInput(txtForgotEmail.text.toString())
-                } else {
-                    dlgMessage(
-                        requireContext(),
-                        "no-wifi",
-                        getString(R.string.dlg_title_wifi),
-                        getString(R.string.dlg_body_wifi),
-                        "Okay"
-                    )
-                }
-            }
-            btnBackToLogin.setOnClickListener {
+            btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
             return root
         }
     }
-    private fun validateInput(email : String) {
+    private fun clearTextError() {
+        bind.txtLayoutEmail.isErrorEnabled = false
+    }
+
+    private fun validateInput(email: String) {
         val loading = dlgLoading(requireContext())
         with(bind) {
-            txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_default)
-            lblForgotPasswordErrorMsg1.visibility = View.GONE
-
-            if (!emailPattern.matches(email)) {
-                txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
-                lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_format)
-            } else {
+            clearTextError()
+            if (emailPattern.matches(email)) {
                 loading.show()
                 auth.fetchSignInMethodsForEmail(email).addOnSuccessListener{ getEmailList ->
                     if (getEmailList.signInMethods?.isEmpty() == true) {
@@ -94,6 +98,8 @@ class FrgForgotPassword : Fragment() {
                     }
                     loading.dismiss()
                 }
+            } else {
+                txtLayoutEmail.error = getString(R.string.error_email_format)
             }
         }
     }
@@ -142,8 +148,9 @@ class FrgForgotPassword : Fragment() {
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
-
+    
     private fun sendArguments(phoneNumber : String, email : String, password : String, otp : String, token : Parcelable) {
+
         val bundle = Bundle().apply {
             putString("phoneNumber", phoneNumber)
             putString("email", email)
@@ -153,22 +160,12 @@ class FrgForgotPassword : Fragment() {
         }
         val fragment = FrgOTP().apply { arguments = bundle }
         parentFragmentManager.beginTransaction()
-            .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+            .setCustomAnimations(
+                androidx.appcompat.R.anim.abc_fade_in,
+                androidx.appcompat.R.anim.abc_fade_out
+            )
             .replace(R.id.containerForgotPassword, fragment)
             .addToBackStack(null)
             .commit()
-    }
-
-    //INPUT VALIDATOR
-    private fun textWatcher(textField : EditText) {
-        with(bind) {
-            textField.addTextChangedListener(object : TextWatcher {
-                override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
-                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { }
-                override fun afterTextChanged(s: Editable?) {
-                    btnContinue.isEnabled = txtForgotEmail.text.isNotEmpty()
-                }
-            })
-        }
     }
 }

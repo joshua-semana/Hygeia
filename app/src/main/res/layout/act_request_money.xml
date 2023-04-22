@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActSendMoney">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblPageTitle"
+        style="@style/Lbl_PageTitle"
+        android:layout_height="wrap_content"
+        android:text="@string/page_title_request_money"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
+    <TextView
+        android:id="@+id/lblTitlePhoneNumber"
+        style="@style/Text_Regular"
+        android:layout_marginTop="@dimen/heading_margin_top"
+        android:text="@string/title_enter_required"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/txtEmailOrPhone"
+        style="@style/Txt_Primary"
+        android:autofillHints=""
+        android:hint="@string/hint_email_or_number"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="@+id/lblTitlePhoneNumber"
+        app:layout_constraintStart_toStartOf="@+id/lblTitlePhoneNumber"
+        app:layout_constraintTop_toBottomOf="@+id/lblTitlePhoneNumber"
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/txtAmount"
+        style="@style/Txt_Primary"
+        android:autofillHints=""
+        android:hint="@string/hint_amount"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/txtEmailOrPhone"
+        app:layout_constraintStart_toStartOf="@+id/txtEmailOrPhone"
+        app:layout_constraintTop_toBottomOf="@+id/txtEmailOrPhone"
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
+
+    <EditText
+        android:id="@+id/txtMessage"
+        style="@style/Txt_Primary"
+        android:autofillHints=""
+        android:hint="@string/hint_message"
+        android:inputType="number"
+        app:layout_constraintEnd_toEndOf="@+id/txtAmount"
+        app:layout_constraintStart_toStartOf="@+id/txtAmount"
+        app:layout_constraintTop_toBottomOf="@+id/txtAmount"
+        tools:ignore="TextFields,VisualLintTextFieldSize" />
+
+    <Button
+        android:id="@+id/btnRequestMoney"
+        style="@style/Btn_Primary"
+        android:enabled="false"
+        android:layout_width="match_parent"
+        android:text="@string/btn_request_money"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

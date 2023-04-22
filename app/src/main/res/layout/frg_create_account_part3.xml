@@ -5,163 +5,239 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/btnBackToCreateAccountPart2"
-        style="@style/IconButtonBack"
-        android:drawableLeft="@drawable/ic_arrow_back"
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="RtlHardcoded,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/lblPgNumCreateAccount2"
-        style="@style/PageNumber"
+        android:id="@+id/lblPageNumber"
+        style="@style/Text_Page_Number"
         android:text="@string/pg_num_3"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
+    <TextView
+        android:id="@+id/lblHeadingRegular"
+        style="@style/Text_H1_Regular"
+        android:layout_width="wrap_content"
+        android:text="@string/h1_create_account3"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/lblCreateAccountHeading1"
-        style="@style/TextHeadingRegular"
-        android:text="@string/heading_create_account3"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/lblHeadingColored"
+        style="@style/Text_H1_Colored_Inline"
+        android:layout_width="wrap_content"
+        android:text="@string/h1_account_colored"
+        app:layout_constraintBottom_toBottomOf="@+id/lblHeadingRegular"
+        app:layout_constraintStart_toEndOf="@+id/lblHeadingRegular"
+        app:layout_constraintTop_toTopOf="@+id/lblHeadingRegular" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerDescription"
+        style="@style/Container_Description"
+        android:padding="@dimen/container_desc_p"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">
+
+        <ImageView
+            android:id="@+id/imgDescription"
+            android:layout_width="@dimen/ic_sm"
+            android:layout_height="@dimen/ic_sm"
+            android:src="@drawable/ic_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/lblDescription"
+            style="@style/Text_Regular"
+            android:layout_marginStart="@dimen/text_desc_ml"
+            android:layout_marginTop="@dimen/text_desc_mt"
+            android:layout_marginBottom="@dimen/text_desc_mb"
+            android:text="@string/desc_create_account_part3"
+            android:textColor="@color/neutral_900"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgDescription"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <TextView
-        android:id="@+id/lblCreateAccountHeading2"
-        style="@style/TextHeadingColored"
-        android:text="@string/account"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:id="@+id/lblH6PersonalInformation"
+        style="@style/Text_H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/h6_personal_information"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading1" />
+        app:layout_constraintTop_toBottomOf="@+id/containerDescription" />
 
-    <TextView
-        android:id="@+id/titleOnCreateAccountPart3.1"
-        style="@style/TextBody"
-        android:text="@string/title_review_gender_and_name"
-        app:layout_constraintEnd_toEndOf="parent"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutFirstName"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:hint="@string/title_first_name"
+        app:layout_constraintEnd_toStartOf="@+id/txtLayoutLastName"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblCreateAccountHeading2" />
+        app:layout_constraintTop_toBottomOf="@+id/lblH6PersonalInformation">
 
-    <EditText
-        android:id="@+id/txtReviewFullNameAndGender"
-        style="@style/PrimaryTextField"
-        android:layout_marginTop="4dp"
-        android:autofillHints=""
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.1"
-        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
-
-    <TextView
-        android:id="@+id/titleOnCreateAccountPart3.2"
-        style="@style/TextBody"
-        android:layout_marginTop="2dp"
-        android:text="@string/title_review_birthdate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtReviewFullNameAndGender" />
-
-    <EditText
-        android:id="@+id/txtReviewBirthdate"
-        style="@style/PrimaryTextField"
-        android:layout_marginTop="4dp"
-        android:autofillHints=""
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.2"
-        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
-
-    <TextView
-        android:id="@+id/titleOnCreateAccountPart3.3"
-        style="@style/TextBody"
-        android:layout_marginTop="2dp"
-        android:text="@string/title_review_email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtReviewBirthdate" />
-
-    <EditText
-        android:id="@+id/txtReviewEmail"
-        style="@style/PrimaryTextField"
-        android:layout_marginTop="4dp"
-        android:autofillHints=""
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.3"
-        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
-
-    <TextView
-        android:id="@+id/titleOnCreateAccountPart3.4"
-        style="@style/TextBody"
-        android:layout_marginTop="2dp"
-        android:text="@string/title_review_phone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtReviewEmail" />
-
-    <EditText
-        android:id="@+id/txtReviewPhoneNumber"
-        style="@style/PrimaryTextField"
-        android:layout_marginTop="4dp"
-        android:autofillHints=""
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:longClickable="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.4"
-        tools:ignore="LabelFor,SpeakableTextPresentCheck,TextFields,VisualLintTextFieldSize" />
-
-    <TextView
-        android:id="@+id/titleOnCreateAccountPart3.5"
-        style="@style/TextBody"
-        android:layout_marginTop="2dp"
-        android:text="@string/title_review_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtReviewPhoneNumber" />
-
-    <RelativeLayout
-        android:id="@+id/grpTxtPassword"
-        style="@style/TextFieldWithIconWrapper"
-        android:layout_marginTop="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnCreateAccountPart3.5">
-
-        <EditText
-            android:id="@+id/txtReviewPassword"
-            style="@style/PrimaryTextFieldWithIcon"
-            android:autofillHints=""
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtFirstName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:inputType="textPassword"
             android:longClickable="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="LabelFor,SpeakableTextPresentCheck,TextContrastCheck,VisualLintTextFieldSize" />
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        <ToggleButton
-            android:id="@+id/tglShowPassword"
-            style="@style/TextFieldIcon"
-            android:background="@drawable/ic_visibility_selector"
-            tools:ignore="RelativeOverlap,TouchTargetSizeCheck,TextSizeCheck,TextContrastCheck,DuplicateSpeakableTextCheck" />
-    </RelativeLayout>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutLastName"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:hint="@string/title_last_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtLayoutFirstName"
+        app:layout_constraintTop_toBottomOf="@+id/lblH6PersonalInformation">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtLastName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutGender"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
+        android:hint="@string/title_gender"
+        app:layout_constraintEnd_toStartOf="@+id/txtLayoutBirthDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutFirstName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtGender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutBirthDate"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:hint="@string/title_birth_date"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/txtLayoutGender"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutLastName">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtBirthDate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/lblH6AccountInformation"
+        style="@style/Text_H6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="@string/h6_account_information"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutGender" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutEmail"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblH6AccountInformation">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutPhoneNumber"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_phone_number"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutEmail">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtPhoneNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutPassword"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_password"
+        app:endIconDrawable="@drawable/ic_eye_selector"
+        app:endIconMode="password_toggle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutPhoneNumber">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:longClickable="false"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnCreateAccount"
-        style="@style/PrimaryButtonLarge"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
         android:text="@string/btn_create_my_account"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
