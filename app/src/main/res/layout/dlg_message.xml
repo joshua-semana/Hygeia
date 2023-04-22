@@ -8,56 +8,60 @@
     app:cardCornerRadius="@dimen/corner_radius">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="350dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingStart="@dimen/mx"
+        android:paddingEnd="@dimen/mx"
         android:layout_gravity="center">
 
         <ImageView
             android:id="@+id/imgDialogLogo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/circle_lg"
+            android:layout_height="@dimen/circle_lg"
             android:layout_marginTop="24dp"
-            android:background="@drawable/ic_bg_dlg_default"
-            android:padding="@dimen/dialog_icon_padding"
+            android:background="@drawable/bg_circle_50"
+            android:padding="@dimen/ic_p"
+            android:src="@drawable/ic_wifi_off"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_wifi_not_connected"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
 
         <TextView
             android:id="@+id/lblDialogTitle"
-            style="@style/TextBody"
-            android:layout_width="match_parent"
+            style="@style/Text_Regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="14dp"
-            android:fontFamily="@font/roboto_bold"
             android:gravity="center"
-            android:text="@string/placeholder_dialog_title"
+            android:text="@string/dlg_placeholder_title"
+            android:textColor="@color/neutral_900"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imgDialogLogo" />
 
         <TextView
             android:id="@+id/lblDialogBody"
-            style="@style/TextBody"
-            android:layout_width="match_parent"
+            style="@style/Text_Regular"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:gravity="center"
-            android:text="@string/placeholder_dialog_body"
+            android:text="@string/dlg_placeholder_body"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/lblDialogTitle" />
 
         <Button
             android:id="@+id/btnDialogPrimary"
-            style="@style/LabelButton"
+            style="@style/Btn_Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
             android:text="@string/btn_okay"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
