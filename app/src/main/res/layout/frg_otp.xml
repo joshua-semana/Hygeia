@@ -15,67 +15,87 @@
 
     <TextView
         android:id="@+id/lblOTPHeading1"
-        style="@style/TextHeadingRegular"
+        style="@style/Text_H1_Regular"
         android:layout_width="wrap_content"
-        android:text="@string/heading_otp"
+        android:text="@string/h1_otp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lblOTPHeading2"
-        style="@style/TextHeadingColored"
+        style="@style/Text_H1_Colored"
         android:layout_width="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="80dp"
-        android:text="@string/pin"
+        android:text="@string/h1_pin_colored"
         app:layout_constraintStart_toEndOf="@+id/lblOTPHeading1"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/titleOTP"
-        style="@style/TextBody"
-        android:text="@string/title_otp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/containerDescription"
+        style="@style/Container_Description"
+        android:padding="@dimen/container_desc_p"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblOTPHeading2" />
+        app:layout_constraintTop_toBottomOf="@+id/lblOTPHeading1">
 
-    <EditText
-        android:id="@+id/txtOTP"
-        style="@style/Txt_Primary"
-        android:autofillHints=""
-        android:hint="@string/hint_otp"
-        android:inputType="number"
-        android:maxLength="6"
+        <ImageView
+            android:id="@+id/imgDescription"
+            android:layout_width="@dimen/ic_sm"
+            android:layout_height="@dimen/ic_sm"
+            android:src="@drawable/ic_info"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+
+        <TextView
+            android:id="@+id/lblDescription"
+            style="@style/Text_Regular"
+            android:layout_marginStart="@dimen/text_desc_ml"
+            android:layout_marginTop="@dimen/text_desc_mt"
+            android:layout_marginBottom="@dimen/text_desc_mb"
+            android:text="@string/desc_otp"
+            android:textColor="@color/neutral_900"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imgDescription"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutOtp"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_otp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOTP"
-        tools:ignore="VisualLintTextFieldSize" />
+        app:layout_constraintTop_toBottomOf="@+id/containerDescription">
 
-    <TextView
-        android:id="@+id/lblOTPErrorMsg1"
-        style="@style/TextBodyError"
-        android:text="@string/validate_otp_incorrect"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtOTP" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtOtp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="number"
+            android:maxLength="6"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
 
     <Button
         android:id="@+id/btnResend"
-        style="@style/Btn_Label"
+        style="@style/Btn_Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
         android:enabled="false"
         android:text="@string/btn_resend"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/lblOTPErrorMsg1"
+        app:layout_constraintTop_toBottomOf="@id/txtLayoutOtp"
         tools:ignore="VisualLintButtonSize" />
 
     <Button
         android:id="@+id/btnVerify"
         style="@style/Btn_Primary"
-        android:enabled="false"
         android:layout_width="match_parent"
         android:text="@string/btn_verify"
         app:layout_constraintBottom_toBottomOf="parent"

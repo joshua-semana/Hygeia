@@ -32,7 +32,7 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize"/>
         <activity
-            android:name=".ActLogin"
+            android:name=".ActMain"
             android:exported="false" />
         <activity
             android:name=".ActForgotPassword"
@@ -42,7 +42,7 @@
             android:name=".ActCreateAccount"
             android:exported="false" />
         <activity
-            android:name=".ActMain"
+            android:name=".ActLogin"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

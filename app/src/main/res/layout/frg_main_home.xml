@@ -116,9 +116,9 @@
 
         <ToggleButton
             android:id="@+id/tglShowBalance"
-            style="@style/Tgl_Md_0"
+            style="@style/Tgl_Md_Clear"
             android:layout_marginEnd="10dp"
-            android:drawableTop="@drawable/ic_visibility_selector"
+            android:drawableTop="@drawable/ic_eye_selector"
             app:layout_constraintBottom_toBottomOf="@+id/lblBalance"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/lblBalance"
@@ -207,7 +207,7 @@
 
     <TextView
         android:id="@+id/lblViewAllTransactions"
-        style="@style/TextBody"
+        style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_marginEnd="6dp"
         android:text="@string/btn_view_all_transactions"
@@ -226,16 +226,15 @@
         app:layout_constraintTop_toTopOf="@+id/lblViewAllTransactions"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
-    <ListView
-        android:id="@+id/listViewTransactions"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleOnMainHome" />
-
+<!--    <ListView-->
+<!--        android:id="@+id/listViewTransactions"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="24dp"-->
+<!--        android:layout_marginTop="4dp"-->
+<!--        android:layout_marginEnd="24dp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/titleOnMainHome" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

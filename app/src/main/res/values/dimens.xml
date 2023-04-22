@@ -3,10 +3,12 @@
     <!--WHEN CHANGING MARGIN_X, PAGE NUMBER, & MARGIN_X_ERROR ARE PLUS OR MINUS 6-->
 
     <!--GLOBAL-->
-    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="corner_radius">12dp</dimen>
     <dimen name="heading_margin_top">80dp</dimen>
     <dimen name="mx">24dp</dimen>
     <dimen name="mx_err">44dp</dimen>
+    <dimen name="elmnt_y">52dp</dimen>
+    <dimen name="elmnt_gap">8dp</dimen>
 
     <dimen name="circle_lg">50dp</dimen>
     <dimen name="circle_md">34dp</dimen>
@@ -23,12 +25,9 @@
     <dimen name="body_top_gap">6dp</dimen>
 
     <!--BUTTONS-->
-    <dimen name="elmnt_y">60dp</dimen>
-    <dimen name="btn_inset_x">3dp</dimen>
-
+    <dimen name="btn_inset_y">0dp</dimen>
     <dimen name="btn_mb">24dp</dimen>
-    <dimen name="btn_stack_mb">2dp</dimen>
-
+    <dimen name="btn_stack_mb">12dp</dimen>
     <dimen name="btn_back_mt">13dp</dimen>
     <dimen name="btn_back_ml">11dp</dimen>
 
@@ -36,6 +35,7 @@
     <dimen name="txt_px">20sp</dimen>
     <dimen name="txt_pr">55sp</dimen>
     <dimen name="txt_ic_mr">4dp</dimen>
+    <dimen name="txt_mt">4dp</dimen>
 
     <!--SPINNERS / CMB-->
     <dimen name="cmb_px">12sp</dimen>
@@ -44,7 +44,15 @@
     <dimen name="ic_lg">34sp</dimen>
     <dimen name="ic_md">26sp</dimen>
     <dimen name="ic_sm">22sp</dimen>
+    <dimen name="ic_p">10dp</dimen>
 
     <!--PAGE NUMBERS-->
     <dimen name="pg_num_end">22dp</dimen>
+
+    <!--CONTAINER DESCRIPTION-->
+    <dimen name="container_desc_mt">8dp</dimen>
+    <dimen name="container_desc_p">10dp</dimen>
+    <dimen name="text_desc_mt">1dp</dimen>
+    <dimen name="text_desc_mb">3dp</dimen>
+    <dimen name="text_desc_ml">6dp</dimen>
 </resources>

@@ -13,58 +13,49 @@ import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.dlgMessage
+import com.hygeia.Utilities.dlgNoInternet
 import com.hygeia.Utilities.isInternetConnected
 
 import com.hygeia.databinding.FrgCreateAccountPart3Binding
 
 class FrgCreateAccountPart3 : Fragment() {
-    private lateinit var bind : FrgCreateAccountPart3Binding
-    private lateinit var auth : FirebaseAuth
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    private lateinit var bind: FrgCreateAccountPart3Binding
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         bind = FrgCreateAccountPart3Binding.inflate(inflater, container, false)
         auth = Firebase.auth
 
         val userInfo = mapOf(
-            "gender" to arguments?.getString("gender"),
             "firstname" to arguments?.getString("firstname"),
             "lastname" to arguments?.getString("lastname"),
+            "gender" to arguments?.getString("gender"),
             "birthdate" to arguments?.getString("birthdate"),
             "email" to arguments?.getString("email"),
             "phoneNumber" to arguments?.getString("phoneNumber"),
             "password" to arguments?.getString("password")
         )
 
-        val fullname = "${userInfo["gender"]} ${userInfo["firstname"]} ${userInfo["lastname"]}"
-
         with(bind) {
             //POPULATE
-            txtReviewFullNameAndGender.setText(fullname)
-            txtReviewBirthdate.setText(userInfo["birthdate"])
-            txtReviewEmail.setText(userInfo["email"])
-            txtReviewPhoneNumber.setText(userInfo["phoneNumber"])
-            txtReviewPassword.setText(userInfo["password"])
+            txtFirstName.setText(userInfo["firstname"])
+            txtLastName.setText(userInfo["lastname"])
+            txtGender.setText(userInfo["gender"])
+            txtBirthDate.setText(userInfo["birthdate"])
+            txtEmail.setText(userInfo["email"])
+            txtPhoneNumber.setText(userInfo["phoneNumber"])
+            txtPassword.setText(userInfo["password"])
 
             //MAIN FUNCTION
             btnCreateAccount.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
                     createAccount(userInfo)
                 } else {
-                    dlgMessage(
-                        requireContext(),
-                        "no-wifi",
-                        getString(R.string.dlg_title_wifi),
-                        getString(R.string.dlg_body_wifi),
-                        "Okay"
-                    )
-                }
-            }
-            //ELEMENT BEHAVIOR
-            tglShowPassword.setOnCheckedChangeListener{ _, isChecked ->
-                val passwordDisplay = if (isChecked) null else PasswordTransformationMethod()
-                with(txtReviewPassword) {
-                    this.transformationMethod = passwordDisplay
-                    setSelection(text.length)
+                    dlgNoInternet(requireContext()).show()
                 }
             }
             //NAVIGATION
@@ -76,9 +67,8 @@ class FrgCreateAccountPart3 : Fragment() {
         }
     }
 
-    private fun createAccount(data : Map<String, String?>) {
+    private fun createAccount(data: Map<String, String?>) {
         val loading = dlgLoading(requireContext())
-        val cloudFirestore = FirebaseFirestore.getInstance()
         loading.show()
 
         val userData = hashMapOf(
@@ -89,31 +79,28 @@ class FrgCreateAccountPart3 : Fragment() {
             "email" to data["email"],
             "phoneNumber" to data["phoneNumber"],
             "password" to data["password"],
-            "role" to "standard"
+            "role" to "standard",
+            "balance" to 0
         )
 
         auth.createUserWithEmailAndPassword(data["email"].toString(), data["password"].toString())
             .addOnSuccessListener { getUser ->
-                val userFirebase = getUser.user
-                if (userFirebase != null) {
-                    cloudFirestore.collection("User").document(userFirebase.uid).set(userData)
-                        .addOnSuccessListener {
-                            loading.dismiss()
-                            dlgMessage(
-                                requireContext(),
-                                "success",
-                                getString(R.string.dlg_title_create_account),
-                                getString(R.string.dlg_body_create_account),
-                                "Go back to login"
-                            ).apply {
-                                setOnDismissListener {
-                                    requireActivity().finish()
-                                }
-                                show()
+                db.collection("User").document(getUser.user!!.uid).set(userData)
+                    .addOnSuccessListener {
+                        loading.dismiss()
+                        dlgMessage(
+                            requireContext(),
+                            "success",
+                            getString(R.string.dlg_title_create_account),
+                            getString(R.string.dlg_body_create_account),
+                            "Go back to login"
+                        ).apply {
+                            setOnDismissListener {
+                                requireActivity().finish()
                             }
+                            show()
                         }
-                }
+                    }
             }
-
     }
 }

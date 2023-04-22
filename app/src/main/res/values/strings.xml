@@ -1,14 +1,61 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Hygeia</string>
     <string name="app_name_lower">hygeia</string>
-    <string name="app_name_upper">HYGEIA</string>
     <string name="app_version">Copyright © 2023. Hygeia. All rights reserved.</string>
-    <string name="app_catchphrase">Your access to your hygiene \n vendo buddy</string>
-    <string name="logo_desc">Main Logo</string>
 
+    <!--HEADINGS-->
+    <string name="h1_create_account1">Let\'s create your</string>
+    <string name="h1_create_account2">Now, let\'s secure your</string>
+    <string name="h1_create_account3">Review your</string>
+    <string name="h1_forgot_password">Let\'s recover your</string>
+    <string name="h1_reset_password">Create your new</string>
+    <string name="h1_otp">Verify one-time</string>
+    <string name="h1_account_colored">account</string>
+    <string name="h1_password_colored">password</string>
+    <string name="h1_pin_colored">PIN</string>
+    <string name="h6_personal_information">Your personal information</string>
+    <string name="h6_account_information">Your account details</string>
+
+    <string name="or">Or</string>
+
+    <!--CONTAINER DESCRIPTION-->
+    <string name="desc_login">Your access to your hygiene\nvendo buddy</string>
+    <string name="desc_create_account_part1">Please provide your personal information.</string>
+    <string name="desc_create_account_part2">Please enter your account details.</string>
+    <string name="desc_create_account_part3">Please make sure that all details are correct.</string>
+    <string name="desc_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia.</string>
+    <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number ending in</string>
+    <string name="desc_update_password"><b>Reminders: </b>Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+
+    <!--FIELDS TITLE-->
+    <string name="title_email">Email</string>
+    <string name="title_password">Password</string>
+    <string name="title_password_new">New password</string>
+    <string name="title_password_confirm">Confirm password</string>
+    <string name="title_otp">One-time PIN</string>
+    <string name="title_first_name">First name</string>
+    <string name="title_last_name">Last name</string>
+    <string name="title_gender">Gender</string>
+    <string name="title_birth_date">Birth date</string>
+    <string name="title_phone_number">Phone number</string>
+
+    <!--ERROR MESSAGE-->
+    <string name="error_email_registered">The email you entered is not registered in our system.</string>
+    <string name="error_email_format">The email you entered is invalid.</string>
+    <string name="error_email_taken">This email is already in use.</string>
+    <string name="error_password_incorrect">Incorrect password.</string>
+    <string name="error_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+    <string name="error_password_matched">Passwords do not match.</string>
+    <string name="error_password_criteria">Password does not match the criteria.</string>
+    <string name="error_birth_date">Sorry, you must be at least 11 years old to use this application.</string>
+    <string name="error_phone_format">The phone number you entered is invalid.</string>
+    <string name="error_phone_taken">This phone number is already in use.</string>
+    <string name="error_otp_incorrect">The one-time pin you entered is incorrect.</string>
+
+    <!--BUTTONS-->
     <string name="btn_login">Login</string>
     <string name="btn_create_account">Create an account</string>
-    <string name="btn_forgot_password">Forgot your password?</string>
+    <string name="btn_forgot_password">Forgot password?</string>
     <string name="btn_continue">Continue</string>
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
@@ -21,17 +68,19 @@
     <string name="btn_add_money">Top Up</string>
     <string name="btn_view_all_transactions">View all</string>
 
+    <!--DIALOGS-->
+    <string name="dlg_placeholder_title">Dialog Title</string>
+    <string name="dlg_placeholder_body">Dialog content</string>
+    <string name="dlg_title_wifi">No internet connection</string>
+    <string name="dlg_body_wifi">Please check your internet connection and try again. If the problem persists, contact your internet service provider. Sorry for the inconvenience.</string>
+    <string name="dlg_title_required_fields">Required field/s</string>
+    <string name="dlg_body_required_fields">Make sure that every field in this form has been filled out. Review the form carefully to ensure that all required information has been entered correctly.</string>
+    <string name="dlg_title_create_account">Successfully registered!</string>
+    <string name="dlg_body_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
+
+    <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
-    <string name="hint_first_name">Enter first name</string>
-    <string name="hint_last_name">Enter last name</string>
-    <string name="hint_birth_date">Enter birth date</string>
-    <string name="hint_email">Enter email</string>
-    <string name="hint_password">Enter password</string>
-    <string name="hint_confirm_password">Re-enter password</string>
     <string name="hint_phone_number">Enter phone number</string>
-    <string name="hint_password_new">Enter your new password</string>
-    <string name="hint_confirm_password_new">Re-enter your new password</string>
-    <string name="hint_otp">Enter OTP</string>
     <string name="hint_amount">Enter amount</string>
     <string name="hint_message">Enter message</string>
     <string name="hint_message_optional">Enter message (Optional)</string>
@@ -39,14 +88,6 @@
     <string name="btn_hint_send_money">Send</string>
     <string name="btn_hint_request_money">Request</string>
     <string name="btn_hint_add_money">Top Up</string>
-
-    <!--CONTENTS-->
-    <string name="heading_create_account1">Let\'s create your</string>
-    <string name="heading_create_account2">Now, let\'s secure your</string>
-    <string name="heading_create_account3">Review your</string>
-    <string name="heading_forgot_password">Let\'s recover your</string>
-    <string name="heading_reset_password">Create your new</string>
-    <string name="heading_otp">One-Time</string>
 
     <string name="page_title_home_greetings">Hey,</string>
     <string name="page_title_home_name">John Doe</string>
@@ -57,16 +98,6 @@
     <string name="page_title_transactions">All Transactions</string>
 
     <string name="title_enter_required">Please enter the required details</string>
-
-    <string name="title_create_personal_info">Please provide your personal information</string>
-    <string name="title_create_account_details">Please enter your account details</string>
-    <string name="title_review_gender_and_name">Your gender and full name</string>
-    <string name="title_review_birthdate">Your birthdate</string>
-    <string name="title_review_email">Your email</string>
-    <string name="title_review_phone">Your phone number</string>
-    <string name="title_review_password">Your password</string>
-    <string name="title_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia</string>
-    <string name="title_otp">Please enter the one-time PIN (OTP) that we sent to your number ending in</string>
     <string name="title_home_balance">Your balance</string>
     <string name="title_home_transactions">Latest transactions</string>
     <string name="title_send_money_balance">Available balance</string>
@@ -77,35 +108,6 @@
     <string name="data_balance_unit">₱</string>
     <string name="data_balance_amount">1,000</string>
     <string name="data_balance_decimal">.00</string>
-
-    <!--SINGLE WORD-->
-    <string name="account">account</string>
-    <string name="password">password</string>
-    <string name="pin">PIN</string>
-
-    <!--VALIDATION MESSAGE-->
-    <string name="validate_placeholder_msg_for_multi_error">This is a placeholder for an error message</string>
-    <string name="validate_required">This field is required</string>
-    <string name="validate_email_exists">The email you entered is not registered in our system.</string>
-    <string name="validate_email_format">The email you entered is invalid.</string>
-    <string name="validate_email_taken">This email is already in use.</string>
-    <string name="validate_password_incorrect">Incorrect password. Please try again.</string>
-    <string name="validate_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
-    <string name="validate_password_matched">Passwords do not match.</string>
-    <string name="validate_password_criteria">Password does not match the criteria.</string>
-    <string name="validate_age_permission">Sorry, you must be at least 11 years old to use this application.</string>
-    <string name="validate_phone_format">The phone number you entered is invalid.</string>
-    <string name="validate_phone_taken">This phone number is already in use.</string>
-    <string name="validate_otp_incorrect">The one-time pin you entered is incorrect.</string>
-
-    <!--DIALOG-->
-    <string name="placeholder_dialog_title">Dialog Title</string>
-    <string name="placeholder_dialog_body">Dialog content</string>
-    <string name="dlg_title_wifi">No internet connection</string>
-    <string name="dlg_body_wifi">It looks like you are not connected to the internet. Be sure to connect to your Wi-Fi in order to log in.</string>
-    <string name="dlg_title_create_account">Successfully registered!</string>
-    <string name="dlg_body_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
-    <string name="dlg_title_otp">One-Time PIN</string>
 
     <!--BOTTOM MENU NAVIGATION-->
     <string name="nav_home">Home</string>
@@ -119,9 +121,9 @@
     <string name="pg_num_3">3 of 3</string>
 
     <!--ARRAYS-->
-    <string-array name="arr_gender">
-        <item>Mr.</item>
-        <item>Ms.</item>
+    <string-array name="gender">
+        <item>Female</item>
+        <item>Male</item>
     </string-array>
 
     <!--LIST TRANSACTION-->

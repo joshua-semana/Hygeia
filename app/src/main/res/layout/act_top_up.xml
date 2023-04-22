@@ -66,7 +66,7 @@
 
     <TextView
         android:id="@+id/lblEnterAmount"
-        style="@style/TextBody"
+        style="@style/Text_Regular"
         android:layout_marginTop="16dp"
         android:text="@string/title_top_up_enter_amount"
         app:layout_constraintEnd_toEndOf="@+id/balanceLayout"
