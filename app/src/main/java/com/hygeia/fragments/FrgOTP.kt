@@ -1,41 +1,43 @@
 package com.hygeia.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
-
 import android.os.CountDownTimer
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgOtpBinding
 import java.util.concurrent.TimeUnit
 
 class FrgOTP : Fragment() {
-    private lateinit var bind : FrgOtpBinding
-    private lateinit var auth : FirebaseAuth
-    private var argToken : PhoneAuthProvider.ForceResendingToken?= null
-    private var argResendToken : PhoneAuthProvider.ForceResendingToken?= null
-    private lateinit var argOtp : String
-    private lateinit var argPhoneNumber : String
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-
+    private lateinit var bind: FrgOtpBinding
+    private lateinit var auth: FirebaseAuth
+    private var argToken: PhoneAuthProvider.ForceResendingToken? = null
+    private var argResendToken: PhoneAuthProvider.ForceResendingToken? = null
+    private lateinit var argOtp: String
+    private lateinit var argPhoneNumber: String
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
         bind = FrgOtpBinding.inflate(inflater, container, false)
         auth = Firebase.auth
 
         with(bind) {
             timerForResendOTP()
-            val title = "${titleOTP.text} +63 9** *** ${arguments?.getString("phoneNumber")?.substring(9)}"
+            val title = "${lblDescription.text} +63 9** *** ${
+                arguments?.getString("phoneNumber")?.substring(9)
+            }"
+
             //POPULATE
             lblDescription.text = title
             argOtp = arguments?.getString("otp").toString()
@@ -53,6 +55,7 @@ class FrgOTP : Fragment() {
             btnResend.setOnClickListener {
                 resendOTP()
             }
+
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireContext().getSystemService(InputMethodManager::class.java).apply {
@@ -61,24 +64,26 @@ class FrgOTP : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
+
             //NAVIGATION
             btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
+
             return root
         }
     }
 
-    private fun timerForResendOTP(){
-        with(bind){
-            val countDownTimer = object: CountDownTimer(120000, 1000) {
-                @SuppressLint("SetTextI18n")
+    private fun timerForResendOTP() {
+        with(bind) {
+            val countDownTimer = object : CountDownTimer(120000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     val seconds = millisUntilFinished / 1000
                     val minutes = seconds / 60
                     val remainingSeconds = seconds % 60
+                    val resendTimer = "Resend code in $minutes:$remainingSeconds"
                     btnResend.isEnabled = false
-                    btnResend.text = "Resend code in $minutes:$remainingSeconds"
+                    btnResend.text = resendTimer
                 }
                 override fun onFinish() {
                     btnResend.isEnabled = true
@@ -88,11 +93,12 @@ class FrgOTP : Fragment() {
             countDownTimer.start()
         }
     }
-    private fun validateInput(otp : String) {
+
+    private fun validateInput(otp: String) {
         val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(argOtp, otp)
         signInWithPhoneAuthCredential(credential)
-
     }
+
     private fun resendOTP() {
         timerForResendOTP()
         val options = PhoneAuthOptions.newBuilder(auth)
@@ -100,24 +106,25 @@ class FrgOTP : Fragment() {
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(requireActivity())
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                override fun onVerificationCompleted(credential: PhoneAuthCredential) { }
-                override fun onVerificationFailed(ex: FirebaseException) { }
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
+                override fun onVerificationFailed(ex: FirebaseException) {}
                 override fun onCodeSent(
                     verificationId: String,
-                    resendToken: PhoneAuthProvider.ForceResendingToken
+                    resendToken: PhoneAuthProvider.ForceResendingToken,
                 ) {
                     argOtp = verificationId
                     argResendToken = resendToken
                 }
             })
             .apply {
-                if (argResendToken != null){
+                if (argResendToken != null) {
                     setForceResendingToken(argResendToken!!)
                 }
             }
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
+
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential).apply {
             addOnSuccessListener {
@@ -130,7 +137,10 @@ class FrgOTP : Fragment() {
                 }
                 val fragment = FrgResetPassword().apply { arguments = bundle }
                 parentFragmentManager.beginTransaction()
-                    .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                    .setCustomAnimations(
+                        androidx.appcompat.R.anim.abc_fade_in,
+                        androidx.appcompat.R.anim.abc_fade_out
+                    )
                     .replace(R.id.containerForgotPassword, fragment)
                     .addToBackStack(null)
                     .commit()

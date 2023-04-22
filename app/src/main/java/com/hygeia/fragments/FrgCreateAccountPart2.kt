@@ -46,7 +46,7 @@ class FrgCreateAccountPart2 : Fragment() {
                 } else {
                     if (isInternetConnected(requireContext())) {
                         loading.show()
-                        clearTextInputs()
+                        clearTextErrors()
                         val validations = arrayOf(
                             validateEmail(),
                             validatePhoneNumber(),
@@ -84,7 +84,7 @@ class FrgCreateAccountPart2 : Fragment() {
         }
     }
 
-    private fun clearTextInputs() {
+    private fun clearTextErrors() {
         bind.txtLayoutEmail.isErrorEnabled = false
         bind.txtLayoutPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
