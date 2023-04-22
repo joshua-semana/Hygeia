@@ -29,10 +29,7 @@ import java.util.concurrent.TimeUnit
 class FrgForgotPassword : Fragment() {
     private lateinit var bind : FrgForgotPasswordBinding
     private lateinit var auth : FirebaseAuth
-
-    private var phoneNumber: String = "+639123456789"
-    private var otp: String = "123456"
-
+    private var phoneNumber: String = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgForgotPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
@@ -45,10 +42,8 @@ class FrgForgotPassword : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
-
             //VALIDATION
             textWatcher(txtForgotEmail)
-
             //NAVIGATION
             btnContinue.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
@@ -63,15 +58,12 @@ class FrgForgotPassword : Fragment() {
                     )
                 }
             }
-
             btnBackToLogin.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
-
             return root
         }
     }
-
     private fun validateInput(email : String) {
         val loading = dlgLoading(requireContext())
         with(bind) {
@@ -90,13 +82,15 @@ class FrgForgotPassword : Fragment() {
                         lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
                         lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
                     } else {
-//                        getPhoneNumber(email).addOnSuccessListener { result ->
-//                            phoneNumber = result.toString()
-//                            loading.dismiss()
-//                            sendOTP(phoneNumber)
-//                        }
+                        getPhoneNumber(email).addOnSuccessListener { result ->
+                            phoneNumber = result.toString()
+                            getPassword(email).addOnSuccessListener{outcome ->
+                                val password = outcome.toString()
+                                sendOTP(phoneNumber, email, password)
+                                loading.dismiss()
+                            }
+                        }
                         loading.dismiss()
-                        sendOTP(phoneNumber)
                     }
                     loading.dismiss()
                 }
@@ -114,7 +108,17 @@ class FrgForgotPassword : Fragment() {
         }
     }
 
-    private fun sendOTP(phoneNumber: String) {
+    private fun getPassword(email: String): Task<String> {
+        val db = FirebaseFirestore.getInstance()
+        val query = db.collection("User").whereEqualTo("email", email)
+
+        return query.get().continueWith { task ->
+            val password = task.result?.documents?.get(0)?.getString("password").toString()
+            password
+        }
+    }
+
+    private fun sendOTP(phoneNumber: String, email: String, password: String) {
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)
             .setTimeout(60L, TimeUnit.SECONDS)
@@ -129,19 +133,21 @@ class FrgForgotPassword : Fragment() {
                     }
                 }
                 override fun onCodeSent(
-                    verificationId: String,
+                    otp: String,
                     resendToken: PhoneAuthProvider.ForceResendingToken
                 ) {
-                    sendArguments(phoneNumber, otp, resendToken)
+                    sendArguments(phoneNumber, email, password, otp, resendToken)
                 }
             })
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
 
-    private fun sendArguments(phoneNumber : String, otp : String, token : Parcelable) {
+    private fun sendArguments(phoneNumber : String, email : String, password : String, otp : String, token : Parcelable) {
         val bundle = Bundle().apply {
             putString("phoneNumber", phoneNumber)
+            putString("email", email)
+            putString("password", password)
             putString("otp", otp)
             putParcelable("token", token)
         }

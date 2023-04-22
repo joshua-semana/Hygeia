@@ -106,7 +106,7 @@ class FrgCreateAccountPart1 : Fragment() {
                 override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) { }
                 override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                     if (textField.hint.toString() == "Enter first name" && textField.hint.toString() == "Enter last name") {
-                        if (s.toString().isNotEmpty() && !s.toString().matches("[a-zA-Z ]+".toRegex())) {
+                        if (s.toString().isNotEmpty() && !s.toString().matches("[a-zA-Z]+".toRegex())) {
                             textField.setText(s?.substring(0, s.length - 1))
                             textField.setSelection(textField.text.length)
                             activity?.msg("Only alphabetic characters are allowed.")

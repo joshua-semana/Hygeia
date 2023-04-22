@@ -1,6 +1,8 @@
 package com.hygeia.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.fragment.app.Fragment
@@ -13,6 +15,7 @@ import com.google.firebase.FirebaseException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.hygeia.R
 import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgOtpBinding
 import java.util.concurrent.TimeUnit
@@ -20,17 +23,22 @@ import java.util.concurrent.TimeUnit
 class FrgOTP : Fragment() {
     private lateinit var bind : FrgOtpBinding
     private lateinit var auth : FirebaseAuth
-    private lateinit var argToken : PhoneAuthProvider.ForceResendingToken
+    private var argToken : PhoneAuthProvider.ForceResendingToken?= null
+    private var argResendToken : PhoneAuthProvider.ForceResendingToken?= null
     private lateinit var argOtp : String
+    private lateinit var argPhoneNumber : String
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         bind = FrgOtpBinding.inflate(inflater, container, false)
         auth = Firebase.auth
 
         with(bind) {
-            val title = "${titleOTP.text} ${arguments?.getString("phoneNumber")?.substring(7)}"
+            timerForResendOTP()
+            val title = "${titleOTP.text} +63 9** *** ${arguments?.getString("phoneNumber")?.substring(9)}"
             //POPULATE
             titleOTP.text = title
-
+            argOtp = arguments?.getString("otp").toString()
+            argToken = arguments?.getParcelable("resendToken")
+            argPhoneNumber = arguments?.getString("phoneNumber").toString()
             //MAIN FUNCTIONS
             btnVerify.setOnClickListener {
                 validateInput(txtOTP.text.toString())
@@ -57,11 +65,33 @@ class FrgOTP : Fragment() {
             return root
         }
     }
+    private fun timerForResendOTP(){
+        with(bind){
+            val countDownTimer = object: CountDownTimer(120000, 1000) {
+                @SuppressLint("SetTextI18n")
+                override fun onTick(millisUntilFinished: Long) {
+                    val seconds = millisUntilFinished / 1000
+                    val minutes = seconds / 60
+                    val remainingSeconds = seconds % 60
+                    btnResend.isEnabled = false
+                    btnResend.text = "Resend code in $minutes:$remainingSeconds"
+                }
+                override fun onFinish() {
+                    btnResend.isEnabled = true
+                    btnResend.text = getString(R.string.btn_resend)
+                }
+            }
+            countDownTimer.start()
+        }
+    }
+    private fun validateInput(otp : String) {
+        val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(argOtp, otp)
+        signInWithPhoneAuthCredential(credential)
+    }
     private fun resendOTP() {
-        val phoneNumber = arguments?.getString("phoneNumber").toString()
-        val resendToken : PhoneAuthProvider.ForceResendingToken? = arguments?.getParcelable("resendToken")
+        timerForResendOTP()
         val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phoneNumber)
+            .setPhoneNumber(argPhoneNumber)
             .setTimeout(60L, TimeUnit.SECONDS)
             .setActivity(requireActivity())
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -72,28 +102,33 @@ class FrgOTP : Fragment() {
                     resendToken: PhoneAuthProvider.ForceResendingToken
                 ) {
                     argOtp = verificationId
-                    argToken = resendToken
+                    argResendToken = resendToken
                 }
             })
             .apply {
-                if (resendToken != null) {
-                    setForceResendingToken(resendToken)
+                if (argResendToken != null){
+                    setForceResendingToken(argResendToken!!)
                 }
             }
             .build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
-
-    private fun validateInput(otp : String) {
-        argOtp = arguments?.getString("otp").toString()
-        val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(argOtp, otp)
-        signInWithPhoneAuthCredential(credential)
-    }
-
     private fun signInWithPhoneAuthCredential(credential: PhoneAuthCredential) {
         auth.signInWithCredential(credential).apply {
             addOnSuccessListener {
                 requireActivity().msg("Success")
+                val email = arguments?.getString("email").toString()
+                val password = arguments?.getString("password").toString()
+                val bundle = Bundle().apply {
+                    putString("email", email)
+                    putString("password", password)
+                }
+                val fragment = FrgResetPassword().apply { arguments = bundle }
+                parentFragmentManager.beginTransaction()
+                    .setCustomAnimations(androidx.appcompat.R.anim.abc_fade_in, androidx.appcompat.R.anim.abc_fade_out)
+                    .replace(R.id.containerForgotPassword, fragment)
+                    .addToBackStack(null)
+                    .commit()
             }
             addOnFailureListener {
                 requireActivity().msg("Invalid")
