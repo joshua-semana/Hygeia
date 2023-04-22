@@ -1,21 +1,17 @@
 package com.hygeia.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import android.os.Parcelable
-import android.text.Editable
-import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-
-import android.widget.EditText
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
-
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -32,6 +28,10 @@ import java.util.concurrent.TimeUnit
 class FrgForgotPassword : Fragment() {
     private lateinit var bind: FrgForgotPasswordBinding
     private lateinit var auth: FirebaseAuth
+    private lateinit var loading: Dialog
+    private val db = FirebaseFirestore.getInstance()
+    private var phoneNumber = ""
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,6 +39,7 @@ class FrgForgotPassword : Fragment() {
     ): View {
         bind = FrgForgotPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
+        loading = dlgLoading(requireContext())
         with(bind) {
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
@@ -70,33 +71,27 @@ class FrgForgotPassword : Fragment() {
             return root
         }
     }
+
     private fun clearTextError() {
         bind.txtLayoutEmail.isErrorEnabled = false
     }
 
     private fun validateInput(email: String) {
-        val loading = dlgLoading(requireContext())
         with(bind) {
             clearTextError()
             if (emailPattern.matches(email)) {
                 loading.show()
-                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener{ getEmailList ->
-                    if (getEmailList.signInMethods?.isEmpty() == true) {
-                        txtForgotEmail.setBackgroundResource(R.drawable.bg_textfield_error)
-                        lblForgotPasswordErrorMsg1.visibility = View.VISIBLE
-                        lblForgotPasswordErrorMsg1.text = getString(R.string.validate_email_exists)
-                    } else {
+                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener { getEmailList ->
+                    if (getEmailList.signInMethods?.isNotEmpty() == true) {
                         getPhoneNumber(email).addOnSuccessListener { result ->
                             phoneNumber = result.toString()
-                            getPassword(email).addOnSuccessListener{outcome ->
-                                val password = outcome.toString()
-                                sendOTP(phoneNumber, email, password)
-                                loading.dismiss()
+                            getPassword(email).addOnSuccessListener { password ->
+                                sendOTP(phoneNumber, email, password.toString())
                             }
                         }
-                        loading.dismiss()
+                    } else {
+                        txtLayoutEmail.error = getString(R.string.error_email_registered)
                     }
-                    loading.dismiss()
                 }
             } else {
                 txtLayoutEmail.error = getString(R.string.error_email_format)
@@ -105,9 +100,7 @@ class FrgForgotPassword : Fragment() {
     }
 
     private fun getPhoneNumber(email: String): Task<String> {
-        val db = FirebaseFirestore.getInstance()
         val query = db.collection("User").whereEqualTo("email", email)
-
         return query.get().continueWith { task ->
             val phoneNumber = task.result?.documents?.get(0)?.getString("phoneNumber").toString()
             phoneNumber
@@ -115,9 +108,7 @@ class FrgForgotPassword : Fragment() {
     }
 
     private fun getPassword(email: String): Task<String> {
-        val db = FirebaseFirestore.getInstance()
         val query = db.collection("User").whereEqualTo("email", email)
-
         return query.get().continueWith { task ->
             val password = task.result?.documents?.get(0)?.getString("password").toString()
             password
@@ -125,32 +116,36 @@ class FrgForgotPassword : Fragment() {
     }
 
     private fun sendOTP(phoneNumber: String, email: String, password: String) {
-        val options = PhoneAuthOptions.newBuilder(auth)
-            .setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS)
-            .setActivity(requireActivity())
+        val options = PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phoneNumber)
+            .setTimeout(60L, TimeUnit.SECONDS).setActivity(requireActivity())
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                override fun onVerificationCompleted(credential: PhoneAuthCredential) { }
+                override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
                 override fun onVerificationFailed(ex: FirebaseException) {
                     if (ex is FirebaseAuthInvalidCredentialsException) {
                         requireActivity().msg("Invalid request")
                     } else if (ex is FirebaseTooManyRequestsException) {
                         requireActivity().msg("Too many request")
                     }
+                    loading.dismiss()
                 }
                 override fun onCodeSent(
                     otp: String,
-                    resendToken: PhoneAuthProvider.ForceResendingToken
+                    resendToken: PhoneAuthProvider.ForceResendingToken,
                 ) {
+                    loading.dismiss()
                     sendArguments(phoneNumber, email, password, otp, resendToken)
                 }
-            })
-            .build()
+            }).build()
         PhoneAuthProvider.verifyPhoneNumber(options)
     }
-    
-    private fun sendArguments(phoneNumber : String, email : String, password : String, otp : String, token : Parcelable) {
 
+    private fun sendArguments(
+        phoneNumber: String,
+        email: String,
+        password: String,
+        otp: String,
+        token: Parcelable,
+    ) {
         val bundle = Bundle().apply {
             putString("phoneNumber", phoneNumber)
             putString("email", email)
