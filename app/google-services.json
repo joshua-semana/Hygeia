@@ -1,42 +1,41 @@
 {
   "project_info": {
-    "project_number": "661426594554",
-    "firebase_url": "https://hygeia-testing-default-rtdb.firebaseio.com",
-    "project_id": "hygeia-testing",
-    "storage_bucket": "hygeia-testing.appspot.com"
+    "project_number": "138115321008",
+    "project_id": "hygeia-vendo",
+    "storage_bucket": "hygeia-vendo.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:661426594554:android:1c7725150e183ab32c5f43",
+        "mobilesdk_app_id": "1:138115321008:android:5f6d45ce4f66e98628ff75",
         "android_client_info": {
           "package_name": "com.hygeia"
         }
       },
       "oauth_client": [
         {
-          "client_id": "661426594554-6t0b0a8to7d749n7trjc36987i0pfm8d.apps.googleusercontent.com",
+          "client_id": "138115321008-otgk9qbcuqtrfs9lo9a3beg51o36r199.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hygeia",
-            "certificate_hash": "3c48f2ef7dc665f720dfb7038a32f133d7710a54"
+            "certificate_hash": "9791330d0b9923c7e3818b0009f38ebc0d5d0b05"
           }
         },
         {
-          "client_id": "661426594554-ft0tj35dp8nlok1r5q0d4ig258eqivr8.apps.googleusercontent.com",
+          "client_id": "138115321008-98b3plnh409it4e51v3362figr15433e.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJdGltfXRfTyAsrXrgEFW87DI3TqkhdH0"
+          "current_key": "AIzaSyBQchSM_V0iZ09e-8_N4PlEJUedoNybyig"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "661426594554-ft0tj35dp8nlok1r5q0d4ig258eqivr8.apps.googleusercontent.com",
+              "client_id": "138115321008-98b3plnh409it4e51v3362figr15433e.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
