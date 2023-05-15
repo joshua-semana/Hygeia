@@ -12,11 +12,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgNoInternet
-import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.Utilities.msg
 import com.hygeia.Utilities.passwordPattern
 import com.hygeia.databinding.FrgResetPasswordBinding
 
@@ -38,15 +36,15 @@ class FrgResetPassword : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnUpdatePassword.setOnClickListener {
-                if (txtPassword.text!!.isEmpty() or txtConfirmPassword.text!!.isEmpty()) {
-                    dlgRequiredFields(requireContext()).show()
-                } else {
-                    if (isInternetConnected(requireContext())) {
+                if (isInternetConnected(requireContext())) {
+                    if (inputsAreNotEmpty()) {
                         clearTextError()
                         validateInputs()
                     } else {
-                        dlgNoInternet(requireContext()).show()
+                        dlgInformation(requireContext(), "empty field").show()
                     }
+                } else {
+                    dlgInformation(requireContext(), "no internet").show()
                 }
             }
 
@@ -64,6 +62,14 @@ class FrgResetPassword : Fragment() {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
             return root
+        }
+    }
+
+    private fun inputsAreNotEmpty(): Boolean {
+        return when {
+            bind.txtPassword.text!!.isEmpty() -> false
+            bind.txtConfirmPassword.text!!.isEmpty() -> false
+            else -> true
         }
     }
 
@@ -100,10 +106,15 @@ class FrgResetPassword : Fragment() {
                             .document(uid!!)
                             .update("password", newPassword)
                             .addOnSuccessListener {
-                                requireActivity().msg("Success")
+                                loading.dismiss()
+                                dlgInformation(requireContext(), "success update password").apply {
+                                    setOnDismissListener {
+                                        requireActivity().finish()
+                                    }
+                                    show()
+                                }
                             }
                     }
-                loading.dismiss()
             }
     }
 }

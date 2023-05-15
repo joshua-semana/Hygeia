@@ -35,7 +35,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:lineHeight="20dp"
+        android:lineHeight="22dp"
         android:text="@string/desc_login"
         android:textAlignment="center"
         android:textColor="@color/neutral_500"
@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:hint="@string/title_email"
+        app:helperTextTextColor="@color/danger_500"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblBrandCatchphrase">

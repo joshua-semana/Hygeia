@@ -29,7 +29,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/mx"
         android:layout_marginEnd="@dimen/mx"
-        android:layout_marginTop="@dimen/heading_margin_top"
+        android:layout_marginTop="@dimen/h_mt"
         android:background="@drawable/bg_squircle_50"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

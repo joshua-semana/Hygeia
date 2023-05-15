@@ -14,7 +14,7 @@
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <TextView
-        android:id="@+id/lblOTPHeading1"
+        android:id="@+id/lblHeadingRegular"
         style="@style/Text_H1_Regular"
         android:layout_width="wrap_content"
         android:text="@string/h1_otp"
@@ -22,21 +22,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/lblOTPHeading2"
-        style="@style/Text_H1_Colored"
+        android:id="@+id/lblHeadingColored"
+        style="@style/Text_H1_Colored_Inline"
         android:layout_width="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="80dp"
         android:text="@string/h1_pin_colored"
-        app:layout_constraintStart_toEndOf="@+id/lblOTPHeading1"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/lblHeadingRegular"
+        app:layout_constraintStart_toEndOf="@+id/lblHeadingRegular"
+        app:layout_constraintTop_toTopOf="@+id/lblHeadingRegular" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/containerDescription"
         style="@style/Container_Description"
         android:padding="@dimen/container_desc_p"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblOTPHeading1">
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular">
 
         <ImageView
             android:id="@+id/imgDescription"
@@ -88,6 +88,7 @@
         android:layout_height="wrap_content"
         android:enabled="false"
         android:text="@string/btn_resend"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/txtLayoutOtp"

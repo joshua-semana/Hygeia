@@ -13,18 +13,19 @@
     <string name="h1_account_colored">account</string>
     <string name="h1_password_colored">password</string>
     <string name="h1_pin_colored">PIN</string>
-    <string name="h6_personal_information">Your personal information</string>
-    <string name="h6_account_information">Your account details</string>
+    <string name="h6_personal_information">Personal Information</string>
+    <string name="h6_account_information">Contact Information</string>
+    <string name="h6_gender">Gender</string>
 
     <string name="or">Or</string>
 
     <!--CONTAINER DESCRIPTION-->
     <string name="desc_login">Your access to your hygiene\nvendo buddy</string>
     <string name="desc_create_account_part1">Please provide your personal information.</string>
-    <string name="desc_create_account_part2">Please enter your account details.</string>
+    <string name="desc_create_account_part2">Please enter your contact information.</string>
     <string name="desc_create_account_part3">Please make sure that all details are correct.</string>
     <string name="desc_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia.</string>
-    <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number ending in</string>
+    <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number </string>
     <string name="desc_update_password"><b>Reminders: </b>Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
 
     <!--FIELDS TITLE-->
@@ -35,6 +36,7 @@
     <string name="title_otp">One-time PIN</string>
     <string name="title_first_name">First name</string>
     <string name="title_last_name">Last name</string>
+    <string name="title_full_name">Full name</string>
     <string name="title_gender">Gender</string>
     <string name="title_birth_date">Birth date</string>
     <string name="title_phone_number">Phone number</string>
@@ -60,6 +62,10 @@
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
     <string name="btn_okay">Okay</string>
+    <string name="btn_got_it">Got it</string>
+    <string name="btn_great">Great</string>
+    <string name="btn_try_it_now">Try it now!</string>
+    <string name="btn_back_to_login">Go back to login</string>
     <string name="btn_verify">Verify</string>
     <string name="btn_send">Send Code</string>
     <string name="btn_resend">Resend Code</string>
@@ -71,12 +77,14 @@
     <!--DIALOGS-->
     <string name="dlg_placeholder_title">Dialog Title</string>
     <string name="dlg_placeholder_body">Dialog content</string>
-    <string name="dlg_title_wifi">No internet connection</string>
-    <string name="dlg_body_wifi">Please check your internet connection and try again. If the problem persists, contact your internet service provider. Sorry for the inconvenience.</string>
-    <string name="dlg_title_required_fields">Required field/s</string>
-    <string name="dlg_body_required_fields">Make sure that every field in this form has been filled out. Review the form carefully to ensure that all required information has been entered correctly.</string>
-    <string name="dlg_title_create_account">Successfully registered!</string>
-    <string name="dlg_body_create_account">Wonderful! You have successfully created your personal account and can now access your vendo buddy, Hygeia!</string>
+    <string name="dlg_title_no_internet">Uh-oh!</string>
+    <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
+    <string name="dlg_title_empty_field">Hmm…</string>
+    <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
+    <string name="dlg_title_create_account">Hooray!</string>
+    <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
+    <string name="dlg_title_update_password">Yippee!</string>
+    <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
 
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
@@ -116,20 +124,19 @@
 
     <!--SPECIFIC ACTIVITIES-->
     <!--CREATE ACCOUNT ACTIVITY-->
-    <string name="pg_num_1">1 of 3</string>
-    <string name="pg_num_2">2 of 3</string>
-    <string name="pg_num_3">3 of 3</string>
+    <string name="pg_num_1" tools:ignore="TypographyFractions">1/3</string>
+    <string name="pg_num_2">2/3</string>
+    <string name="pg_num_3">3/3</string>
 
     <!--ARRAYS-->
     <string-array name="gender">
-        <item>Female</item>
         <item>Male</item>
+        <item>Female</item>
+        <item>Prefer not to say</item>
     </string-array>
 
     <!--LIST TRANSACTION-->
     <string name="t1">Send Money</string>
     <string name="t2">April 19 | 7:00 AM</string>
     <string name="t3">- ₱10.00</string>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
