@@ -8,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.hygeia.*
+import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
 
 class FrgMainHome : Fragment() {
@@ -16,7 +18,18 @@ class FrgMainHome : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?, ): View {
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
 
+        val (language, greeting) = greetings.entries.random()
+        val fullname = "${UserManager.firstname} ${UserManager.lastname}"
+
         with(bind) {
+            //POPULATE
+            lblGreetings.text = greeting
+            lblUserFullName.text = fullname
+
+            //MAIN FUNCTIONS
+            lblGreetings.setOnClickListener {
+                dlgInformation(requireContext(), language).show()
+            }
 
             //NAVIGATION
 //            btnSendMoney.setOnClickListener {

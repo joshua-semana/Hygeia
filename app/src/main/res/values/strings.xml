@@ -53,6 +53,9 @@
     <string name="error_phone_format">The phone number you entered is invalid.</string>
     <string name="error_phone_taken">This phone number is already in use.</string>
     <string name="error_otp_incorrect">The one-time pin you entered is incorrect.</string>
+    
+    <!--HELPER DESCRIPTION-->
+    <string name="helper_forgot_password_email">We will send a one-time verification code to the phone number associated with your account.</string>
 
     <!--BUTTONS-->
     <string name="btn_login">Login</string>
@@ -61,11 +64,6 @@
     <string name="btn_continue">Continue</string>
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
-    <string name="btn_okay">Okay</string>
-    <string name="btn_got_it">Got it</string>
-    <string name="btn_great">Great</string>
-    <string name="btn_try_it_now">Try it now!</string>
-    <string name="btn_back_to_login">Go back to login</string>
     <string name="btn_verify">Verify</string>
     <string name="btn_send">Send Code</string>
     <string name="btn_resend">Resend Code</string>
@@ -74,16 +72,24 @@
     <string name="btn_add_money">Top Up</string>
     <string name="btn_view_all_transactions">View all</string>
 
+    <string name="btn_okay">Okay</string>
+    <string name="btn_got_it">Got it</string>
+    <string name="btn_great">Great</string>
+    <string name="btn_try_it_now">Try it now!</string>
+    <string name="btn_back_to_login">Go back to login</string>
+
     <!--DIALOGS-->
     <string name="dlg_placeholder_title">Dialog Title</string>
     <string name="dlg_placeholder_body">Dialog content</string>
-    <string name="dlg_title_no_internet">Uh-oh!</string>
+    <string name="dlg_title_positive_1">Hooray!</string>
+    <string name="dlg_title_positive_2">Yippee!</string>
+    <string name="dlg_title_negative_1">Uh-oh!</string>
+    <string name="dlg_title_negative_2">Oh no!</string>
+    <string name="dlg_title_negative_3">Hmm…</string>
+    <string name="dlg_title_trivia">Trivia!</string>
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
-    <string name="dlg_title_empty_field">Hmm…</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
-    <string name="dlg_title_create_account">Hooray!</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
-    <string name="dlg_title_update_password">Yippee!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
 
     <!--NEW-->
@@ -139,4 +145,5 @@
     <string name="t1">Send Money</string>
     <string name="t2">April 19 | 7:00 AM</string>
     <string name="t3">- ₱10.00</string>
+    <string name="placeholder">default</string>
 </resources>

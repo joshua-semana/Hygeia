@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
-import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
@@ -17,7 +16,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
@@ -26,6 +25,7 @@ import com.hygeia.databinding.FrgForgotPasswordBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.util.concurrent.TimeUnit
 import kotlin.math.pow
 
@@ -33,9 +33,12 @@ class FrgForgotPassword : Fragment() {
     private lateinit var bind: FrgForgotPasswordBinding
     private lateinit var auth: FirebaseAuth
     private lateinit var loading: Dialog
+
     private val db = FirebaseFirestore.getInstance()
-    private var phoneNumber = ""
+    private val userRef = db.collection("User")
+
     private var emailAddress = ""
+    private var phoneNumber = ""
     private var password = ""
 
     override fun onCreateView(
@@ -54,10 +57,10 @@ class FrgForgotPassword : Fragment() {
                         validateInput(txtEmail.text.toString())
                     } else {
                         clearTextError()
-                        dlgInformation(requireContext(), "empty field").show()
+                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
-                    dlgInformation(requireContext(), "no internet").show()
+                    dlgStatus(requireContext(), "no internet").show()
                 }
             }
 
@@ -83,23 +86,18 @@ class FrgForgotPassword : Fragment() {
     }
 
     private fun validateInput(email: String) {
+        clearTextError()
         with(bind) {
-            clearTextError()
-            if (emailPattern.matches(email)) {
+            if (email.matches(emailPattern)) {
                 loading.show()
-                auth.fetchSignInMethodsForEmail(email).addOnSuccessListener { getEmailList ->
-                    if (getEmailList.signInMethods?.isNotEmpty() == true) {
-                        emailAddress = email
-                        getPhoneNumber(email).addOnSuccessListener { getPhoneNumber ->
-                            phoneNumber = getPhoneNumber.toString()
-                            getPassword(email).addOnSuccessListener { getPassword ->
-                                password = getPassword.toString()
-                                lifecycleScope.launch(Dispatchers.Main) {
-                                    makeFirebaseRequest()
-                                }
-                            }
-                        }
+                lifecycleScope.launch(Dispatchers.Main) {
+                    getEmailAddress(email)
+                    if (emailAddress.isNotEmpty()) {
+                        getPhoneNumber()
+                        getPassword()
+                        makeFirebaseRequest()
                     } else {
+                        loading.dismiss()
                         txtLayoutEmail.error = getString(R.string.error_email_registered)
                     }
                 }
@@ -109,18 +107,19 @@ class FrgForgotPassword : Fragment() {
         }
     }
 
-    private fun getPhoneNumber(email: String): Task<String> {
-        val query = db.collection("User").whereEqualTo("email", email)
-        return query.get().continueWith { task ->
-            task.result?.documents?.getOrNull(0)?.getString("phoneNumber").toString()
-        }
+    private suspend fun getEmailAddress(email: String) {
+        val query = userRef.whereEqualTo("email", email).get().await()
+        emailAddress = if (query.isEmpty) "" else email
     }
 
-    private fun getPassword(email: String): Task<String> {
-        val query = db.collection("User").whereEqualTo("email", email)
-        return query.get().continueWith { task ->
-            task.result?.documents?.getOrNull(0)?.getString("password").toString()
-        }
+    private suspend fun getPhoneNumber() {
+        val query = userRef.whereEqualTo("email", emailAddress).get().await()
+        phoneNumber = query.documents[0].get("phoneNumber").toString()
+    }
+
+    private suspend fun getPassword() {
+        val query = userRef.whereEqualTo("email", emailAddress).get().await()
+        password = query.documents[0].get("password").toString()
     }
 
     private var requestCount = 0

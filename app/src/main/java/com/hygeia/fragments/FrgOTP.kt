@@ -12,7 +12,7 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgOtpBinding
 import java.util.concurrent.TimeUnit
@@ -49,7 +49,7 @@ class FrgOTP : Fragment() {
                 if (txtOtp.text!!.isNotEmpty()) {
                     validateInput(txtOtp.text.toString())
                 } else {
-                    dlgInformation(requireContext(), "empty field").show()
+                    dlgStatus(requireContext(), "empty field").show()
                 }
             }
             btnResend.setOnClickListener {

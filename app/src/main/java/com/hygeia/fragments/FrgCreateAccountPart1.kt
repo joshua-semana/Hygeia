@@ -9,9 +9,10 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.hygeia.R
-import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgCreateAccountPart1Binding
+import java.text.SimpleDateFormat
 import java.util.*
 
 class FrgCreateAccountPart1 : Fragment() {
@@ -39,10 +40,10 @@ class FrgCreateAccountPart1 : Fragment() {
                     if (inputsAreNotEmpty()) {
                         sendArguments()
                     } else {
-                        dlgInformation(requireContext(), "empty field").show()
+                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
-                    dlgInformation(requireContext(), "no internet").show()
+                    dlgStatus(requireContext(), "no internet").show()
                 }
             }
 
@@ -117,9 +118,11 @@ class FrgCreateAccountPart1 : Fragment() {
                 val age = currentDate.get(Calendar.YEAR) - selectedDate.get(Calendar.YEAR) -
                         if (selectedDate.get(Calendar.DAY_OF_YEAR) > currentDate.get(Calendar.DAY_OF_YEAR)) 1 else 0
                 with(bind) {
-                    val date = "$day/${month + 1}/$year"
+                    //val date = "$day/${month + 1}/$year"
+                    val dateFormat = SimpleDateFormat("MMMM d, yyyy", Locale.getDefault())
+                    val formattedDate = dateFormat.format(selectedDate.time)
                     if (age >= 11) {
-                        txtBirthdate.setText(date)
+                        txtBirthdate.setText(formattedDate)
                         clearTextError()
                     } else {
                         txtBirthdate.text?.clear()

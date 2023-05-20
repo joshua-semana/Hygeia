@@ -1,6 +1,5 @@
 package com.hygeia.fragments
 
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -12,7 +11,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.passwordPattern
@@ -22,8 +21,10 @@ class FrgResetPassword : Fragment() {
 
     private lateinit var bind: FrgResetPasswordBinding
     private lateinit var auth: FirebaseAuth
-    private lateinit var loading: Dialog
+    private val loading = dlgLoading(requireContext())
+
     private val db = FirebaseFirestore.getInstance()
+    private val userRef = db.collection("User")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,20 +32,20 @@ class FrgResetPassword : Fragment() {
     ): View {
         bind = FrgResetPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
-        loading = dlgLoading(requireContext())
 
         with(bind) {
             //MAIN FUNCTIONS
             btnUpdatePassword.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
                     if (inputsAreNotEmpty()) {
+                        loading.show()
                         clearTextError()
                         validateInputs()
                     } else {
-                        dlgInformation(requireContext(), "empty field").show()
+                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
-                    dlgInformation(requireContext(), "no internet").show()
+                    dlgStatus(requireContext(), "no internet").show()
                 }
             }
 
@@ -93,29 +94,22 @@ class FrgResetPassword : Fragment() {
     }
 
     private fun updatePassword(newPassword: String) {
-        val loading = dlgLoading(requireContext())
         val email = arguments?.getString("email").toString()
         val password = arguments?.getString("password").toString()
-        loading.show()
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnSuccessListener {
-                val uid = it.user?.uid
-                it.user?.updatePassword(newPassword)
-                    ?.addOnSuccessListener {
-                        db.collection("User")
-                            .document(uid!!)
-                            .update("password", newPassword)
-                            .addOnSuccessListener {
-                                loading.dismiss()
-                                dlgInformation(requireContext(), "success update password").apply {
-                                    setOnDismissListener {
-                                        requireActivity().finish()
-                                    }
-                                    show()
-                                }
-                            }
+        auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {
+            it.user!!.updatePassword(newPassword)
+            userRef.document(it.user!!.uid)
+                .update("password", newPassword)
+                .addOnSuccessListener {
+                    loading.dismiss()
+                    dlgStatus(requireContext(), "success update password").apply {
+                        setOnDismissListener {
+                            requireActivity().finish()
+                        }
+                        show()
                     }
             }
+        }
     }
 }
 
