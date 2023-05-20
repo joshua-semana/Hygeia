@@ -6,24 +6,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.passwordPattern
 import com.hygeia.Utilities.phoneNumberPattern
 import com.hygeia.databinding.FrgCreateAccountPart2Binding
-import java.util.concurrent.CompletableFuture
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class FrgCreateAccountPart2 : Fragment() {
     private lateinit var bind: FrgCreateAccountPart2Binding
     private lateinit var auth: FirebaseAuth
+
     private val db = FirebaseFirestore.getInstance()
+    private val userRef = db.collection("User")
+
+    private var emailAddress = ""
+    private var phoneNumber = ""
+    private var password = ""
+    private var confirmPassword = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,24 +51,20 @@ class FrgCreateAccountPart2 : Fragment() {
                         loading.show()
                         clearTextErrors()
 
-                        val validations = arrayOf(
-                            validateEmail(),
-                            validatePhoneNumber(),
-                            validatePassword(),
-                            validateConfirmPassword()
-                        )
+                        emailAddress = txtEmail.text.toString()
+                        phoneNumber = (txtLayoutPhoneNumber.prefixText.toString() + txtPhoneNumber.text.toString()).trim()
+                        password = txtPassword.text.toString()
+                        confirmPassword = txtConfirmPassword.text.toString()
 
-                        CompletableFuture.allOf(*validations).thenRunAsync {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            if (inputsAreCorrect()) sendArguments()
                             loading.dismiss()
-                            if (validations.all { it.get() }) {
-                                sendArguments()
-                            }
                         }
                     } else {
-                        dlgInformation(requireContext(), "empty field").show()
+                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
-                    dlgInformation(requireContext(), "no internet").show()
+                    dlgStatus(requireContext(), "no internet").show()
                 }
             }
 
@@ -79,7 +85,6 @@ class FrgCreateAccountPart2 : Fragment() {
             return root
         }
     }
-
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtEmail.text!!.isEmpty() -> false
@@ -89,108 +94,73 @@ class FrgCreateAccountPart2 : Fragment() {
             else -> true
         }
     }
-
     private fun clearTextErrors() {
         bind.txtLayoutEmail.isErrorEnabled = false
         bind.txtLayoutPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
         bind.txtLayoutConfirmPassword.isErrorEnabled = false
     }
-
-    private fun validateEmail(): CompletableFuture<Boolean> {
-        val future = CompletableFuture<Boolean>()
+    private suspend fun inputsAreCorrect(): Boolean {
+        var inputErrorCount = 0
         with(bind) {
-            if (txtEmail.text!!.matches(emailPattern)) {
-                auth.fetchSignInMethodsForEmail(txtEmail.text!!.toString())
-                    .addOnSuccessListener { getEmailList ->
-                        if (getEmailList.signInMethods?.isEmpty() == true) {
-                            future.complete(true)
-                        } else {
-                            txtLayoutEmail.error = getString(R.string.error_email_taken)
-                            future.complete(false)
-                        }
-                    }
+            if (emailAddress.matches(emailPattern)) {
+                if (getEmailExistenceOf(emailAddress)) {
+                    inputErrorCount++
+                    txtLayoutEmail.error = getString(R.string.error_email_taken)
+                }
             } else {
+                inputErrorCount++
                 txtLayoutEmail.error = getString(R.string.error_email_format)
-                future.complete(false)
             }
-        }
-        return future
-    }
 
-    private fun validatePhoneNumber(): CompletableFuture<Boolean> {
-        val future = CompletableFuture<Boolean>()
-        with(bind) {
-            val phoneNumber =
-                (txtLayoutPhoneNumber.prefixText.toString() + txtPhoneNumber.text.toString()).trim()
             if (phoneNumber.matches(phoneNumberPattern)) {
-                db.collection("User")
-                    .whereEqualTo("phoneNumber", phoneNumber).get()
-                    .addOnSuccessListener { getPhoneNumbers ->
-                        if (getPhoneNumbers.isEmpty) {
-                            future.complete(true)
-                        } else {
-                            txtLayoutPhoneNumber.error = getString(R.string.error_phone_taken)
-                            future.complete(false)
-                        }
-                    }
+                if (getPhoneNumberExistenceOf(phoneNumber)) {
+                    inputErrorCount++
+                    txtLayoutPhoneNumber.error = getString(R.string.error_phone_taken)
+                }
             } else {
+                inputErrorCount++
                 txtLayoutPhoneNumber.error = getString(R.string.error_phone_format)
-                future.complete(false)
             }
-        }
-        return future
-    }
 
-    private fun validatePassword(): CompletableFuture<Boolean> {
-        val future = CompletableFuture<Boolean>()
-        with(bind) {
-            if (txtPassword.text!!.matches(passwordPattern)) {
-                future.complete(true)
-            } else {
+            if (!password.matches(passwordPattern)) {
+                inputErrorCount++
                 txtLayoutPassword.error = getString(R.string.error_password_format)
-                future.complete(false)
             }
-        }
-        return future
-    }
 
-    private fun validateConfirmPassword(): CompletableFuture<Boolean> {
-        val future = CompletableFuture<Boolean>()
-        with(bind) {
-            if (txtConfirmPassword.text!!.toString() == txtPassword.text!!.toString()) {
-                future.complete(true)
-            } else {
+            if (confirmPassword != password) {
+                inputErrorCount++
                 txtLayoutConfirmPassword.error = getString(R.string.error_password_matched)
-                future.complete(false)
             }
         }
-        return future
+        return inputErrorCount == 0
     }
-
+    private suspend fun getEmailExistenceOf(email: String): Boolean {
+        val query = userRef.whereEqualTo("email", email).get().await()
+        return !query.isEmpty
+    }
+    private suspend fun getPhoneNumberExistenceOf(phoneNumber: String): Boolean {
+        val query = userRef.whereEqualTo("phoneNumber", phoneNumber).get().await()
+        return !query.isEmpty
+    }
     private fun sendArguments() {
-        with(bind) {
-            val bundle = Bundle().apply {
-                putString("gender", arguments?.getString("gender"))
-                putString("firstname", arguments?.getString("firstname"))
-                putString("lastname", arguments?.getString("lastname"))
-                putString("birthdate", arguments?.getString("birthdate"))
-                putString("email", txtEmail.text.toString())
-                putString(
-                    "phoneNumber",
-                    (txtLayoutPhoneNumber.prefixText.toString() + txtPhoneNumber.text.toString()).trim()
-                )
-                putString("password", txtPassword.text.toString())
-            }
-            val fragment = FrgCreateAccountPart3().apply { arguments = bundle }
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    androidx.appcompat.R.anim.abc_fade_in,
-                    androidx.appcompat.R.anim.abc_fade_out
-                )
-                .replace(R.id.containerCreateAccount, fragment)
-                .addToBackStack(null)
-                .commit()
+        val bundle = Bundle().apply {
+            putString("gender", arguments?.getString("gender"))
+            putString("firstname", arguments?.getString("firstname"))
+            putString("lastname", arguments?.getString("lastname"))
+            putString("birthdate", arguments?.getString("birthdate"))
+            putString("email", emailAddress)
+            putString("phoneNumber", phoneNumber)
+            putString("password", password)
         }
+        val fragment = FrgCreateAccountPart3().apply { arguments = bundle }
+        parentFragmentManager.beginTransaction()
+            .setCustomAnimations(
+                androidx.appcompat.R.anim.abc_fade_in,
+                androidx.appcompat.R.anim.abc_fade_out
+            )
+            .replace(R.id.containerCreateAccount, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 }

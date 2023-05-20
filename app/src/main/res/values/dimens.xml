@@ -4,7 +4,7 @@
 
     <!--GLOBAL-->
     <dimen name="corner_radius">12dp</dimen>
-    <dimen name="h_mt">70dp</dimen>
+    <dimen name="h_mt">60dp</dimen>
     <dimen name="mx">24dp</dimen>
     <dimen name="mx_err">44dp</dimen>
     <dimen name="elmnt_y">52dp</dimen>
@@ -21,6 +21,7 @@
     <dimen name="text_sm">12sp</dimen>
 
     <dimen name="text_emoji_lg">42sp</dimen>
+    <dimen name="text_greetings_mt">8sp</dimen>
 
     <dimen name="letter_spacing">0.6</dimen>
     <dimen name="line_spacing">-6dp</dimen>
@@ -30,8 +31,8 @@
     <dimen name="btn_inset_y">0dp</dimen>
     <dimen name="btn_mb">24dp</dimen>
     <dimen name="btn_stack_mb">12dp</dimen>
-    <dimen name="btn_back_mt">13dp</dimen>
-    <dimen name="btn_back_ml">11dp</dimen>
+    <dimen name="btn_back_mt">0dp</dimen>
+    <dimen name="btn_back_ml">2dp</dimen>
 
     <!--INPUT TEXT-->
     <dimen name="txt_px">20sp</dimen>
@@ -53,7 +54,7 @@
     <dimen name="progress_thick">3dp</dimen>
 
     <!--PAGE NUMBERS-->
-    <dimen name="pg_num_end">24dp</dimen>
+    <dimen name="pg_num_end">16dp</dimen>
 
     <!--CONTAINER DESCRIPTION-->
     <dimen name="container_desc_mt">8dp</dimen>
