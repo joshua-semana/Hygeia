@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
@@ -33,7 +34,11 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
-
+    fun clearTextFields(vararg textFields: EditText) {
+        for(textField in textFields){
+            textField.text.clear()
+        }
+    }
     fun Context.msg(message: CharSequence) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
