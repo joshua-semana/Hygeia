@@ -65,8 +65,9 @@ class ActLogin : AppCompatActivity() {
             btnForgotPassword.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
                 clearTextErrors()
+                bind.txtEmail.text?.clear()
+                bind.txtPassword.text?.clear()
             }
-
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
                 clearTextErrors()

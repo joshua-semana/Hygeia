@@ -1,11 +1,13 @@
 package com.hygeia.fragments
 
+import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.OnBackPressedCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,7 +23,7 @@ class FrgResetPassword : Fragment() {
 
     private lateinit var bind: FrgResetPasswordBinding
     private lateinit var auth: FirebaseAuth
-    private val loading = dlgLoading(requireContext())
+    private lateinit var loading : Dialog
 
     private val db = FirebaseFirestore.getInstance()
     private val userRef = db.collection("User")
@@ -32,7 +34,7 @@ class FrgResetPassword : Fragment() {
     ): View {
         bind = FrgResetPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
-
+        loading = dlgLoading(requireContext())
         with(bind) {
             //MAIN FUNCTIONS
             btnUpdatePassword.setOnClickListener {
@@ -48,7 +50,6 @@ class FrgResetPassword : Fragment() {
                     dlgStatus(requireContext(), "no internet").show()
                 }
             }
-
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireContext().getSystemService(InputMethodManager::class.java).apply {
@@ -57,15 +58,26 @@ class FrgResetPassword : Fragment() {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
-
             //NAVIGATION
             btnBack.setOnClickListener {
-                activity?.onBackPressedDispatcher?.onBackPressed()
+                onBackPressed()
             }
+            requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackPressed()
+                }
+            })
             return root
         }
     }
-
+    private fun onBackPressed(){
+        dlgStatus(requireContext(), "going back").apply {
+            setOnDismissListener {
+                requireActivity().finish()
+            }
+            show()
+        }
+    }
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtPassword.text!!.isEmpty() -> false
@@ -73,12 +85,10 @@ class FrgResetPassword : Fragment() {
             else -> true
         }
     }
-
     private fun clearTextError() {
         bind.txtLayoutPassword.isErrorEnabled = false
         bind.txtLayoutConfirmPassword.isErrorEnabled = false
     }
-
     private fun validateInputs() {
         with(bind) {
             if (txtPassword.text!!.matches(passwordPattern)) {
@@ -92,8 +102,8 @@ class FrgResetPassword : Fragment() {
             }
         }
     }
-
     private fun updatePassword(newPassword: String) {
+        loading = dlgLoading(requireContext())
         val email = arguments?.getString("email").toString()
         val password = arguments?.getString("password").toString()
         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {

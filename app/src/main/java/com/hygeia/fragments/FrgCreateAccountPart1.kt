@@ -2,15 +2,19 @@ package com.hygeia.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
+import android.widget.EditText
 import com.hygeia.R
 import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgCreateAccountPart1Binding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,16 +27,8 @@ class FrgCreateAccountPart1 : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         bind = FrgCreateAccountPart1Binding.inflate(inflater, container, false)
-
         with(bind) {
-            //POPULATE
-            cmbGender.setAdapter(
-                ArrayAdapter(
-                    requireContext(),
-                    R.layout.elmnt_dropdown_item,
-                    resources.getStringArray(R.array.gender)
-                )
-            )
+            onResume()
 
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
@@ -57,7 +53,9 @@ class FrgCreateAccountPart1 : Fragment() {
             txtLayoutBirthdate.setEndIconOnClickListener {
                 showDatePickerDialog()
             }
-
+            //INPUT VALIDATION
+            textWatcher(txtFirstName)
+            textWatcher(txtLastName)
             //ELEMENT BEHAVIOR
             mainLayout.setOnClickListener {
                 requireContext().getSystemService(InputMethodManager::class.java).apply {
@@ -75,7 +73,16 @@ class FrgCreateAccountPart1 : Fragment() {
             return root
         }
     }
-
+    override fun onResume() {
+        super.onResume()
+        bind.cmbGender.setAdapter(
+            ArrayAdapter(
+                requireContext(),
+                R.layout.elmnt_dropdown_item,
+                resources.getStringArray(R.array.gender)
+            )
+        )
+    }
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtFirstName.text!!.isEmpty() -> false
@@ -85,7 +92,22 @@ class FrgCreateAccountPart1 : Fragment() {
             else -> true
         }
     }
-
+    //INPUT VALIDATOR
+    private fun textWatcher(textField : EditText){
+        textField.addTextChangedListener(object : TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val input = s.toString()
+                val validInput = input.replace("[^a-zA-Z]".toRegex(), "")
+                if (input != validInput) {
+                    textField.setText(validInput)
+                    textField.setSelection(textField.text.length)
+                    activity?.msg("Only alphabetic characters are allowed.")
+                }
+            }
+            override fun afterTextChanged(s: Editable?){}
+        })
+    }
     private fun clearTextError() {
         bind.txtLayoutBirthdate.isErrorEnabled = false
     }

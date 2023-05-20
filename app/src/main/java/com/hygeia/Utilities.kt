@@ -99,6 +99,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
         }
 
+        if (content == "going back") {
+            lblDlgInfoEmoji.text = emoException
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_going_back)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_sure)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
