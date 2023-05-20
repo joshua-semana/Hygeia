@@ -74,6 +74,7 @@
 
     <string name="btn_okay">Okay</string>
     <string name="btn_got_it">Got it</string>
+    <string name="btn_sure">Sure</string>
     <string name="btn_great">Great</string>
     <string name="btn_try_it_now">Try it now!</string>
     <string name="btn_back_to_login">Go back to login</string>
@@ -89,6 +90,7 @@
     <string name="dlg_title_trivia">Trivia!</string>
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
+    <string name="dlg_body_going_back">Are you sure you want to go back? Going back will take you to the login page and reset the process.</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
 

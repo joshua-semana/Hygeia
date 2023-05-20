@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.Utilities.clearTextFields
 import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.emailPattern
@@ -65,8 +66,8 @@ class ActLogin : AppCompatActivity() {
             btnForgotPassword.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
                 clearTextErrors()
+                clearTextFields(txtEmail,txtPassword)
             }
-
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
                 clearTextErrors()
@@ -119,6 +120,7 @@ class ActLogin : AppCompatActivity() {
                 userRef.document(it.user!!.uid).get().addOnSuccessListener { data ->
                     loading.dismiss()
                     UserManager.setUserInformation(data)
+                    clearTextFields(bind.txtEmail,bind.txtPassword)
                     startActivity(
                         when (UserManager.role) {
                             "standard" -> Intent(applicationContext, ActMain::class.java)

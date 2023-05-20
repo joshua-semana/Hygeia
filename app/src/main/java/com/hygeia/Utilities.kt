@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 
@@ -33,7 +34,11 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
-
+    fun clearTextFields(vararg textFields: EditText) {
+        for(textField in textFields){
+            textField.text.clear()
+        }
+    }
     fun Context.msg(message: CharSequence) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
@@ -97,6 +102,13 @@ object Utilities {
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_3)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_empty_field)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
+        }
+
+        if (content == "going back") {
+            lblDlgInfoEmoji.text = emoException
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_going_back)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_sure)
         }
 
         btnDlgInfoPrimary.setOnClickListener {
