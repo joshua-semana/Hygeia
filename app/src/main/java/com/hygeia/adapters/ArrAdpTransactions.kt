@@ -18,7 +18,7 @@ class ArrAdpTransactions (context: Context, resource: Int, items: ArrayList<Tran
         }
 
         // Get the current transaction from the array
-        val currentTransaction = getItem(position)
+        //val currentTransaction = getItem(position)
 
         // Populate the views in the custom list item layout with data from the current transaction
 //        val imageView = .findViewById<ImageView>(R.id.transaction_image)

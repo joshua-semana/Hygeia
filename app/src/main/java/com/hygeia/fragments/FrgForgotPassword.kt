@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.lifecycleScope
 import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
@@ -16,14 +17,17 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgNoInternet
-import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgForgotPasswordBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
+import kotlin.math.pow
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind: FrgForgotPasswordBinding
@@ -31,6 +35,8 @@ class FrgForgotPassword : Fragment() {
     private lateinit var loading: Dialog
     private val db = FirebaseFirestore.getInstance()
     private var phoneNumber = ""
+    private var emailAddress = ""
+    private var password = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,15 +49,15 @@ class FrgForgotPassword : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
-                if (txtEmail.text!!.isEmpty()) {
-                    dlgRequiredFields(requireContext()).show()
-                    clearTextError()
-                } else {
-                    if (isInternetConnected(requireContext())) {
+                if (isInternetConnected(requireContext())) {
+                    if (txtEmail.text!!.isNotEmpty()) {
                         validateInput(txtEmail.text.toString())
                     } else {
-                        dlgNoInternet(requireContext()).show()
+                        clearTextError()
+                        dlgInformation(requireContext(), "empty field").show()
                     }
+                } else {
+                    dlgInformation(requireContext(), "no internet").show()
                 }
             }
 
@@ -83,10 +89,14 @@ class FrgForgotPassword : Fragment() {
                 loading.show()
                 auth.fetchSignInMethodsForEmail(email).addOnSuccessListener { getEmailList ->
                     if (getEmailList.signInMethods?.isNotEmpty() == true) {
-                        getPhoneNumber(email).addOnSuccessListener { result ->
-                            phoneNumber = result.toString()
-                            getPassword(email).addOnSuccessListener { password ->
-                                sendOTP(phoneNumber, email, password.toString())
+                        emailAddress = email
+                        getPhoneNumber(email).addOnSuccessListener { getPhoneNumber ->
+                            phoneNumber = getPhoneNumber.toString()
+                            getPassword(email).addOnSuccessListener { getPassword ->
+                                password = getPassword.toString()
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    makeFirebaseRequest()
+                                }
                             }
                         }
                     } else {
@@ -102,41 +112,56 @@ class FrgForgotPassword : Fragment() {
     private fun getPhoneNumber(email: String): Task<String> {
         val query = db.collection("User").whereEqualTo("email", email)
         return query.get().continueWith { task ->
-            val phoneNumber = task.result?.documents?.get(0)?.getString("phoneNumber").toString()
-            phoneNumber
+            task.result?.documents?.getOrNull(0)?.getString("phoneNumber").toString()
         }
     }
 
     private fun getPassword(email: String): Task<String> {
         val query = db.collection("User").whereEqualTo("email", email)
         return query.get().continueWith { task ->
-            val password = task.result?.documents?.get(0)?.getString("password").toString()
-            password
+            task.result?.documents?.getOrNull(0)?.getString("password").toString()
         }
     }
 
-    private fun sendOTP(phoneNumber: String, email: String, password: String) {
-        val options = PhoneAuthOptions.newBuilder(auth).setPhoneNumber(phoneNumber)
-            .setTimeout(60L, TimeUnit.SECONDS).setActivity(requireActivity())
-            .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
-                override fun onVerificationFailed(ex: FirebaseException) {
-                    if (ex is FirebaseAuthInvalidCredentialsException) {
-                        requireActivity().msg("Invalid request")
-                    } else if (ex is FirebaseTooManyRequestsException) {
-                        requireActivity().msg("Too many request")
+    private var requestCount = 0
+    private val requestLimit = 10
+    private val requestInterval = 1_000L // 1 second
+
+    private suspend fun makeFirebaseRequest() {
+        try {
+            val options = PhoneAuthOptions.newBuilder(auth)
+                .setPhoneNumber(phoneNumber)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(requireActivity())
+                .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
+                    override fun onVerificationFailed(ex: FirebaseException) {
+                        if (ex is FirebaseAuthInvalidCredentialsException) {
+                            requireActivity().msg("Invalid request")
+                        } else if (ex is FirebaseTooManyRequestsException) {
+                            requireActivity().msg("Too many request. Please try again later.")
+                        }
+                        loading.dismiss()
                     }
-                    loading.dismiss()
-                }
-                override fun onCodeSent(
-                    otp: String,
-                    resendToken: PhoneAuthProvider.ForceResendingToken,
-                ) {
-                    loading.dismiss()
-                    sendArguments(phoneNumber, email, password, otp, resendToken)
-                }
-            }).build()
-        PhoneAuthProvider.verifyPhoneNumber(options)
+                    override fun onCodeSent(
+                        otp: String,
+                        resendToken: PhoneAuthProvider.ForceResendingToken,
+                    ) {
+                        loading.dismiss()
+                        sendArguments(phoneNumber, emailAddress, password, otp, resendToken)
+                    }
+                }).build()
+            PhoneAuthProvider.verifyPhoneNumber(options)
+            requestCount++
+        } catch (e: FirebaseTooManyRequestsException) {
+            delay(requestInterval * (2.0.pow(requestCount.toDouble())).toLong())
+            makeFirebaseRequest()
+        }
+
+        if (requestCount >= requestLimit) {
+            delay(requestInterval)
+            requestCount = 0
+        }
     }
 
     private fun sendArguments(

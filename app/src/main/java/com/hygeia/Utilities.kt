@@ -1,25 +1,22 @@
 package com.hygeia
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.GradientDrawable
 import android.net.*
-import android.view.LayoutInflater
-import android.view.WindowManager
 import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import com.hygeia.databinding.DlgMessageBinding
 
 object Utilities {
-
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
     val phoneNumberPattern = "^\\+639\\d{9}\$|^09\\d{9}\$".toRegex()
     val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
+
+    private const val emoSuccess = "🥳"
+    private const val emoError = "🧐"
+    private const val emoNoInternet = "😵"
     fun Context.msg(message: CharSequence) =
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 
@@ -46,77 +43,46 @@ object Utilities {
         return dialog
     }
 
-    fun dlgMessage(context: Context, dialogIcon: String, dialogTitle: String, dialogContent: String, dialogOkay: String): Dialog {
-        val bindDlg = DlgMessageBinding.inflate(LayoutInflater.from(context))
-        val builder = AlertDialog.Builder(context).apply{
-            setCancelable(false)
-            setView(bindDlg.root)
-        }
-        val shape = GradientDrawable().apply { cornerRadius = 30f }
-        val dialog = builder.create()
-        with(dialog) {
-            window?.setBackgroundDrawable(shape)
-            with(bindDlg) {
-                //DISPLAY
-                if (dialogIcon == "no-wifi") imgDialogLogo.setImageResource(R.drawable.ic_wifi_off)
-                else if (dialogIcon == "success") imgDialogLogo.setImageResource(R.drawable.ic_success)
-                lblDialogTitle.text = dialogTitle
-                lblDialogBody.text = dialogContent
-                btnDialogPrimary.text = dialogOkay
-
-                //MAIN FUNCTIONS
-                btnDialogPrimary.setOnClickListener {
-                    if (dialog != null && dialog.isShowing) {
-                        dismiss()
-                    }
-                }
-            }
-        }
-        return dialog
-    }
-
-    fun dlgNoInternet(context: Context): Dialog {
+    fun dlgInformation(context: Context, content: String): Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_message)
         dialog.setCancelable(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        val imgDialogLogo = dialog.findViewById<ImageView>(R.id.imgDialogLogo)
-        val lblDialogTitle = dialog.findViewById<TextView>(R.id.lblDialogTitle)
-        val lblDialogBody = dialog.findViewById<TextView>(R.id.lblDialogBody)
-        val btnDialogPrimary = dialog.findViewById<Button>(R.id.btnDialogPrimary)
+        val lblDlgInfoEmoji = dialog.findViewById<TextView>(R.id.lblDlgInfoEmoji)
+        val lblDlgInfoTitle = dialog.findViewById<TextView>(R.id.lblDlgInfoTitle)
+        val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
+        val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
-        imgDialogLogo.setImageResource(R.drawable.ic_wifi_off)
-        imgDialogLogo.setBackgroundResource(R.drawable.bg_circle_50)
-        lblDialogTitle.text = context.getString(R.string.dlg_title_wifi)
-        lblDialogBody.text = context.getString(R.string.dlg_body_wifi)
-        btnDialogPrimary.text = context.getString(R.string.btn_okay)
-
-        btnDialogPrimary.setOnClickListener {
-            dialog.dismiss()
+        if (content == "success create account") {
+            lblDlgInfoEmoji.text = emoSuccess
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_create_account)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_create_account)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_try_it_now)
         }
 
-        return dialog
-    }
+        if (content == "success update password") {
+            lblDlgInfoEmoji.text = emoSuccess
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_update_password)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_update_password)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+        }
 
-    fun dlgRequiredFields(context: Context): Dialog {
-        val dialog = Dialog(context)
-        dialog.setContentView(R.layout.dlg_message)
-        dialog.setCancelable(false)
-        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        if (content == "no internet") {
+            lblDlgInfoEmoji.text = emoNoInternet
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_no_internet)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_internet)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
 
-        val imgDialogLogo = dialog.findViewById<ImageView>(R.id.imgDialogLogo)
-        val lblDialogTitle = dialog.findViewById<TextView>(R.id.lblDialogTitle)
-        val lblDialogBody = dialog.findViewById<TextView>(R.id.lblDialogBody)
-        val btnDialogPrimary = dialog.findViewById<Button>(R.id.btnDialogPrimary)
+        if (content == "empty field") {
+            lblDlgInfoEmoji.text = emoError
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_empty_field)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_empty_field)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
+        }
 
-        imgDialogLogo.setImageResource(R.drawable.ic_warning)
-        imgDialogLogo.setBackgroundResource(R.drawable.bg_circle_danger_50)
-        lblDialogTitle.text = context.getString(R.string.dlg_title_required_fields)
-        lblDialogBody.text = context.getString(R.string.dlg_body_required_fields)
-        btnDialogPrimary.text = context.getString(R.string.btn_okay)
-
-        btnDialogPrimary.setOnClickListener {
+        btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
 

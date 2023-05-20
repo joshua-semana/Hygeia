@@ -13,9 +13,20 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        style="@style/Progress_Linear"
+        android:layout_height="2dp"
+        android:max="100"
+        android:progress="33"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
     <TextView
         android:id="@+id/lblPageNumber"
         style="@style/Text_Page_Number"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/pg_num_1"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"
@@ -141,6 +152,39 @@
             android:focusable="false"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
+
+    <!--    <TextView-->
+    <!--        android:id="@+id/lblH6Gender"-->
+    <!--        style="@style/Text_H6"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="@string/h6_gender"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/txtLayoutBirthdate" />-->
+
+    <!--    <RadioGroup-->
+    <!--        android:id="@+id/grpRadioGender"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_marginStart="24dp"-->
+    <!--        android:layout_marginEnd="24dp"-->
+    <!--        android:checkedButton="@+id/btnMale"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/lblH6Gender">-->
+
+    <!--        <RadioButton-->
+    <!--            android:id="@+id/btnRadioMale"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="@string/gender_male" />-->
+
+    <!--        <RadioButton-->
+    <!--            android:id="@+id/btnRadioFemale"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:text="@string/gender_female" />-->
+    <!--    </RadioGroup>-->
 
     <Button
         android:id="@+id/btnContinue"

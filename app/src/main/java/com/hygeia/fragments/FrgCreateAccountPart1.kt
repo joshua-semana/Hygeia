@@ -9,7 +9,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import com.hygeia.R
-import com.hygeia.Utilities.dlgRequiredFields
+import com.hygeia.Utilities.dlgInformation
+import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgCreateAccountPart1Binding
 import java.util.*
 
@@ -33,6 +34,22 @@ class FrgCreateAccountPart1 : Fragment() {
             )
 
             //MAIN FUNCTIONS
+            btnContinue.setOnClickListener {
+                if (isInternetConnected(requireContext())) {
+                    if (inputsAreNotEmpty()) {
+                        sendArguments()
+                    } else {
+                        dlgInformation(requireContext(), "empty field").show()
+                    }
+                } else {
+                    dlgInformation(requireContext(), "no internet").show()
+                }
+            }
+
+            cmbGender.setOnItemClickListener { _, _, _, _ ->
+                mainLayout.performClick()
+            }
+
             txtBirthdate.setOnClickListener {
                 showDatePickerDialog()
             }
@@ -50,23 +67,21 @@ class FrgCreateAccountPart1 : Fragment() {
             }
 
             //NAVIGATION
-            btnContinue.setOnClickListener {
-                if (txtFirstName.text!!.isEmpty() or
-                    txtLastName.text!!.isEmpty() or
-                    cmbGender.text!!.isEmpty() or
-                    txtBirthdate.text!!.isEmpty()
-                ) {
-                    dlgRequiredFields(requireContext()).show()
-                } else {
-                    sendArguments()
-                }
-            }
-
             btnBack.setOnClickListener {
                 activity?.onBackPressedDispatcher?.onBackPressed()
             }
 
             return root
+        }
+    }
+
+    private fun inputsAreNotEmpty(): Boolean {
+        return when {
+            bind.txtFirstName.text!!.isEmpty() -> false
+            bind.txtLastName.text!!.isEmpty() -> false
+            bind.cmbGender.text!!.isEmpty() -> false
+            bind.txtBirthdate.text!!.isEmpty() -> false
+            else -> true
         }
     }
 

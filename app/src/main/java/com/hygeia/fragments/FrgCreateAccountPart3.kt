@@ -1,7 +1,6 @@
 package com.hygeia.fragments
 
 import android.os.Bundle
-import android.text.method.PasswordTransformationMethod
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +9,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.hygeia.R
+import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgMessage
-import com.hygeia.Utilities.dlgNoInternet
 import com.hygeia.Utilities.isInternetConnected
 
 import com.hygeia.databinding.FrgCreateAccountPart3Binding
@@ -42,8 +39,8 @@ class FrgCreateAccountPart3 : Fragment() {
 
         with(bind) {
             //POPULATE
-            txtFirstName.setText(userInfo["firstname"])
-            txtLastName.setText(userInfo["lastname"])
+            val fullname = "${userInfo["firstname"]} ${userInfo["lastname"]}"
+            txtFullName.setText(fullname)
             txtGender.setText(userInfo["gender"])
             txtBirthDate.setText(userInfo["birthdate"])
             txtEmail.setText(userInfo["email"])
@@ -55,7 +52,7 @@ class FrgCreateAccountPart3 : Fragment() {
                 if (isInternetConnected(requireContext())) {
                     createAccount(userInfo)
                 } else {
-                    dlgNoInternet(requireContext()).show()
+                    dlgInformation(requireContext(), "no internet").show()
                 }
             }
             //NAVIGATION
@@ -88,13 +85,7 @@ class FrgCreateAccountPart3 : Fragment() {
                 db.collection("User").document(getUser.user!!.uid).set(userData)
                     .addOnSuccessListener {
                         loading.dismiss()
-                        dlgMessage(
-                            requireContext(),
-                            "success",
-                            getString(R.string.dlg_title_create_account),
-                            getString(R.string.dlg_body_create_account),
-                            "Go back to login"
-                        ).apply {
+                        dlgInformation(requireContext(), "success create account").apply {
                             setOnDismissListener {
                                 requireActivity().finish()
                             }

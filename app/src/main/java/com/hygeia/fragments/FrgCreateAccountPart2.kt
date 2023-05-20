@@ -11,9 +11,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgNoInternet
-import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.Utilities.passwordPattern
@@ -37,16 +36,11 @@ class FrgCreateAccountPart2 : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
-                if (txtEmail.text!!.isEmpty() or
-                    txtPhoneNumber.text!!.isEmpty() or
-                    txtPassword.text!!.isEmpty() or
-                    txtConfirmPassword.text!!.isEmpty()
-                ) {
-                    dlgRequiredFields(requireContext()).show()
-                } else {
-                    if (isInternetConnected(requireContext())) {
+                if (isInternetConnected(requireContext())) {
+                    if (inputsAreNotEmpty()) {
                         loading.show()
                         clearTextErrors()
+
                         val validations = arrayOf(
                             validateEmail(),
                             validatePhoneNumber(),
@@ -61,8 +55,10 @@ class FrgCreateAccountPart2 : Fragment() {
                             }
                         }
                     } else {
-                        dlgNoInternet(requireContext()).show()
+                        dlgInformation(requireContext(), "empty field").show()
                     }
+                } else {
+                    dlgInformation(requireContext(), "no internet").show()
                 }
             }
 
@@ -81,6 +77,16 @@ class FrgCreateAccountPart2 : Fragment() {
             }
 
             return root
+        }
+    }
+
+    private fun inputsAreNotEmpty(): Boolean {
+        return when {
+            bind.txtEmail.text!!.isEmpty() -> false
+            bind.txtPhoneNumber.text!!.isEmpty() -> false
+            bind.txtPassword.text!!.isEmpty() -> false
+            bind.txtConfirmPassword.text!!.isEmpty() -> false
+            else -> true
         }
     }
 

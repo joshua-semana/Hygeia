@@ -13,9 +13,20 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
+    <com.google.android.material.progressindicator.LinearProgressIndicator
+        style="@style/Progress_Linear"
+        android:layout_height="2dp"
+        android:max="100"
+        android:progress="66"
+        app:layout_constraintBottom_toBottomOf="@+id/btnBack"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnBack" />
+
     <TextView
         android:id="@+id/lblPageNumber"
         style="@style/Text_Page_Number"
+        android:fontFamily="@font/roboto_bold"
         android:text="@string/pg_num_2"
         app:layout_constraintBottom_toBottomOf="@+id/btnBack"
         app:layout_constraintEnd_toEndOf="parent"

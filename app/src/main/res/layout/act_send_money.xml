@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/elmnt_y"
         android:layout_marginStart="@dimen/mx"
-        android:layout_marginTop="@dimen/heading_margin_top"
+        android:layout_marginTop="@dimen/h_mt"
         android:layout_marginEnd="@dimen/mx"
         android:background="@drawable/bg_squircle_50"
         app:layout_constraintEnd_toEndOf="parent"

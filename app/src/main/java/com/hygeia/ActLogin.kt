@@ -9,9 +9,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.dlgNoInternet
-import com.hygeia.Utilities.dlgRequiredFields
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
 import com.hygeia.databinding.ActLoginBinding
@@ -31,15 +30,15 @@ class ActLogin : AppCompatActivity() {
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
-                if (txtEmail.text!!.isEmpty() or txtPassword.text!!.isEmpty()) {
-                    dlgRequiredFields(this@ActLogin).show()
-                    clearTextErrors()
-                } else {
-                    if (isInternetConnected(applicationContext)) {
+                if (isInternetConnected(applicationContext)) {
+                    if (inputsAreNotEmpty()) {
                         validateInputs(txtEmail.text.toString(), txtPassword.text.toString())
                     } else {
-                        dlgNoInternet(this@ActLogin).show()
+                        clearTextErrors()
+                        dlgInformation(this@ActLogin, "empty field").show()
                     }
+                } else {
+                    dlgInformation(this@ActLogin, "no internet").show()
                 }
             }
 
@@ -55,19 +54,34 @@ class ActLogin : AppCompatActivity() {
             //NAVIGATION
             btnForgotPassword.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
+                clearTextInputs()
+                clearTextErrors()
             }
 
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
+                clearTextInputs()
+                clearTextErrors()
             }
         }
     }
 
-    private fun clearTextErrors() {
-        with(bind) {
-            txtLayoutEmail.isErrorEnabled = false
-            txtLayoutPassword.isErrorEnabled = false
+    private fun inputsAreNotEmpty(): Boolean {
+        return when {
+            bind.txtEmail.text!!.isEmpty() -> false
+            bind.txtPassword.text!!.isEmpty() -> false
+            else -> true
         }
+    }
+
+    private fun clearTextInputs() {
+        bind.txtEmail.setText("")
+        bind.txtPassword.setText("")
+    }
+
+    private fun clearTextErrors() {
+        bind.txtLayoutEmail.isErrorEnabled = false
+        bind.txtLayoutPassword.isErrorEnabled = false
     }
 
     private fun validateInputs(email: String, password: String) {

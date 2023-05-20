@@ -26,7 +26,7 @@
     <TextView
         android:id="@+id/lblTitlePhoneNumber"
         style="@style/Text_Regular"
-        android:layout_marginTop="@dimen/heading_margin_top"
+        android:layout_marginTop="@dimen/h_mt"
         android:text="@string/title_enter_required"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="parent"

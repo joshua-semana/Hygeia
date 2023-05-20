@@ -19,25 +19,25 @@ class FrgMainHome : Fragment() {
         with(bind) {
 
             //NAVIGATION
-            btnSendMoney.setOnClickListener {
-                startActivity(Intent(requireContext(), ActSendMoney::class.java))
-            }
-
-            btnRequestMoney.setOnClickListener {
-                startActivity(Intent(requireContext(), ActRequestMoney::class.java))
-            }
-
-            btnAddMoney.setOnClickListener {
-                startActivity(Intent(requireContext(), ActTopUp::class.java))
-            }
-
-            btnViewAllTransactions.setOnClickListener {
-                startActivity(Intent(requireContext(), ActTransactions::class.java))
-            }
-
-            lblViewAllTransactions.setOnClickListener {
-                btnViewAllTransactions.performClick()
-            }
+//            btnSendMoney.setOnClickListener {
+//                startActivity(Intent(requireContext(), ActSendMoney::class.java))
+//            }
+//
+//            btnRequestMoney.setOnClickListener {
+//                startActivity(Intent(requireContext(), ActRequestMoney::class.java))
+//            }
+//
+//            btnAddMoney.setOnClickListener {
+//                startActivity(Intent(requireContext(), ActTopUp::class.java))
+//            }
+//
+//            btnViewAllTransactions.setOnClickListener {
+//                startActivity(Intent(requireContext(), ActTransactions::class.java))
+//            }
+//
+//            lblViewAllTransactions.setOnClickListener {
+//                btnViewAllTransactions.performClick()
+//            }
 
             return root
         }

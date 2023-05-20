@@ -151,7 +151,7 @@
         <item name="android:layout_marginTop">@dimen/elmnt_gap</item>
         <item name="errorIconDrawable">@null</item>
     </style>
-    
+
     <style name="Txt_Layout_Primary_Shape">
         <item name="cornerSize">@dimen/corner_radius</item>
     </style>
@@ -178,7 +178,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/mx</item>
         <item name="android:layout_marginEnd">@dimen/mx</item>
-        <item name="android:layout_marginTop">@dimen/heading_margin_top</item>
+        <item name="android:layout_marginTop">@dimen/h_mt</item>
         <item name="android:fontFamily">@font/spoof_regular</item>
         <item name="android:textSize">@dimen/text_xl</item>
         <item name="android:textColor">@color/neutral_900</item>
@@ -224,7 +224,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginEnd">@dimen/pg_num_end</item>
-        <item name="android:textColor">@color/neutral_500</item>
+        <item name="android:textColor">@color/neutral_900</item>
     </style>
 
     <style name="Lbl_PageTitle" parent="Widget.AppCompat.TextView">
@@ -246,4 +246,11 @@
         <item name="android:background">@drawable/bg_squircle_50</item>
     </style>
 
+    <style name="Progress_Linear" parent="Widget.Material3.LinearProgressIndicator">
+        <item name="android:layout_width">@dimen/progress_width</item>
+        <item name="trackThickness">@dimen/progress_thick</item>
+        <item name="trackColor">@color/neutral_300</item>
+        <item name="indicatorColor">@color/neutral_900</item>
+        <item name="trackCornerRadius">@dimen/corner_radius</item>
+    </style>
 </resources>
