@@ -1,5 +1,6 @@
 package com.hygeia
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Color
@@ -20,6 +21,9 @@ object Utilities {
     private const val emoNoInternet = "😵"
     private const val emoException = "😱"
     private const val emoTrivia = "🤯"
+    private const val emoConfirmation = "🤔"
+
+    enum class ButtonType { PRIMARY, SECONDARY }
 
     val greetings = hashMapOf(
         "Filipino" to "Mabuhay!",
@@ -104,13 +108,6 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
         }
 
-        if (content == "going back") {
-            lblDlgInfoEmoji.text = emoException
-            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
-            lblDlgInfoBody.text = context.getString(R.string.dlg_body_going_back)
-            btnDlgInfoPrimary.text = context.getString(R.string.btn_sure)
-        }
-
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
@@ -162,6 +159,42 @@ object Utilities {
         btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
 
         btnDlgInfoPrimary.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        return dialog
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun dlgConfirmation(context: Context, content: String, onButtonClicked: (type: ButtonType) -> Unit): Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_confirmation)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val lblDlgConfirmEmoji = dialog.findViewById<TextView>(R.id.lblDlgConfirmEmoji)
+        val lblDlgConfirmTitle = dialog.findViewById<TextView>(R.id.lblDlgConfirmTitle)
+        val lblDlgConfirmBody = dialog.findViewById<TextView>(R.id.lblDlgConfirmBody)
+        val btnDlgConfirmPrimary = dialog.findViewById<Button>(R.id.btnDlgConfirmPrimary)
+        val btnDlgConfirmSecondary = dialog.findViewById<Button>(R.id.btnDlgConfirmSecondary)
+
+        lblDlgConfirmEmoji.text = emoConfirmation
+        lblDlgConfirmTitle.text = context.getString(R.string.dlg_title_confirmation)
+        btnDlgConfirmSecondary.text = context.getString(R.string.btn_no)
+
+        if (content == "going back") {
+            lblDlgConfirmBody.text = context.getString(R.string.dlg_body_going_back)
+            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, go back"
+            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+        }
+
+        btnDlgConfirmPrimary.setOnClickListener {
+            onButtonClicked(ButtonType.PRIMARY)
+            dialog.dismiss()
+        }
+
+        btnDlgConfirmSecondary.setOnClickListener {
+            onButtonClicked(ButtonType.SECONDARY)
             dialog.dismiss()
         }
 

@@ -87,6 +87,9 @@
     <string name="btn_try_it_now">Try it now!</string>
     <string name="btn_back_to_login">Go back to login</string>
 
+    <string name="btn_yes">Yes</string>
+    <string name="btn_no">No</string>
+
     <!--DIALOGS-->
     <string name="dlg_placeholder_title">Dialog Title</string>
     <string name="dlg_placeholder_body">Dialog content</string>
@@ -98,10 +101,11 @@
     <string name="dlg_title_trivia">Trivia!</string>
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
-    <string name="dlg_body_going_back">Are you sure you want to go back? Going back will take you to the login page and reset the process.</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
 
+    <string name="dlg_title_confirmation">Hold on a moment!</string>
+    <string name="dlg_body_going_back">Are you sure you want to go back? Keep in mind that any unsaved changes will be lost.</string>
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
     <string name="hint_phone_number">Enter phone number</string>
