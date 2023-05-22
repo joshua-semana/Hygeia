@@ -13,6 +13,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities
+import com.hygeia.Utilities.dlgConfirmation
 import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.isInternetConnected
@@ -71,12 +73,11 @@ class FrgResetPassword : Fragment() {
         }
     }
     private fun onBackPressed(){
-        dlgStatus(requireContext(), "going back").apply {
-            setOnDismissListener {
+        dlgConfirmation(requireContext(), "going back") {
+            if (it == Utilities.ButtonType.PRIMARY) {
                 requireActivity().finish()
             }
-            show()
-        }
+        }.show()
     }
     private fun inputsAreNotEmpty(): Boolean {
         return when {
