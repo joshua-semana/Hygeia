@@ -14,6 +14,7 @@
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
 
     <com.google.android.material.progressindicator.LinearProgressIndicator
+        android:id="@+id/linearProgressIndicator"
         style="@style/Progress_Linear"
         android:layout_height="2dp"
         android:max="100"
@@ -43,41 +44,47 @@
     <TextView
         android:id="@+id/lblHeadingColored"
         style="@style/Text_H1_Colored"
-        android:text="@string/h1_account_colored"
+        android:text="@string/h1_profile_colored"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerDescription"
-        style="@style/Container_Description"
-        android:padding="@dimen/container_desc_p"
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/Text_Description"
+        android:text="@string/desc_create_account_part1"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored" />
 
-        <ImageView
-            android:id="@+id/imgDescription"
-            android:layout_width="@dimen/ic_sm"
-            android:layout_height="@dimen/ic_sm"
-            android:src="@drawable/ic_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/containerDescription"-->
+<!--        style="@style/Container_Description"-->
+<!--        android:padding="@dimen/container_desc_p"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">-->
 
-        <TextView
-            android:id="@+id/lblDescription"
-            style="@style/Text_Regular"
-            android:layout_marginStart="@dimen/text_desc_ml"
-            android:layout_marginTop="@dimen/text_desc_mt"
-            android:layout_marginBottom="@dimen/text_desc_mb"
-            android:text="@string/desc_create_account_part1"
-            android:textColor="@color/neutral_900"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgDescription"
-            app:layout_constraintTop_toTopOf="parent" />
+<!--        <ImageView-->
+<!--            android:id="@+id/imgDescription"-->
+<!--            android:layout_width="@dimen/ic_sm"-->
+<!--            android:layout_height="@dimen/ic_sm"-->
+<!--            android:src="@drawable/ic_info"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />-->
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--        <TextView-->
+<!--            android:id="@+id/lblDescription"-->
+<!--            style="@style/Text_Regular"-->
+<!--            android:layout_marginStart="@dimen/text_desc_ml"-->
+<!--            android:text="@string/desc_create_account_part1"-->
+<!--            android:textColor="@color/neutral_900"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/imgDescription"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLayoutFirstName"
@@ -85,9 +92,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/title_first_name"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerDescription">
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtFirstName"

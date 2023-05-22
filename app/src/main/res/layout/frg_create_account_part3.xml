@@ -34,60 +34,61 @@
     <TextView
         android:id="@+id/lblHeadingRegular"
         style="@style/Text_H1_Regular"
-        android:layout_width="wrap_content"
         android:text="@string/h1_create_account3"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/lblHeadingColored"
-        style="@style/Text_H1_Colored_Inline"
-        android:layout_width="wrap_content"
-        android:text="@string/h1_account_colored"
-        app:layout_constraintBottom_toBottomOf="@+id/lblHeadingRegular"
-        app:layout_constraintStart_toEndOf="@+id/lblHeadingRegular"
-        app:layout_constraintTop_toTopOf="@+id/lblHeadingRegular" />
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/containerDescription"
-        style="@style/Container_Description"
-        android:padding="@dimen/container_desc_p"
+        style="@style/Text_H1_Colored"
+        android:text="@string/h1_details_colored"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular" />
 
-        <ImageView
-            android:id="@+id/imgDescription"
-            android:layout_width="@dimen/ic_sm"
-            android:layout_height="@dimen/ic_sm"
-            android:src="@drawable/ic_info"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/Text_Description"
+        android:text="@string/desc_create_account_part3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored" />
 
-        <TextView
-            android:id="@+id/lblDescription"
-            style="@style/Text_Regular"
-            android:layout_marginStart="@dimen/text_desc_ml"
-            android:layout_marginTop="@dimen/text_desc_mt"
-            android:layout_marginBottom="@dimen/text_desc_mb"
-            android:text="@string/desc_create_account_part3"
-            android:textColor="@color/neutral_900"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imgDescription"
-            app:layout_constraintTop_toTopOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:id="@+id/containerDescription"-->
+<!--        style="@style/Container_Description"-->
+<!--        android:padding="@dimen/container_desc_p"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">-->
+
+<!--        <ImageView-->
+<!--            android:id="@+id/imgDescription"-->
+<!--            android:layout_width="@dimen/ic_sm"-->
+<!--            android:layout_height="@dimen/ic_sm"-->
+<!--            android:src="@drawable/ic_info"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />-->
+
+<!--        <TextView-->
+<!--            android:id="@+id/lblDescription"-->
+<!--            style="@style/Text_Regular"-->
+<!--            android:layout_marginStart="@dimen/text_desc_ml"-->
+<!--            android:text="@string/desc_create_account_part3"-->
+<!--            android:textColor="@color/neutral_900"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/imgDescription"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <TextView
         android:id="@+id/lblH6PersonalInformation"
-        style="@style/Text_H6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/mx"
-        android:layout_marginTop="12dp"
+        style="@style/Text_H6_Title"
         android:text="@string/h6_personal_information"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/containerDescription" />
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLayoutFullName"
@@ -174,11 +175,7 @@
 
     <TextView
         android:id="@+id/lblH6AccountInformation"
-        style="@style/Text_H6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/mx"
-        android:layout_marginTop="12dp"
+        style="@style/Text_H6_Title"
         android:text="@string/h6_account_information"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtLayoutGender" />

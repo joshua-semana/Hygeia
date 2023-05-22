@@ -8,5 +8,5 @@
         android:color="@color/accent_500"
         android:width="2dp"/>
     <corners
-        android:radius="@dimen/corner_radius" />
+        android:radius="@dimen/radius_md" />
 </shape>

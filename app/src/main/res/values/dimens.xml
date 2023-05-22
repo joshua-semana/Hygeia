@@ -3,19 +3,23 @@
     <!--WHEN CHANGING MARGIN_X, PAGE NUMBER, & MARGIN_X_ERROR ARE PLUS OR MINUS 6-->
 
     <!--GLOBAL-->
-    <dimen name="corner_radius">12dp</dimen>
+    <dimen name="radius_md">12dp</dimen>
+    <dimen name="radius_lg">24dp</dimen>
     <dimen name="h_mt">60dp</dimen>
     <dimen name="mx">24dp</dimen>
     <dimen name="mx_err">44dp</dimen>
     <dimen name="elmnt_y">52dp</dimen>
-    <dimen name="elmnt_gap">8dp</dimen>
+    <dimen name="elmnt_gap_md">8dp</dimen>
+    <dimen name="elmnt_gap_lg">12dp</dimen>
+    <dimen name="elmnt_gap_xl">16dp</dimen>
 
     <dimen name="circle_lg">52dp</dimen>
     <dimen name="circle_md">34dp</dimen>
-    <dimen name="circle_sm">26dp</dimen>
+    <dimen name="circle_sm">48dp</dimen>
 
     <!--TEXTS-->
-    <dimen name="text_xl">32sp</dimen>
+    <dimen name="text_xxl">32sp</dimen>
+    <dimen name="text_xl">24sp</dimen>
     <dimen name="text_lg">18sp</dimen>
     <dimen name="text_md">14sp</dimen>
     <dimen name="text_sm">12sp</dimen>
@@ -24,7 +28,7 @@
     <dimen name="text_greetings_mt">8sp</dimen>
 
     <dimen name="letter_spacing">0.6</dimen>
-    <dimen name="line_spacing">-6dp</dimen>
+    <dimen name="line_spacing">-2dp</dimen>
     <dimen name="body_top_gap">6dp</dimen>
 
     <!--BUTTONS-->
@@ -59,8 +63,14 @@
     <!--CONTAINER DESCRIPTION-->
     <dimen name="container_desc_mt">8dp</dimen>
     <dimen name="container_desc_p">10dp</dimen>
-    <dimen name="text_desc_mt">1dp</dimen>
-    <dimen name="text_desc_mb">3dp</dimen>
     <dimen name="text_desc_ml">6dp</dimen>
+
     <dimen name="fab_margin">16dp</dimen>
+
+    <!--CARD WALLET-->
+    <dimen name="card_wallet_width">0dp</dimen>
+    <dimen name="card_wallet_height">200dp</dimen>
+    <dimen name="card_wallet_mx">40dp</dimen>
+    <dimen name="card_wallet_mt">24dp</dimen>
+    <dimen name="card_wallet_elevation">16dp</dimen>
 </resources>
