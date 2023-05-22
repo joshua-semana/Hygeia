@@ -9,19 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.lifecycle.lifecycleScope
-import com.google.firebase.FirebaseException
-import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.hygeia.OTPManager
+import com.hygeia.objects.OTPManager
 import com.hygeia.R
-import com.hygeia.Utilities.clearTextError
-import com.hygeia.Utilities.dlgStatus
-import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.emailPattern
-import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.classes.ButtonType
+import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.dlgLoading
+import com.hygeia.objects.Utilities.emailPattern
+import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgForgotPasswordBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -78,6 +77,7 @@ class FrgForgotPassword : Fragment() {
             return root
         }
     }
+
     private fun validateInput(email: String) {
         auth = Firebase.auth
         clearTextError()
@@ -89,14 +89,20 @@ class FrgForgotPassword : Fragment() {
                     if (emailAddress.isNotEmpty()) {
                         getPhoneNumber()
                         getPassword()
-                        OTPManager.requestOTP(phoneNumber, auth, requireActivity())
-                        sendArguments(
-                            phoneNumber,
-                            emailAddress,
-                            password,
-                            OTPManager.getOTP(),
-                            OTPManager.getToken()
-                        )
+                        OTPManager.requestOTP(requireActivity(), phoneNumber, auth)
+                        if (OTPManager.getOTP() != null) {
+                            OTPManager.verifyOtp(
+                                requireActivity(),
+                                requireContext(),
+                                phoneNumber,
+                                auth,
+                                OTPManager.getOTP()
+                            ) {
+                                if (it == ButtonType.VERIFIED) {
+                                    sendArguments()
+                                }
+                            }.show()
+                        }
                         loading.dismiss()
                     } else {
                         loading.dismiss()
@@ -123,21 +129,13 @@ class FrgForgotPassword : Fragment() {
         val query = userRef.whereEqualTo("email", emailAddress).get().await()
         password = query.documents[0].get("password").toString()
     }
-    private fun sendArguments(
-        phoneNumber: String,
-        email: String,
-        password: String,
-        otp: String?,
-        token: Parcelable?,
-    ) {
+
+    private fun sendArguments() {
         val bundle = Bundle().apply {
-            putString("phoneNumber", phoneNumber)
-            putString("email", email)
+            putString("email", emailAddress)
             putString("password", password)
-            putString("otp", otp)
-            putParcelable("token", token)
         }
-        val fragment = FrgOTP().apply { arguments = bundle }
+        val fragment = FrgResetPassword().apply { arguments = bundle }
         parentFragmentManager.beginTransaction()
             .setCustomAnimations(
                 androidx.appcompat.R.anim.abc_fade_in,

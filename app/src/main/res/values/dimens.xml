@@ -37,6 +37,7 @@
     <dimen name="btn_stack_mb">12dp</dimen>
     <dimen name="btn_back_mt">0dp</dimen>
     <dimen name="btn_back_ml">2dp</dimen>
+    <dimen name="btn_inline_gap">8dp</dimen>
 
     <!--INPUT TEXT-->
     <dimen name="txt_px">20sp</dimen>
@@ -73,4 +74,7 @@
     <dimen name="card_wallet_mx">40dp</dimen>
     <dimen name="card_wallet_mt">24dp</dimen>
     <dimen name="card_wallet_elevation">16dp</dimen>
+
+    <!--WITHIN DIALOGS-->
+    <dimen name="emoji_mt">24dp</dimen>
 </resources>

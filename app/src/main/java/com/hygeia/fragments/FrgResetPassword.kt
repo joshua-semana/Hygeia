@@ -8,17 +8,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities
-import com.hygeia.Utilities.dlgConfirmation
-import com.hygeia.Utilities.dlgStatus
-import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.Utilities.passwordPattern
+import com.hygeia.classes.ButtonType
+import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgConfirmation
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.dlgLoading
+import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.passwordPattern
 import com.hygeia.databinding.FrgResetPasswordBinding
 
 class FrgResetPassword : Fragment() {
@@ -74,8 +76,8 @@ class FrgResetPassword : Fragment() {
     }
     private fun onBackPressed(){
         dlgConfirmation(requireContext(), "going back") {
-            if (it == Utilities.ButtonType.PRIMARY) {
-                requireActivity().finish()
+            if (it == ButtonType.PRIMARY) {
+                parentFragmentManager.popBackStack()
             }
         }.show()
     }

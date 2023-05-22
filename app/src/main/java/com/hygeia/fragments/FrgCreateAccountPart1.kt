@@ -12,9 +12,9 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.hygeia.R
-import com.hygeia.Utilities.dlgStatus
-import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.Utilities.msg
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 import com.hygeia.databinding.FrgCreateAccountPart1Binding
 import java.text.SimpleDateFormat
 import java.util.*

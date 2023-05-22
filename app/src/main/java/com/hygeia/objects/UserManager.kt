@@ -1,4 +1,4 @@
-package com.hygeia
+package com.hygeia.objects
 
 import com.google.firebase.firestore.DocumentSnapshot
 

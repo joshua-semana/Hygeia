@@ -10,9 +10,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.hygeia.Utilities.dlgStatus
-import com.hygeia.Utilities.dlgLoading
-import com.hygeia.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.dlgLoading
+import com.hygeia.objects.Utilities.isInternetConnected
 
 import com.hygeia.databinding.FrgCreateAccountPart3Binding
 import java.util.Date
