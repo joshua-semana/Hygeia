@@ -12,6 +12,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
+import com.hygeia.Utilities.clearTextError
 import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.emailPattern
@@ -49,8 +50,7 @@ class FrgCreateAccountPart2 : Fragment() {
                 if (isInternetConnected(requireContext())) {
                     if (inputsAreNotEmpty()) {
                         loading.show()
-                        clearTextErrors()
-
+                        clearTextError(txtLayoutEmail, txtLayoutPhoneNumber, txtLayoutPassword, txtLayoutConfirmPassword)
                         emailAddress = txtEmail.text.toString()
                         phoneNumber = (txtLayoutPhoneNumber.prefixText.toString() + txtPhoneNumber.text.toString()).trim()
                         password = txtPassword.text.toString()
@@ -93,12 +93,6 @@ class FrgCreateAccountPart2 : Fragment() {
             bind.txtConfirmPassword.text!!.isEmpty() -> false
             else -> true
         }
-    }
-    private fun clearTextErrors() {
-        bind.txtLayoutEmail.isErrorEnabled = false
-        bind.txtLayoutPhoneNumber.isErrorEnabled = false
-        bind.txtLayoutPassword.isErrorEnabled = false
-        bind.txtLayoutConfirmPassword.isErrorEnabled = false
     }
     private suspend fun inputsAreCorrect(): Boolean {
         var inputErrorCount = 0
