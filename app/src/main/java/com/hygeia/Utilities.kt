@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputLayout
 
 object Utilities {
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
@@ -38,9 +39,14 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
-    fun clearTextFields(vararg textFields: EditText) {
+    fun clearTextFields(vararg textFields : EditText) {
         for(textField in textFields){
             textField.text.clear()
+        }
+    }
+    fun clearTextError(vararg textInputLayouts : TextInputLayout) {
+        for (textInputLayout in textInputLayouts){
+            textInputLayout.isErrorEnabled = false
         }
     }
     fun Context.msg(message: CharSequence) =

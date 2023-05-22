@@ -15,19 +15,17 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import com.hygeia.OTPManager
 import com.hygeia.R
+import com.hygeia.Utilities.clearTextError
 import com.hygeia.Utilities.dlgStatus
 import com.hygeia.Utilities.dlgLoading
 import com.hygeia.Utilities.emailPattern
 import com.hygeia.Utilities.isInternetConnected
-import com.hygeia.Utilities.msg
 import com.hygeia.databinding.FrgForgotPasswordBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.util.concurrent.TimeUnit
-import kotlin.math.pow
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind: FrgForgotPasswordBinding
@@ -56,7 +54,7 @@ class FrgForgotPassword : Fragment() {
                     if (txtEmail.text!!.isNotEmpty()) {
                         validateInput(txtEmail.text.toString())
                     } else {
-                        clearTextError()
+                        clearTextError(txtLayoutEmail)
                         dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
@@ -80,12 +78,8 @@ class FrgForgotPassword : Fragment() {
             return root
         }
     }
-
-    private fun clearTextError() {
-        bind.txtLayoutEmail.isErrorEnabled = false
-    }
-
     private fun validateInput(email: String) {
+        auth = Firebase.auth
         clearTextError()
         with(bind) {
             if (email.matches(emailPattern)) {
@@ -95,7 +89,15 @@ class FrgForgotPassword : Fragment() {
                     if (emailAddress.isNotEmpty()) {
                         getPhoneNumber()
                         getPassword()
-                        makeFirebaseRequest()
+                        OTPManager.requestOTP(phoneNumber, auth, requireActivity())
+                        sendArguments(
+                            phoneNumber,
+                            emailAddress,
+                            password,
+                            OTPManager.getOTP(),
+                            OTPManager.getToken()
+                        )
+                        loading.dismiss()
                     } else {
                         loading.dismiss()
                         txtLayoutEmail.error = getString(R.string.error_email_registered)
@@ -121,54 +123,12 @@ class FrgForgotPassword : Fragment() {
         val query = userRef.whereEqualTo("email", emailAddress).get().await()
         password = query.documents[0].get("password").toString()
     }
-
-    private var requestCount = 0
-    private val requestLimit = 10
-    private val requestInterval = 1_000L // 1 second
-
-    private suspend fun makeFirebaseRequest() {
-        try {
-            val options = PhoneAuthOptions.newBuilder(auth)
-                .setPhoneNumber(phoneNumber)
-                .setTimeout(60L, TimeUnit.SECONDS)
-                .setActivity(requireActivity())
-                .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                    override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
-                    override fun onVerificationFailed(ex: FirebaseException) {
-                        if (ex is FirebaseAuthInvalidCredentialsException) {
-                            requireActivity().msg("Invalid request")
-                        } else if (ex is FirebaseTooManyRequestsException) {
-                            requireActivity().msg("Too many request. Please try again later.")
-                        }
-                        loading.dismiss()
-                    }
-                    override fun onCodeSent(
-                        otp: String,
-                        resendToken: PhoneAuthProvider.ForceResendingToken,
-                    ) {
-                        loading.dismiss()
-                        sendArguments(phoneNumber, emailAddress, password, otp, resendToken)
-                    }
-                }).build()
-            PhoneAuthProvider.verifyPhoneNumber(options)
-            requestCount++
-        } catch (e: FirebaseTooManyRequestsException) {
-            delay(requestInterval * (2.0.pow(requestCount.toDouble())).toLong())
-            makeFirebaseRequest()
-        }
-
-        if (requestCount >= requestLimit) {
-            delay(requestInterval)
-            requestCount = 0
-        }
-    }
-
     private fun sendArguments(
         phoneNumber: String,
         email: String,
         password: String,
-        otp: String,
-        token: Parcelable,
+        otp: String?,
+        token: Parcelable?,
     ) {
         val bundle = Bundle().apply {
             putString("phoneNumber", phoneNumber)
