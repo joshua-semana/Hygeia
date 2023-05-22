@@ -6,7 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/lblGreetings"
         style="@style/Text_Regular"
@@ -19,13 +18,80 @@
 
     <TextView
         android:id="@+id/lblUserFullName"
-        style="@style/Text_H6"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
         android:fontFamily="@font/spoof_regular"
         android:text="@string/placeholder"
+        android:textColor="@color/neutral_900"
         android:textSize="@dimen/text_lg"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/lblGreetings"
         app:layout_constraintTop_toBottomOf="@+id/lblGreetings" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWallet"
+        style="@style/Card_Wallet"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblUserFullName">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/img_wallet_card">
+
+                <ImageView
+                    android:layout_width="@dimen/ic_md"
+                    android:layout_height="@dimen/ic_md"
+                    android:layout_marginTop="@dimen/mx"
+                    android:layout_marginEnd="@dimen/mx"
+                    android:src="@drawable/logo_hygeia"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/lblAmountBalance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/placeholder"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/lblWalletBalance"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/lblWalletBalance"
+                    style="@style/Text_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/desc_wallet_balance"
+                    android:textColor="@color/neutral_200"
+                    android:textSize="@dimen/text_sm"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/lblActions"
+        style="@style/Text_H6_Title"
+        android:layout_marginTop="@dimen/mx"
+        android:text="@string/h6_actions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardWallet" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

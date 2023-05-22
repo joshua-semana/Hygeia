@@ -11,6 +11,7 @@ import com.hygeia.*
 import com.hygeia.Utilities.dlgInformation
 import com.hygeia.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
+import java.text.DecimalFormat
 
 class FrgMainHome : Fragment() {
     private lateinit var bind : FrgMainHomeBinding
@@ -20,11 +21,13 @@ class FrgMainHome : Fragment() {
 
         val (language, greeting) = greetings.entries.random()
         val fullname = "${UserManager.firstname} ${UserManager.lastname}"
+        val balance = formatNumber(UserManager.balance)
 
         with(bind) {
             //POPULATE
             lblGreetings.text = greeting
             lblUserFullName.text = fullname
+            lblAmountBalance.text = balance
 
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
@@ -54,5 +57,9 @@ class FrgMainHome : Fragment() {
 
             return root
         }
+    }
+
+    private fun formatNumber(number: Long?): String {
+        return DecimalFormat("₱ #,###.##").format(number)
     }
 }

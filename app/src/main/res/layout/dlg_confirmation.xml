@@ -11,10 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="@dimen/mx"
-        android:paddingEnd="@dimen/mx">
+        android:paddingEnd="@dimen/mx"
+        android:layout_gravity="center">
 
         <TextView
-            android:id="@+id/lblDlgInfoEmoji"
+            android:id="@+id/lblDlgConfirmEmoji"
             style="@style/Text_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -26,7 +27,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/lblDlgInfoTitle"
+            android:id="@+id/lblDlgConfirmTitle"
             style="@style/Text_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,10 +39,10 @@
             android:textSize="@dimen/text_lg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblDlgInfoEmoji" />
+            app:layout_constraintTop_toBottomOf="@id/lblDlgConfirmEmoji" />
 
         <TextView
-            android:id="@+id/lblDlgInfoBody"
+            android:id="@+id/lblDlgConfirmBody"
             style="@style/Text_Regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -51,15 +52,15 @@
             android:textColor="@color/neutral_900"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblDlgInfoTitle"
+            app:layout_constraintTop_toBottomOf="@id/lblDlgConfirmTitle"
             app:lineHeight="20dp" />
 
         <Button
-            android:id="@+id/btnDlgInfoPrimary"
+            android:id="@+id/btnDlgConfirmPrimary"
             style="@style/Btn_Primary"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="1dp"
             android:layout_marginBottom="20dp"
@@ -68,8 +69,27 @@
             android:text="@string/btn_okay"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnDlgConfirmSecondary"
+            app:layout_constraintTop_toBottomOf="@id/lblDlgConfirmBody"
+            tools:ignore="VisualLintButtonSize,DuplicateSpeakableTextCheck" />
+
+        <Button
+            android:id="@+id/btnDlgConfirmSecondary"
+            style="@style/Btn_Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="4dp"
+            android:layout_marginBottom="20dp"
+            android:insetTop="5dp"
+            android:insetBottom="5dp"
+            android:text="@string/btn_okay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btnDlgConfirmPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lblDlgInfoBody" />
+            app:layout_constraintTop_toBottomOf="@id/lblDlgConfirmBody"
+            tools:ignore="VisualLintButtonSize" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

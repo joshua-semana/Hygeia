@@ -2,31 +2,39 @@
     <string name="app_name">Hygeia</string>
     <string name="app_name_lower">hygeia</string>
     <string name="app_version">Copyright © 2023. Hygeia. All rights reserved.</string>
+    <string name="app_catchphrase">Your access to your hygiene vendo buddy.</string>
+<!--    Unlock a World of Hygiene Convenience with Hygeia!-->
 
     <!--HEADINGS-->
-    <string name="h1_create_account1">Let\'s create your</string>
-    <string name="h1_create_account2">Now, let\'s secure your</string>
-    <string name="h1_create_account3">Review your</string>
+    <string name="h1_welcome">Hey! Welcome to</string>
+    <string name="h1_create_account1">Start building your</string>
+    <string name="h1_create_account2">Stay connected and</string>
+    <string name="h1_create_account3">Check your account</string>
     <string name="h1_forgot_password">Let\'s recover your</string>
     <string name="h1_reset_password">Create your new</string>
     <string name="h1_otp">Verify one-time</string>
     <string name="h1_account_colored">account</string>
+    <string name="h1_profile_colored">profile</string>
+    <string name="h1_protected_colored">protected</string>
+    <string name="h1_details_colored">details</string>
     <string name="h1_password_colored">password</string>
     <string name="h1_pin_colored">PIN</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
-    <string name="h6_gender">Gender</string>
+    <string name="h6_actions">Actions</string>
+    <string name="h6_latest_transactions">Latest Transactions</string>
 
     <string name="or">Or</string>
 
     <!--CONTAINER DESCRIPTION-->
-    <string name="desc_login">Your access to your hygiene\nvendo buddy</string>
-    <string name="desc_create_account_part1">Please provide your personal information.</string>
-    <string name="desc_create_account_part2">Please enter your contact information.</string>
-    <string name="desc_create_account_part3">Please make sure that all details are correct.</string>
-    <string name="desc_forgot_password">To recover your account, please provide your email you use to sign in to Hygeia.</string>
+    <string name="desc_login">Enter your login credentials below — so you can access your hygiene vendo buddy.</string>
+    <string name="desc_create_account_part1">Kindly provide your personal details — so other users can connect and engage with you.</string>
+    <string name="desc_create_account_part2">Please enter your contact details and secure your account — your email and password will serve as your login credentials.</string>
+    <string name="desc_create_account_part3">Please take a moment to review your account details before proceeding. We will then send a one-time pin to your number for a quick verification.</string>
+    <string name="desc_forgot_password">Kindly enter the email associated with your account to initiate the password renewal process.  We will then send a one-time pin to your number for a quick verification.</string>
     <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number </string>
-    <string name="desc_update_password"><b>Reminders: </b>Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+    <string name="desc_update_password">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+    <string name="desc_wallet_balance">Wallet Balance</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
