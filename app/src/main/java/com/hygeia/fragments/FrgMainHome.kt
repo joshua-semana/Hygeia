@@ -1,16 +1,14 @@
 package com.hygeia.fragments
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import com.hygeia.*
-import com.hygeia.Utilities.dlgInformation
-import com.hygeia.Utilities.greetings
+import com.hygeia.objects.Utilities.dlgInformation
+import com.hygeia.objects.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
+import com.hygeia.objects.UserManager
 import java.text.DecimalFormat
 
 class FrgMainHome : Fragment() {

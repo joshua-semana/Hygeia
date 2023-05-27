@@ -1,4 +1,4 @@
-package com.hygeia
+package com.hygeia.objects
 
 import android.annotation.SuppressLint
 import android.app.Dialog
@@ -11,20 +11,13 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputLayout
+import com.hygeia.R
+import com.hygeia.classes.ButtonType
 
 object Utilities {
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
     val phoneNumberPattern = "^\\+639\\d{9}\$|^09\\d{9}\$".toRegex()
     val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
-
-    private const val emoSuccess = "🥳"
-    private const val emoError = "🧐"
-    private const val emoNoInternet = "😵"
-    private const val emoException = "😱"
-    private const val emoTrivia = "🤯"
-    private const val emoConfirmation = "🤔"
-
-    enum class ButtonType { PRIMARY, SECONDARY }
 
     val greetings = hashMapOf(
         "Filipino" to "Mabuhay!",
@@ -39,12 +32,12 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
-    fun clearTextFields(vararg textFields : EditText) {
+    fun clearTextFields(vararg textFields: EditText) {
         for(textField in textFields){
             textField.text.clear()
         }
     }
-    fun clearTextError(vararg textInputLayouts : TextInputLayout) {
+    fun clearTextError(vararg textInputLayouts: TextInputLayout) {
         for (textInputLayout in textInputLayouts){
             textInputLayout.isErrorEnabled = false
         }
@@ -87,28 +80,28 @@ object Utilities {
         val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
         if (content == "success create account") {
-            lblDlgInfoEmoji.text = emoSuccess
+            lblDlgInfoEmoji.text = Emoji.Success
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_create_account)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_try_it_now)
         }
 
         if (content == "success update password") {
-            lblDlgInfoEmoji.text = emoSuccess
+            lblDlgInfoEmoji.text = Emoji.Success
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_2)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_update_password)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
         }
 
         if (content == "no internet") {
-            lblDlgInfoEmoji.text = emoNoInternet
+            lblDlgInfoEmoji.text = Emoji.NoInternet
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_internet)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
         if (content == "empty field") {
-            lblDlgInfoEmoji.text = emoError
+            lblDlgInfoEmoji.text = Emoji.Error
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_3)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_empty_field)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
@@ -134,7 +127,7 @@ object Utilities {
 
         if (greetings.containsKey(info1)) {
             val message = "The word '${greetings[info1]}' is the $info1 term for the word 'Hello!'"
-            lblDlgInfoEmoji.text = emoTrivia
+            lblDlgInfoEmoji.text = Emoji.Trivia
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_trivia)
             lblDlgInfoBody.text = message
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
@@ -159,7 +152,7 @@ object Utilities {
         val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
         val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
-        lblDlgInfoEmoji.text = emoException
+        lblDlgInfoEmoji.text = Emoji.Exception
         lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
         lblDlgInfoBody.text = errorMessage
         btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
@@ -184,7 +177,7 @@ object Utilities {
         val btnDlgConfirmPrimary = dialog.findViewById<Button>(R.id.btnDlgConfirmPrimary)
         val btnDlgConfirmSecondary = dialog.findViewById<Button>(R.id.btnDlgConfirmSecondary)
 
-        lblDlgConfirmEmoji.text = emoConfirmation
+        lblDlgConfirmEmoji.text = Emoji.Confirmation
         lblDlgConfirmTitle.text = context.getString(R.string.dlg_title_confirmation)
         btnDlgConfirmSecondary.text = context.getString(R.string.btn_no)
 

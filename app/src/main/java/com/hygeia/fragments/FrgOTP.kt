@@ -12,8 +12,8 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
-import com.hygeia.Utilities.dlgStatus
-import com.hygeia.Utilities.msg
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.msg
 import com.hygeia.databinding.FrgOtpBinding
 import java.util.concurrent.TimeUnit
 

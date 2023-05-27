@@ -41,7 +41,7 @@
     <string name="title_password">Password</string>
     <string name="title_password_new">New password</string>
     <string name="title_password_confirm">Confirm password</string>
-    <string name="title_otp">One-time PIN</string>
+    <string name="title_otp">One-Time PIN</string>
     <string name="title_first_name">First name</string>
     <string name="title_last_name">Last name</string>
     <string name="title_full_name">Full name</string>
@@ -72,13 +72,17 @@
     <string name="btn_continue">Continue</string>
     <string name="btn_create_my_account">Create my account</string>
     <string name="btn_update_password">Update my password</string>
-    <string name="btn_verify">Verify</string>
     <string name="btn_send">Send Code</string>
     <string name="btn_resend">Resend Code</string>
     <string name="btn_send_money">Send</string>
     <string name="btn_request_money">Request</string>
     <string name="btn_add_money">Top Up</string>
     <string name="btn_view_all_transactions">View all</string>
+
+    <string name="btn_verify">Verify</string>
+    <string name="btn_save">Save</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_back">Back</string>
 
     <string name="btn_okay">Okay</string>
     <string name="btn_got_it">Got it</string>
@@ -105,7 +109,11 @@
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
-    <string name="dlg_body_going_back">Are you sure you want to go back? Keep in mind that any unsaved changes will be lost.</string>
+    <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
+
+    <string name="dlg_title_otp">Account verification</string>
+    <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
+
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
     <string name="hint_phone_number">Enter phone number</string>

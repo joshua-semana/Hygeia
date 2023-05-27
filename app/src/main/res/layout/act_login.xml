@@ -6,18 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/imgDialogLogo"-->
-<!--        style="@style/Circle_Sm_300"-->
-<!--        android:layout_marginStart="@dimen/mx"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:padding="8dp"-->
-<!--        android:scaleType="centerInside"-->
-<!--        android:src="@drawable/logo_hygeia"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck,TouchTargetSizeCheck" />-->
-
     <TextView
         android:id="@+id/lblHeadingRegular"
         style="@style/Text_H1_Regular"
@@ -41,45 +29,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored" />
-
-    <!--    <ImageView-->
-<!--        android:id="@+id/imgDialogLogo"-->
-<!--        style="@style/Circle_Lg_50"-->
-<!--        android:layout_marginTop="58dp"-->
-<!--        android:padding="@dimen/ic_p"-->
-<!--        android:scaleType="centerInside"-->
-<!--        android:src="@drawable/logo_hygeia"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/txtBrandName"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/spoof_bold"-->
-<!--        android:text="@string/app_name_lower"-->
-<!--        android:textColor="@color/accent_500"-->
-<!--        android:textSize="@dimen/text_xxl"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/imgDialogLogo" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/lblBrandCatchphrase"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="4dp"-->
-<!--        android:lineHeight="24sp"-->
-<!--        android:text="@string/desc_login"-->
-<!--        android:textAlignment="center"-->
-<!--        android:textColor="@color/neutral_500"-->
-<!--        android:textSize="@dimen/text_md"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/txtBrandName"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/txtBrandName"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/txtBrandName"-->
-<!--        tools:ignore="UnusedAttribute" />-->
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLayoutEmail"

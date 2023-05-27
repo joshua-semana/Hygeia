@@ -266,4 +266,10 @@
         <item name="cardElevation">@dimen/card_wallet_elevation</item>
     </style>
 
+    <!--DIALOG-->
+    <style name="Dlg_Fullscreen" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>
