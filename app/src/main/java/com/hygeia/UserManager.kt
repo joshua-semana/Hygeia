@@ -4,7 +4,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 
 object UserManager {
     var uid: String? = null
-    var balance: Long? = null
+    var balance: Any? = null
     var birthdate: String? = null
     var email: String? = null
     var firstname: String? = null
@@ -18,7 +18,7 @@ object UserManager {
     fun setUserInformation(userInfo: DocumentSnapshot) {
         with(userInfo) {
             uid = id
-            balance = get("balance") as Long
+            balance = get("balance")
             birthdate = get("birthdate") as String
             email = get("email") as String
             firstname = get("firstname") as String

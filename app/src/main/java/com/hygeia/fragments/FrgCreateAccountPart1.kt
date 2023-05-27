@@ -98,7 +98,7 @@ class FrgCreateAccountPart1 : Fragment() {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 val input = s.toString()
-                val validInput = input.replace("[^a-zA-Z]".toRegex(), "")
+                val validInput = input.replace("[^a-zA-Z ]".toRegex(), "")
                 if (input != validInput) {
                     textField.setText(validInput)
                     textField.setSelection(textField.text.length)
