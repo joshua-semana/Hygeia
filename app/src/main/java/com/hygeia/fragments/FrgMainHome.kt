@@ -59,7 +59,13 @@ class FrgMainHome : Fragment() {
         }
     }
 
-    private fun formatNumber(number: Long?): String {
-        return DecimalFormat("₱ #,###.##").format(number)
+    private fun formatNumber(balance: Any?): String {
+        return if (balance.toString() == "0") {
+            DecimalFormat("₱ 0.00").format(balance)
+        } else if (balance.toString().contains(".")) {
+            DecimalFormat("₱ #,###.##").format(balance)
+        } else {
+            DecimalFormat("₱ #,###.00").format(balance)
+        }
     }
 }
