@@ -18,6 +18,7 @@ import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
+import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +48,7 @@ class ActLogin : AppCompatActivity() {
                     if (inputsAreNotEmpty()) {
                         validateInputs(txtEmail.text.toString(), txtPassword.text.toString())
                     } else {
-                        clearTextErrors()
+                        clearTextError(txtLayoutEmail, txtLayoutPassword)
                         dlgStatus(this@ActLogin, "empty field").show()
                         showRequiredTextField(
                             txtEmail to txtLayoutEmail,
@@ -71,16 +72,16 @@ class ActLogin : AppCompatActivity() {
             //NAVIGATION
             btnForgotPassword.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
-                clearTextErrors()
+                clearTextError(txtLayoutEmail, txtLayoutPassword)
                 clearTextFields(txtEmail,txtPassword)
             }
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
-                clearTextErrors()
+                clearTextError(txtLayoutEmail, txtLayoutPassword)
+                clearTextFields(txtEmail,txtPassword)
             }
         }
     }
-
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtEmail.text!!.isEmpty() -> false
@@ -88,14 +89,8 @@ class ActLogin : AppCompatActivity() {
             else -> true
         }
     }
-
-    private fun clearTextErrors() {
-        bind.txtLayoutEmail.isErrorEnabled = false
-        bind.txtLayoutPassword.isErrorEnabled = false
-    }
-
     private fun validateInputs(email: String, password: String) {
-        clearTextErrors()
+        clearTextError(bind.txtLayoutEmail, bind.txtLayoutPassword)
         loading.show()
         with(bind) {
             if (email.matches(emailPattern)) {
