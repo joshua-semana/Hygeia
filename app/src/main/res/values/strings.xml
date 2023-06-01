@@ -3,7 +3,7 @@
     <string name="app_name_lower">hygeia</string>
     <string name="app_version">Copyright © 2023. Hygeia. All rights reserved.</string>
     <string name="app_catchphrase">Your access to your hygiene vendo buddy.</string>
-<!--    Unlock a World of Hygiene Convenience with Hygeia!-->
+    <!--    Unlock a World of Hygiene Convenience with Hygeia!-->
 
     <!--HEADINGS-->
     <string name="h1_welcome">Hey! Welcome to</string>
@@ -18,7 +18,12 @@
     <string name="h1_protected_colored">protected</string>
     <string name="h1_details_colored">details</string>
     <string name="h1_password_colored">password</string>
+    <string name="h1_send_money">Send Money</string>
     <string name="h1_pin_colored">PIN</string>
+    <string name="h1_all_transactions">Transaction History</string>
+    <string name="h1_user_info">My information</string>
+    <string name="h1_change_password">Change your account</string>
+    <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
     <string name="h6_actions">Actions</string>
@@ -35,10 +40,14 @@
     <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number </string>
     <string name="desc_update_password">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="desc_wallet_balance">Wallet Balance</string>
+    <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
+    <string name="desc_transaction_history">View all your transactions in one place. This displays a comprehensive list of all the transactions you have made, providing you with a clear overview of your financial activity.</string>
+    <string name="desc_user_info">View your profile and account details at a glance.</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
     <string name="title_password">Password</string>
+    <string name="title_password_old">Old password</string>
     <string name="title_password_new">New password</string>
     <string name="title_password_confirm">Confirm password</string>
     <string name="title_otp">One-Time PIN</string>
@@ -48,6 +57,7 @@
     <string name="title_gender">Gender</string>
     <string name="title_birth_date">Birth date</string>
     <string name="title_phone_number">Phone number</string>
+    <string name="title_amount">Amount</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -61,7 +71,7 @@
     <string name="error_phone_format">The phone number you entered is invalid.</string>
     <string name="error_phone_taken">This phone number is already in use.</string>
     <string name="error_otp_incorrect">The one-time pin you entered is incorrect.</string>
-    
+
     <!--HELPER DESCRIPTION-->
     <string name="helper_forgot_password_email">We will send a one-time verification code to the phone number associated with your account.</string>
 
@@ -75,9 +85,12 @@
     <string name="btn_send">Send Code</string>
     <string name="btn_resend">Resend Code</string>
     <string name="btn_send_money">Send</string>
-    <string name="btn_request_money">Request</string>
-    <string name="btn_add_money">Top Up</string>
-    <string name="btn_view_all_transactions">View all</string>
+    <string name="btn_purchase">Purchase</string>
+    <string name="btn_log_out">Log Out</string>
+    <string name="btn_view_information">View my info</string>
+    <string name="btn_change_password">Change password</string>
+
+    <string name="btn_text_terms_and_conditions">By continuing, you accept our <a href="">terms and conditions</a>\nand <a href="">privacy policy</a>.</string>
 
     <string name="btn_verify">Verify</string>
     <string name="btn_save">Save</string>
@@ -125,13 +138,7 @@
     <string name="btn_hint_request_money">Request</string>
     <string name="btn_hint_add_money">Top Up</string>
 
-    <string name="page_title_home_greetings">Hey,</string>
-    <string name="page_title_home_name">John Doe</string>
-    <string name="page_title_send_money">Send Money</string>
-    <string name="page_title_request_money">Request Money</string>
-    <string name="page_title_top_up">Top Up</string>
     <string name="page_title_notifications">Notifications</string>
-    <string name="page_title_transactions">All Transactions</string>
 
     <string name="title_enter_required">Please enter the required details</string>
     <string name="title_home_balance">Your balance</string>
@@ -147,8 +154,8 @@
 
     <!--BOTTOM MENU NAVIGATION-->
     <string name="nav_home">Home</string>
-    <string name="nav_qr">Scan QR</string>
-    <string name="nav_settings">Settings</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_profile">Profile</string>
 
     <!--SPECIFIC ACTIVITIES-->
     <!--CREATE ACCOUNT ACTIVITY-->
@@ -168,4 +175,40 @@
     <string name="t2">April 19 | 7:00 AM</string>
     <string name="t3">- ₱10.00</string>
     <string name="placeholder">default</string>
+    <string name="title_activity_act_user_info">ActUserInfo</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="terms_and_conditions"><b>Terms and Conditions:</b>\n\n
+    • Acceptance of Terms\nBy accessing and using Hygeia, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please refrain from using our services.
+    \n\n
+    • Account Registration\nTo use Hygeia, you must create an account by providing accurate and complete information, including your first name, last name, gender, birthday, email address, phone number, and password. You are responsible for maintaining the confidentiality of your account information and are solely responsible for all activities that occur under your account.
+    \n\n
+    • Privacy and Data Protection\nWe respect your privacy and handle your personal information in accordance with our Privacy Policy. Please review our Privacy Policy to understand how we collect, use, and protect your personal information.
+    \n\n
+    • Use of Services\nHygeia allows you to perform various financial transactions, including (but not limited to) sending money and purchasing products. You agree to use our services for lawful purposes only and in compliance with applicable laws and regulations.
+    \n\n
+    • Security Measures\nWe employ industry-standard security measures to protect your account and personal information. However, you acknowledge that no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
+    \n\n
+    • Limitation of Liability\nWe strive to provide accurate and reliable services, but we do not warrant or guarantee the accuracy, completeness, reliability, or availability of our services. We shall not be liable for any direct, indirect, incidental, special, or consequential damages arising out of or in connection with the use or inability to use our services.
+    \n\n
+    • Modifications to Terms and Services\nWe reserve the right to modify these Terms and Conditions and our services at any time. Any changes will be effective upon posting an updated version of the Terms and Conditions of Hygeia. Continued use of our services after any modifications constitutes your acceptance of the revised terms.
+    \n\n
+    <b>Privacy Policy:</b>\n\n
+    • Information Collection and Use\nWe collect personal information such as your name, email address, phone number, and transaction details to provide and improve our services. We may use your information to authenticate your identity, process transactions, and send important notifications.
+    \n\n
+    • Information Sharing\nWe do not sell, rent, or lease your personal information to third parties. However, we may share your information with trusted service providers who assist us in operating our business and providing services to you.
+    \n\n
+    • Security\nWe implement appropriate security measures to protect your personal information from unauthorized access, alteration, disclosure, or destruction. However, no method of transmission over the internet or electronic storage is completely secure, and we cannot guarantee absolute security.
+    \n\n
+    • Data Retention\nWe retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required by law.
+    \n\n
+    • Compliance with Laws\nWe comply with applicable laws and regulations governing the collection, use, and disclosure of personal information. We may disclose your information when required by law or in response to valid legal requests.
+    \n\n
+    • Updates to Privacy Policy\nWe may update our Privacy Policy from time to time. We will notify you of any material changes by posting the updated Privacy Policy of Hygeia or by other means. Continued use of our services after any modifications constitutes your acceptance of the revised Privacy Policy.
+    \n
+    </string>
 </resources>

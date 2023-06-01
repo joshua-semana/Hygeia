@@ -94,4 +94,55 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardWallet" />
 
+    <ImageButton
+        android:id="@+id/btnSendMoney"
+        style="@style/Circle_Lg_50"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:src="@drawable/ic_money_send"
+        app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblActions"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnPurchase"
+        style="@style/Circle_Lg_50"
+        android:src="@drawable/ic_buy"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/lblSendMoney"
+        style="@style/Text_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_send_money"
+        app:layout_constraintEnd_toEndOf="@+id/btnSendMoney"
+        app:layout_constraintStart_toStartOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toBottomOf="@+id/btnSendMoney"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblPurchase"
+        style="@style/Text_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_purchase"
+        app:layout_constraintEnd_toEndOf="@+id/btnPurchase"
+        app:layout_constraintStart_toStartOf="@+id/btnPurchase"
+        app:layout_constraintTop_toBottomOf="@+id/btnPurchase"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblLatestTransactions"
+        style="@style/Text_H6_Title"
+        android:text="@string/h6_latest_transactions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblSendMoney" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

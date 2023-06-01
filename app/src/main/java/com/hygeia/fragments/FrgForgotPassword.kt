@@ -99,6 +99,7 @@ class FrgForgotPassword : Fragment() {
                                 OTPManager.getOTP()
                             ) {
                                 if (it == ButtonType.VERIFIED) {
+                                    loading.dismiss()
                                     sendArguments()
                                 }
                             }.show()

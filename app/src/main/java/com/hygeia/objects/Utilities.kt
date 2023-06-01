@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
@@ -33,13 +34,20 @@ object Utilities {
         "Vietnamese" to "Xin Chào!",
     )
     fun clearTextFields(vararg textFields: EditText) {
-        for(textField in textFields){
+        for (textField in textFields){
             textField.text.clear()
         }
     }
     fun clearTextError(vararg textInputLayouts: TextInputLayout) {
         for (textInputLayout in textInputLayouts){
             textInputLayout.isErrorEnabled = false
+        }
+    }
+    fun showRequiredTextField(vararg inputs: Pair<TextInputEditText, TextInputLayout>) {
+        for (input in inputs) {
+            if (input.first.text!!.isEmpty()) {
+                input.second.error = "Required*"
+            }
         }
     }
     fun Context.msg(message: CharSequence) =
@@ -65,6 +73,23 @@ object Utilities {
             setContentView(R.layout.dlg_loading)
             window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         }
+        return dialog
+    }
+
+    fun dlgTermsAndConditions(context: Context): Dialog {
+        val dialog = Dialog(context)
+        with(dialog) {
+            setCancelable(false)
+            setContentView(R.layout.dlg_terms_and_conditions)
+            window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        val btnDlgTermsPrimary = dialog.findViewById<Button>(R.id.btnDlgTermsPrimary)
+
+        btnDlgTermsPrimary.setOnClickListener {
+            dialog.dismiss()
+        }
+
         return dialog
     }
 

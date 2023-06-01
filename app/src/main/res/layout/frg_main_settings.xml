@@ -7,12 +7,95 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/lblUserFullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/nav_settings"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:fontFamily="@font/spoof_regular"
+        android:text="@string/placeholder"
+        android:textColor="@color/neutral_900"
+        android:textSize="@dimen/text_lg"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imgLogo" />
+
+    <TextView
+        android:id="@+id/lblPhoneNumber"
+        style="@style/Text_Regular"
+        android:text="@string/placeholder"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_md"
+        app:layout_constraintEnd_toEndOf="@+id/lblUserFullName"
+        app:layout_constraintStart_toStartOf="@+id/lblUserFullName"
+        app:layout_constraintTop_toBottomOf="@+id/lblUserFullName" />
+
+    <TextView
+        android:id="@+id/lblActions"
+        style="@style/Text_H6_Title"
+        android:layout_marginTop="@dimen/mx"
+        android:text="@string/h6_actions"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblPhoneNumber" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginEnd="@dimen/mx"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblActions">
+
+        <Button
+            android:id="@+id/btnViewMyInfo"
+            style="@style/Btn_Text_Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/btn_view_information"
+            app:icon="@drawable/ic_profile" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/neutral_300" />
+
+        <Button
+            android:id="@+id/btnChangePassword"
+            style="@style/Btn_Text_Icon"
+            app:icon="@drawable/ic_lock"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_change_password" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/imgLogo"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/h_mt"
+        android:src="@drawable/logo_hygeia"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
+    <Button
+        android:id="@+id/btnLogOut"
+        style="@style/Btn_Secondary"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="76dp"
+        android:text="@string/btn_log_out"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        tools:ignore="VisualLintButtonSize" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

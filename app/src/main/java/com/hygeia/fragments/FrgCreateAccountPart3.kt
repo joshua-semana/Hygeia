@@ -82,7 +82,7 @@ class FrgCreateAccountPart3 : Fragment() {
             "password" to data["password"],
             "status" to "active",
             "role" to "standard",
-            "balance" to 0.00,
+            "balance" to 0,
             "dateCreated" to Timestamp(Date())
         )
 
