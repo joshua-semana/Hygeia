@@ -12,9 +12,9 @@
         tools:layout="@layout/frg_main_home"/>
     <fragment
         android:id="@+id/frgMainQR"
-        android:name="com.hygeia.fragments.FrgMainQR"
+        android:name="com.hygeia.fragments.FrgMainTransactions"
         android:label="FrgMainQR"
-        tools:layout="@layout/frg_main_qr"/>
+        tools:layout="@layout/frg_main_transactions"/>
     <fragment
         android:id="@+id/frgMainSettings"
         android:name="com.hygeia.fragments.FrgMainSettings"

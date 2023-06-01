@@ -8,10 +8,10 @@
         android:icon="@drawable/ic_nav_home"/>
     <item
         android:id="@+id/frgMainQR"
-        android:title="@string/nav_qr"
+        android:title="@string/nav_transactions"
         android:icon="@drawable/ic_nav_learn"/>
     <item
         android:id="@+id/frgMainSettings"
         android:icon="@drawable/ic_nav_profile"
-        android:title="@string/nav_settings" />
+        android:title="@string/nav_profile" />
 </menu>

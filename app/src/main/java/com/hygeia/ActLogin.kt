@@ -17,8 +17,8 @@ import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.ActLoginBinding
-import com.hygeia.objects.OTPManager
 import com.hygeia.objects.UserManager
+import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -49,6 +49,10 @@ class ActLogin : AppCompatActivity() {
                     } else {
                         clearTextErrors()
                         dlgStatus(this@ActLogin, "empty field").show()
+                        showRequiredTextField(
+                            txtEmail to txtLayoutEmail,
+                            txtPassword to txtLayoutPassword
+                        )
                     }
                 } else {
                     dlgStatus(this@ActLogin, "no internet").show()

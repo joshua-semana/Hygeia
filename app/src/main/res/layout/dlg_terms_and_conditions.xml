@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/white"
+    app:cardCornerRadius="@dimen/radius_lg">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/mx"
+        android:paddingEnd="@dimen/mx">
+
+        <ScrollView
+            android:id="@+id/scrollDlgTermsContent"
+            android:layout_width="match_parent"
+            android:layout_height="500dp"
+            android:layout_marginTop="@dimen/mx"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/lblDlgInfoBody"
+                style="@style/Text_Regular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/elmnt_gap_md"
+                android:text="@string/terms_and_conditions"
+                android:textAlignment="textStart"
+                android:textColor="@color/neutral_900"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lblDlgInfoTitle"
+                app:lineHeight="20dp"
+                tools:ignore="VisualLintLongText" />
+        </ScrollView>
+
+        <Button
+            android:id="@+id/btnDlgTermsPrimary"
+            style="@style/Btn_Primary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginTop="14dp"
+            android:layout_marginEnd="1dp"
+            android:layout_marginBottom="20dp"
+            android:insetTop="5dp"
+            android:insetBottom="5dp"
+            android:text="@string/btn_okay"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/scrollDlgTermsContent"
+            tools:ignore="VisualLintButtonSize" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

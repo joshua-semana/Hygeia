@@ -2,16 +2,18 @@ package com.hygeia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.hygeia.databinding.ActRequestMoneyBinding
+import com.hygeia.databinding.ActChangePasswordBinding
 
-class ActRequestMoney : AppCompatActivity() {
-    private lateinit var bind : ActRequestMoneyBinding
+class ActChangePassword : AppCompatActivity() {
+    private lateinit var bind : ActChangePasswordBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        bind = ActRequestMoneyBinding.inflate(layoutInflater)
+        bind = ActChangePasswordBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
         with(bind) {
+
+            //NAVIGATION
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }

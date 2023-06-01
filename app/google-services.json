@@ -14,11 +14,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "138115321008-5t9qful09amtu98bp392hgc6ig8sbs24.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hygeia",
+            "certificate_hash": "6faaacde02c1937fcd0d91f4234d2c64927f4c32"
+          }
+        },
+        {
           "client_id": "138115321008-otgk9qbcuqtrfs9lo9a3beg51o36r199.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.hygeia",
             "certificate_hash": "9791330d0b9923c7e3818b0009f38ebc0d5d0b05"
+          }
+        },
+        {
+          "client_id": "138115321008-r1ka54roj2e9ekb23khqtaibrdul8f9q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hygeia",
+            "certificate_hash": "3c48f2ef7dc665f720dfb7038a32f133d7710a54"
           }
         },
         {

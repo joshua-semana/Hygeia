@@ -113,23 +113,23 @@ class FrgCreateAccountPart1 : Fragment() {
     }
 
     private fun sendArguments() {
-        with(bind) {
-            val bundle = Bundle().apply {
-                putString("firstname", txtFirstName.text?.trim().toString())
-                putString("lastname", txtLastName.text?.trim().toString())
-                putString("gender", cmbGender.text.toString())
-                putString("birthdate", txtBirthdate.text.toString())
-            }
-            val fragment = FrgCreateAccountPart2().apply { arguments = bundle }
-            parentFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    androidx.appcompat.R.anim.abc_fade_in,
-                    androidx.appcompat.R.anim.abc_fade_out
-                )
-                .replace(R.id.containerCreateAccount, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
+//        with(bind) {
+//            val bundle = Bundle().apply {
+//                putString("firstname", txtFirstName.text?.trim().toString())
+//                putString("lastname", txtLastName.text?.trim().toString())
+//                putString("gender", cmbGender.text.toString())
+//                putString("birthdate", txtBirthdate.text.toString())
+//            }
+//            val fragment = FrgCreateAccountPart2().apply { arguments = bundle }
+//            parentFragmentManager.beginTransaction()
+//                .setCustomAnimations(
+//                    androidx.appcompat.R.anim.abc_fade_in,
+//                    androidx.appcompat.R.anim.abc_fade_out
+//                )
+//                .replace(R.id.containerCreateAccount, fragment)
+//                .addToBackStack(null)
+//                .commit()
+//        }
     }
 
     private fun showDatePickerDialog() {

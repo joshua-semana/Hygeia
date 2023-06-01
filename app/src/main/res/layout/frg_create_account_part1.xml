@@ -57,35 +57,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored" />
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:id="@+id/containerDescription"-->
-<!--        style="@style/Container_Description"-->
-<!--        android:padding="@dimen/container_desc_p"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored">-->
-
-<!--        <ImageView-->
-<!--            android:id="@+id/imgDescription"-->
-<!--            android:layout_width="@dimen/ic_sm"-->
-<!--            android:layout_height="@dimen/ic_sm"-->
-<!--            android:src="@drawable/ic_info"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />-->
-
-<!--        <TextView-->
-<!--            android:id="@+id/lblDescription"-->
-<!--            style="@style/Text_Regular"-->
-<!--            android:layout_marginStart="@dimen/text_desc_ml"-->
-<!--            android:text="@string/desc_create_account_part1"-->
-<!--            android:textColor="@color/neutral_900"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toEndOf="@+id/imgDescription"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txtLayoutFirstName"
         style="@style/Txt_Layout_Primary"

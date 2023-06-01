@@ -38,13 +38,11 @@ class FrgResetPassword : Fragment() {
     ): View {
         bind = FrgResetPasswordBinding.inflate(inflater, container, false)
         auth = Firebase.auth
-        loading = dlgLoading(requireContext())
         with(bind) {
             //MAIN FUNCTIONS
             btnUpdatePassword.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
                     if (inputsAreNotEmpty()) {
-                        loading.show()
                         clearTextError()
                         validateInputs()
                     } else {
@@ -107,6 +105,7 @@ class FrgResetPassword : Fragment() {
     }
     private fun updatePassword(newPassword: String) {
         loading = dlgLoading(requireContext())
+        loading.show()
         val email = arguments?.getString("email").toString()
         val password = arguments?.getString("password").toString()
         auth.signInWithEmailAndPassword(email, password).addOnSuccessListener {

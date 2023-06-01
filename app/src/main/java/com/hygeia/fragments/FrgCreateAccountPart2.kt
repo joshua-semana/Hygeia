@@ -138,23 +138,23 @@ class FrgCreateAccountPart2 : Fragment() {
         return !query.isEmpty
     }
     private fun sendArguments() {
-        val bundle = Bundle().apply {
-            putString("gender", arguments?.getString("gender"))
-            putString("firstname", arguments?.getString("firstname"))
-            putString("lastname", arguments?.getString("lastname"))
-            putString("birthdate", arguments?.getString("birthdate"))
-            putString("email", emailAddress)
-            putString("phoneNumber", phoneNumber)
-            putString("password", password)
-        }
-        val fragment = FrgCreateAccountPart3().apply { arguments = bundle }
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                androidx.appcompat.R.anim.abc_fade_in,
-                androidx.appcompat.R.anim.abc_fade_out
-            )
-            .replace(R.id.containerCreateAccount, fragment)
-            .addToBackStack(null)
-            .commit()
+//        val bundle = Bundle().apply {
+//            putString("gender", arguments?.getString("gender"))
+//            putString("firstname", arguments?.getString("firstname"))
+//            putString("lastname", arguments?.getString("lastname"))
+//            putString("birthdate", arguments?.getString("birthdate"))
+//            putString("email", emailAddress)
+//            putString("phoneNumber", phoneNumber)
+//            putString("password", password)
+//        }
+//        val fragment = FrgCreateAccountPart3().apply { arguments = bundle }
+//        parentFragmentManager.beginTransaction()
+//            .setCustomAnimations(
+//                androidx.appcompat.R.anim.abc_fade_in,
+//                androidx.appcompat.R.anim.abc_fade_out
+//            )
+//            .replace(R.id.containerCreateAccount, fragment)
+//            .addToBackStack(null)
+//            .commit()
     }
 }

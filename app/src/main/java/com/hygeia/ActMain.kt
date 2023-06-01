@@ -14,9 +14,9 @@ class ActMain : AppCompatActivity() {
         setContentView(bind.root)
 
         with(bind) {
-//            actMainBotNavigation.setupWithNavController(
-//                containerMain.getFragment<NavHostFragment>().navController
-//            )
+            actMainBotNavigation.setupWithNavController(
+                containerMain.getFragment<NavHostFragment>().navController
+            )
         }
 
     }

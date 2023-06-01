@@ -84,11 +84,17 @@ object OTPManager {
             .setActivity(activity)
             .setCallbacks(object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
                 override fun onVerificationCompleted(credential: PhoneAuthCredential) {}
-                override fun onVerificationFailed(ex: FirebaseException) {}
+                override fun onVerificationFailed(ex: FirebaseException) {
+                    if (ex is FirebaseTooManyRequestsException) {
+                        activity.msg("Too many request. Please try again later.")
+                        OTP.complete(null)
+                    }
+                }
                 override fun onCodeSent(
                     verificationId: String,
                     resendToken: PhoneAuthProvider.ForceResendingToken,
                 ) {
+                    activity.msg("OTP is on the way!")
                 }
             })
             .build()
