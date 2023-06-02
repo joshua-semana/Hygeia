@@ -20,4 +20,9 @@
         android:name="com.hygeia.fragments.FrgMainSettings"
         android:label="FrgMainSettings"
         tools:layout="@layout/frg_main_settings"/>
+    <fragment
+        android:id="@+id/frgMainAdminTools"
+        android:name="com.hygeia.fragments.FrgAdminTools"
+        android:label="frg_admin_tools"
+        tools:layout="@layout/frg_admin_tools" />
 </navigation>

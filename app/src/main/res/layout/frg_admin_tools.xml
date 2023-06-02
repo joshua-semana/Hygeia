@@ -6,12 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
     <TextView
         android:id="@+id/lblHeadingRegular"
         style="@style/Text_H1_Regular"
-        android:layout_marginTop="@dimen/mx"
-        android:text="@string/h1_all_transactions"
+        android:layout_marginTop="24dp"
+        android:text="@string/h1_vending_machines"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,9 +18,25 @@
     <TextView
         android:id="@+id/lblDescription"
         style="@style/Text_Description"
-        android:text="@string/desc_transaction_history"
+        android:text="@string/desc_vending_machines"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
         tools:ignore="VisualLintLongText" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listViewMachines"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription"
+        tools:listitem="@layout/list_machine"/>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

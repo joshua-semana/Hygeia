@@ -64,19 +64,19 @@ class ActCreateAccount : AppCompatActivity() {
             onResume()
             //MAIN FUNCTION
             btnContinue.setOnClickListener {
+                clearTextError(
+                    txtLayoutFirstName,
+                    txtLayoutLastName,
+                    txtLayoutGender,
+                    txtLayoutBirthdate,
+                    txtLayoutEmail,
+                    txtLayoutPhoneNumber,
+                    txtLayoutPassword,
+                    txtLayoutConfirmPassword
+                )
                 if (isInternetConnected(this@ActCreateAccount)){
                     if (inputsAreNotEmpty()){
                         loading.show()
-                        clearTextError(
-                            txtLayoutFirstName,
-                            txtLayoutLastName,
-                            txtLayoutGender,
-                            txtLayoutBirthdate,
-                            txtLayoutEmail,
-                            txtLayoutPhoneNumber,
-                            txtLayoutPassword,
-                            txtLayoutConfirmPassword
-                        )
                         //Get data for input validation and for map
                         firstname = txtFirstName.text.toString()
                         lastname = txtLastName.text.toString()
@@ -89,12 +89,11 @@ class ActCreateAccount : AppCompatActivity() {
 
                         lifecycleScope.launch(Dispatchers.Main) {
                             if (inputsAreCorrect()){
-                                createAccount()
+                                processOTP()
                             }
                             loading.dismiss()
                         }
                     } else {
-                        dlgStatus(this@ActCreateAccount,"empty field").show()
                         showRequiredTextField(
                             txtFirstName to txtLayoutFirstName,
                             txtLastName to txtLayoutLastName,
@@ -147,13 +146,7 @@ class ActCreateAccount : AppCompatActivity() {
             }
         }
     }
-    private fun onBackBtnPressed(){
-        Utilities.dlgConfirmation(this, "going back") {
-            if (it == ButtonType.PRIMARY) {
-                this.finish()
-            }
-        }.show()
-    }
+
     override fun onResume() {
         super.onResume()
         bind.cmbGender.setAdapter(
@@ -164,8 +157,82 @@ class ActCreateAccount : AppCompatActivity() {
             )
         )
     }
+
+    private suspend fun processOTP() {
+        OTPManager.requestOTP(this@ActCreateAccount, phoneNumber, auth)
+        if (OTPManager.getOTP() != null) {
+            OTPManager.verifyOtp(
+                this@ActCreateAccount,
+                this@ActCreateAccount,
+                phoneNumber,
+                auth,
+                OTPManager.getOTP()
+            ) {
+                if (it == ButtonType.VERIFIED) {
+                    loading.dismiss()
+                    createAccount()
+                }
+            }.show()
+        }
+    }
+
+    private fun createAccount() {
+        loading.show()
+        val userData = hashMapOf(
+            "gender" to gender,
+            "firstname" to firstname,
+            "lastname" to lastname,
+            "birthdate" to birthdate,
+            "email" to emailAddress,
+            "phoneNumber" to phoneNumber,
+            "password" to password,
+            "status" to "active",
+            "role" to "standard",
+            "balance" to 0,
+            "dateCreated" to Timestamp(Date())
+        )
+
+        auth.createUserWithEmailAndPassword(emailAddress, password)
+            .addOnSuccessListener { result ->
+                loading.dismiss()
+                userRef.document(result.user!!.uid).set(userData)
+                dlgStatus(this@ActCreateAccount, "success create account").apply {
+                    setOnDismissListener {
+                        this@ActCreateAccount.finish()
+                    }
+                    show()
+                }
+            }
+    }
+
+    private fun onBackBtnPressed(){
+        if (inputsAreEmpty()) {
+            this.finish()
+        } else {
+            Utilities.dlgConfirmation(this, "going back") {
+                if (it == ButtonType.PRIMARY) {
+                    this.finish()
+                }
+            }.show()
+        }
+    }
+
+    private fun inputsAreEmpty(): Boolean {
+        return when {
+            bind.txtFirstName.text!!.isNotEmpty() -> false
+            bind.txtLastName.text!!.isNotEmpty() -> false
+            bind.cmbGender.text!!.isNotEmpty() -> false
+            bind.txtBirthdate.text!!.isNotEmpty() -> false
+            bind.txtEmail.text!!.isNotEmpty() -> false
+            bind.txtPhoneNumber.text!!.isNotEmpty() -> false
+            bind.txtPassword.text!!.isNotEmpty() -> false
+            bind.txtConfirmPassword.text!!.isNotEmpty() -> false
+            else -> true
+        }
+    }
+
     private fun inputsAreNotEmpty(): Boolean {
-        return when{
+        return when {
             bind.txtFirstName.text!!.isEmpty() -> false
             bind.txtLastName.text!!.isEmpty() -> false
             bind.cmbGender.text!!.isEmpty() -> false
@@ -177,22 +244,7 @@ class ActCreateAccount : AppCompatActivity() {
             else -> true
         }
     }
-    //INPUT VALIDATION
-    private fun textWatcher(textField : EditText){
-        textField.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                val input = s.toString()
-                val validInput = input.replace("[^a-zA-Z ]".toRegex(), "")
-                if (input != validInput) {
-                    textField.setText(validInput)
-                    textField.setSelection(textField.text.length)
-                    this@ActCreateAccount.msg("Only alphabetic characters are allowed.")
-                }
-            }
-            override fun afterTextChanged(s: Editable?){}
-        })
-    }
+
     private suspend fun inputsAreCorrect(): Boolean {
         var inputErrorCount = 0
         with(bind) {
@@ -236,49 +288,7 @@ class ActCreateAccount : AppCompatActivity() {
         val query = userRef.whereEqualTo("phoneNumber", phoneNumber).get().await()
         return !query.isEmpty
     }
-    private fun createAccount() {
-        loading.show()
-        val userData = hashMapOf(
-            "gender" to gender,
-            "firstname" to firstname,
-            "lastname" to lastname,
-            "birthdate" to birthdate,
-            "email" to emailAddress,
-            "phoneNumber" to phoneNumber,
-            "password" to password,
-            "status" to "active",
-            "role" to "standard",
-            "balance" to 0,
-            "dateCreated" to Timestamp(Date())
-        )
-        lifecycleScope.launch(Dispatchers.Main) {
-            OTPManager.requestOTP(this@ActCreateAccount, phoneNumber, auth)
-            if (OTPManager.getOTP() != null) {
-                OTPManager.verifyOtp(
-                    this@ActCreateAccount,
-                    this@ActCreateAccount,
-                    phoneNumber,
-                    auth,
-                    OTPManager.getOTP()
-                ) {
-                    if (it == ButtonType.VERIFIED) {
-                        loading.dismiss()
-                        auth.createUserWithEmailAndPassword(emailAddress, password)
-                            .addOnSuccessListener { result ->
-                                loading.dismiss()
-                                userRef.document(result.user!!.uid).set(userData)
-                                dlgStatus(this@ActCreateAccount, "success create account").apply {
-                                    setOnDismissListener {
-                                        this@ActCreateAccount.finish()
-                                    }
-                                    show()
-                                }
-                            }
-                    }
-                }.show()
-            }
-        }
-    }
+
     private fun showDatePickerDialog() {
         val currentDate = Calendar.getInstance()
         DatePickerDialog(
@@ -305,5 +315,21 @@ class ActCreateAccount : AppCompatActivity() {
             datePicker.maxDate = currentDate.timeInMillis
             show()
         }
+    }
+    //INPUT VALIDATION
+    private fun textWatcher(textField : EditText){
+        textField.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val input = s.toString()
+                val validInput = input.replace("[^a-zA-Z ]".toRegex(), "")
+                if (input != validInput) {
+                    textField.setText(validInput)
+                    textField.setSelection(textField.text.length)
+                    this@ActCreateAccount.msg("Only alphabetic characters are allowed.")
+                }
+            }
+            override fun afterTextChanged(s: Editable?){}
+        })
     }
 }

@@ -41,12 +41,11 @@ class FrgResetPassword : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnUpdatePassword.setOnClickListener {
+                clearTextError(txtLayoutPassword, txtLayoutConfirmPassword)
                 if (isInternetConnected(requireContext())) {
                     if (inputsAreNotEmpty()) {
-                        clearTextError(txtLayoutPassword,txtLayoutConfirmPassword)
                         validateInputs()
                     } else {
-                        dlgStatus(requireContext(), "empty field").show()
                         showRequiredTextField(
                             txtPassword to txtLayoutPassword,
                             txtConfirmPassword to txtLayoutConfirmPassword

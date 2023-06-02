@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/elmnt_gap_md"
+    android:backgroundTint="@color/white"
+    app:cardCornerRadius="@dimen/radius_md"
+    app:cardElevation="0dp"
+    app:strokeColor="@color/neutral_300"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/elmnt_gap_xl">
+
+        <ImageView
+            style="@style/Circle_Lg_50"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="@dimen/elmnt_gap_md"
+            android:clickable="false"
+            android:src="@drawable/ic_machine"
+            tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:padding="7dp">
+
+            <TextView
+                android:id="@+id/lblListMachineName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="1dp"
+                android:fontFamily="@font/roboto_bold"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                android:textSize="@dimen/text_md"
+                tools:ignore="TextContrastCheck" />
+
+            <TextView
+                android:id="@+id/lblListMachineLocation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:fontFamily="@font/roboto"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_500"
+                android:textSize="@dimen/text_sm"
+                tools:ignore="TextContrastCheck" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/elmnt_gap_md"
+            android:padding="@dimen/elmnt_gap_md"
+            android:src="@drawable/ic_arrow"
+            app:tint="@color/neutral_400"
+            tools:ignore="ContentDescription" />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

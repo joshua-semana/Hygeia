@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -18,6 +19,7 @@ import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
+import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
@@ -33,8 +35,10 @@ class ActLogin : AppCompatActivity() {
     private var userRef = db.collection("User")
 
     private var emailAddress = ""
+    private var phoneNumber = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseApp.initializeApp(this)
         bind = ActLoginBinding.inflate(layoutInflater)
         auth = Firebase.auth
         loading = dlgLoading(this@ActLogin)
@@ -46,12 +50,11 @@ class ActLogin : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 if (isInternetConnected(applicationContext)) {
                     if (inputsAreNotEmpty()) {
-                        validateInputs(txtEmail.text.toString(), txtPassword.text.toString())
+                        validateInputs(txtEmailOrPhoneNumber.text?.trim().toString(), txtPassword.text.toString())
                     } else {
-                        clearTextError(txtLayoutEmail, txtLayoutPassword)
-                        dlgStatus(this@ActLogin, "empty field").show()
+                        clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
                         showRequiredTextField(
-                            txtEmail to txtLayoutEmail,
+                            txtEmailOrPhoneNumber to txtLayoutEmailOrPhoneNumber,
                             txtPassword to txtLayoutPassword
                         )
                     }
@@ -72,40 +75,55 @@ class ActLogin : AppCompatActivity() {
             //NAVIGATION
             btnForgotPassword.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActForgotPassword::class.java))
-                clearTextError(txtLayoutEmail, txtLayoutPassword)
-                clearTextFields(txtEmail,txtPassword)
+                clearTextErrors()
+                clearTextFields(txtEmailOrPhoneNumber, txtPassword)
             }
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
-                clearTextError(txtLayoutEmail, txtLayoutPassword)
-                clearTextFields(txtEmail,txtPassword)
+                clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
+                clearTextFields(txtEmailOrPhoneNumber,txtPassword)
             }
         }
     }
     private fun inputsAreNotEmpty(): Boolean {
         return when {
-            bind.txtEmail.text!!.isEmpty() -> false
+            bind.txtEmailOrPhoneNumber.text!!.isEmpty() -> false
             bind.txtPassword.text!!.isEmpty() -> false
             else -> true
         }
     }
-    private fun validateInputs(email: String, password: String) {
-        clearTextError(bind.txtLayoutEmail, bind.txtLayoutPassword)
+
+    private fun clearTextErrors() {
+        bind.txtLayoutEmailOrPhoneNumber.isErrorEnabled = false
+        bind.txtLayoutPassword.isErrorEnabled = false
+    }
+    private fun validateInputs(input: String, password: String) {
+        clearTextError(bind.txtLayoutEmailOrPhoneNumber, bind.txtLayoutPassword)
         loading.show()
         with(bind) {
-            if (email.matches(emailPattern)) {
-                lifecycleScope.launch(Dispatchers.Main) {
-                    getEmailAddress(email)
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (input.matches(emailPattern)) {
+                    getEmailAddress(input)
                     if (emailAddress.isNotEmpty()) {
-                        attemptLogin(email, password)
+                        attemptEmailLogin(emailAddress, password)
                     } else {
                         loading.dismiss()
-                        txtLayoutEmail.error = getString(R.string.error_email_registered)
+                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
                     }
                 }
-            } else {
-                loading.dismiss()
-                txtLayoutEmail.error = getString(R.string.error_email_format)
+                else if (input.matches(phoneNumberPattern)) {
+                    getPhoneNumber(input)
+                    if (phoneNumber.isNotEmpty()) {
+                        attemptPhoneNumberLogin(phoneNumber, password)
+                    } else {
+                        loading.dismiss()
+                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                    }
+                }
+                else {
+                    loading.dismiss()
+                    txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_password_format)
+                }
             }
         }
     }
@@ -115,26 +133,43 @@ class ActLogin : AppCompatActivity() {
         emailAddress = if (query.isEmpty) "" else email
     }
 
-    private fun attemptLogin(email: String, password: String) {
+    private suspend fun getPhoneNumber(number: String) {
+        var sanitizedNumber = number
+        if (number.startsWith("0")) {
+            sanitizedNumber = "+63" + number.substring(1)
+        }
+        val query = userRef.whereEqualTo("phoneNumber", sanitizedNumber).get().await()
+        phoneNumber = if (query.isEmpty) "" else sanitizedNumber
+    }
+
+    private fun attemptEmailLogin(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).apply {
             addOnSuccessListener {
                 userRef.document(it.user!!.uid).get().addOnSuccessListener { data ->
                     loading.dismiss()
                     UserManager.setUserInformation(data)
-                    clearTextFields(bind.txtEmail,bind.txtPassword)
-                    startActivity(
-                        when (UserManager.role) {
-                            "standard" -> Intent(applicationContext, ActMain::class.java)
-//                          "admin" -> Intent(this@ActLogin, ActUserAdmin::class.java)
-                            else -> null
-                        }
-                    )
+                    clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
+                    startActivity(Intent(applicationContext, ActMain::class.java))
                 }
             }
             addOnFailureListener {
                 loading.dismiss()
                 bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
             }
+        }
+    }
+    private suspend fun attemptPhoneNumberLogin(number: String, password: String) {
+        val query = userRef.whereEqualTo("phoneNumber", number).get().await()
+        if (query.documents[0].getString("password") == password) {
+            userRef.document(query.documents[0].id).get().addOnSuccessListener { data ->
+                loading.dismiss()
+                UserManager.setUserInformation(data)
+                clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
+                startActivity(Intent(applicationContext, ActMain::class.java))
+            }
+        } else {
+            loading.dismiss()
+            bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
         }
     }
 }

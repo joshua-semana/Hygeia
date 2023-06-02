@@ -2,7 +2,6 @@ package com.hygeia.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import android.os.Parcelable
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +21,7 @@ import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgForgotPasswordBinding
+import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -50,15 +50,14 @@ class FrgForgotPassword : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
+                clearTextError(txtLayoutEmailOrPhoneNumber)
                 if (isInternetConnected(requireContext())) {
-                    if (txtEmail.text!!.isNotEmpty()) {
-                        validateInput(txtEmail.text.toString())
+                    if (txtEmailOrPhoneNumber.text!!.isNotEmpty()) {
+                        validateInput(txtEmailOrPhoneNumber.text?.trim().toString())
                     } else {
-                        clearTextError(txtLayoutEmail)
                         showRequiredTextField(
-                            txtEmail to txtLayoutEmail
+                            txtEmailOrPhoneNumber to txtLayoutEmailOrPhoneNumber
                         )
-                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
                     dlgStatus(requireContext(), "no internet").show()
@@ -82,42 +81,40 @@ class FrgForgotPassword : Fragment() {
         }
     }
 
-    private fun validateInput(email: String) {
-        auth = Firebase.auth
-        clearTextError()
+    private fun validateInput(input: String) {
         with(bind) {
-            if (email.matches(emailPattern)) {
-                loading.show()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    getEmailAddress(email)
+            clearTextError(txtLayoutEmailOrPhoneNumber)
+            loading.show()
+            lifecycleScope.launch(Dispatchers.Main) {
+                if (input.matches(emailPattern)) {
+                    getEmailAddress(input)
                     if (emailAddress.isNotEmpty()) {
-                        getPhoneNumber()
-                        getPassword()
-                        OTPManager.requestOTP(requireActivity(), phoneNumber, auth)
-                        if (OTPManager.getOTP() != null) {
-                            OTPManager.verifyOtp(
-                                requireActivity(),
-                                requireContext(),
-                                phoneNumber,
-                                auth,
-                                OTPManager.getOTP()
-                            ) {
-                                if (it == ButtonType.VERIFIED) {
-                                    loading.dismiss()
-                                    sendArguments()
-                                }
-                            }.show()
-                        }
-                        loading.dismiss()
+                        getUserPhoneNumber()
+                        getUserPassword()
+                        processOTP()
                     } else {
                         loading.dismiss()
-                        txtLayoutEmail.error = getString(R.string.error_email_registered)
+                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
                     }
                 }
-            } else {
-                txtLayoutEmail.error = getString(R.string.error_email_format)
+                else if (input.matches(phoneNumberPattern)) {
+                    getPhoneNumber(input)
+                    if (phoneNumber.isNotEmpty()) {
+                        getUserPhoneNumber()
+                        getUserPassword()
+                        processOTP()
+                    } else {
+                        loading.dismiss()
+                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                    }
+                }
+                else {
+                    loading.dismiss()
+                    txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_password_format)
+                }
             }
         }
+
     }
 
     private suspend fun getEmailAddress(email: String) {
@@ -125,14 +122,44 @@ class FrgForgotPassword : Fragment() {
         emailAddress = if (query.isEmpty) "" else email
     }
 
-    private suspend fun getPhoneNumber() {
+    private suspend fun getPhoneNumber(number: String) {
+        var sanitizedNumber = number
+        if (number.startsWith("0")) {
+            sanitizedNumber = "+63" + number.substring(1)
+        }
+        val query = userRef.whereEqualTo("phoneNumber", sanitizedNumber).get().await()
+        phoneNumber = if (query.isEmpty) "" else sanitizedNumber
+        emailAddress = query.documents[0].getString("email").toString()
+    }
+
+    private suspend fun getUserPhoneNumber() {
         val query = userRef.whereEqualTo("email", emailAddress).get().await()
         phoneNumber = query.documents[0].get("phoneNumber").toString()
     }
 
-    private suspend fun getPassword() {
+    private suspend fun getUserPassword() {
         val query = userRef.whereEqualTo("email", emailAddress).get().await()
         password = query.documents[0].get("password").toString()
+    }
+
+    private suspend fun processOTP() {
+        auth = Firebase.auth
+        OTPManager.requestOTP(requireActivity(), phoneNumber, auth)
+        if (OTPManager.getOTP() != null) {
+            OTPManager.verifyOtp(
+                requireActivity(),
+                requireContext(),
+                phoneNumber,
+                auth,
+                OTPManager.getOTP()
+            ) {
+                if (it == ButtonType.VERIFIED) {
+                    loading.dismiss()
+                    sendArguments()
+                }
+            }.show()
+        }
+        loading.dismiss()
     }
 
     private fun sendArguments() {
@@ -150,4 +177,42 @@ class FrgForgotPassword : Fragment() {
             .addToBackStack(null)
             .commit()
     }
+
+//    private fun validateInput(email: String) {
+//        auth = Firebase.auth
+//        clearTextError()
+//        with(bind) {
+//            if (email.matches(emailPattern)) {
+//                loading.show()
+//                lifecycleScope.launch(Dispatchers.Main) {
+//                    getEmailAddress(email)
+//                    if (emailAddress.isNotEmpty()) {
+//                        getPhoneNumber()
+//                        getPassword()
+//                        OTPManager.requestOTP(requireActivity(), phoneNumber, auth)
+//                        if (OTPManager.getOTP() != null) {
+//                            OTPManager.verifyOtp(
+//                                requireActivity(),
+//                                requireContext(),
+//                                phoneNumber,
+//                                auth,
+//                                OTPManager.getOTP()
+//                            ) {
+//                                if (it == ButtonType.VERIFIED) {
+//                                    loading.dismiss()
+//                                    sendArguments()
+//                                }
+//                            }.show()
+//                        }
+//                        loading.dismiss()
+//                    } else {
+//                        loading.dismiss()
+//                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
+//                    }
+//                }
+//            } else {
+//                txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_format)
+//            }
+//        }
+//    }
 }
