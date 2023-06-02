@@ -1,15 +1,6 @@
 package com.hygeia.classes
 
-class DataMachines {
-    var name: String = ""
-    var location: String = ""
-
-    // Default constructor
-    constructor()
-
-    // Additional constructor with fields
-    constructor(name: String, location: String) {
-        this.name = name
-        this.location = location
-    }
-}
+data class DataMachines(
+    val Name : String? = null,
+    val Location : String? = null
+)

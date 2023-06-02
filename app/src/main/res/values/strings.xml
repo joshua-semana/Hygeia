@@ -24,11 +24,13 @@
     <string name="h1_user_info">My information</string>
     <string name="h1_change_password">Update password</string>
     <string name="h1_vending_machines">Vending Machines</string>
+    <string name="h1_vending_name">Hygeia Vendo</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
     <string name="h6_actions">Actions</string>
     <string name="h6_latest_transactions">Latest Transactions</string>
+    <string name="h6_available_products">Available Products</string>
 
     <string name="or">Or</string>
 
@@ -43,7 +45,12 @@
     <string name="desc_wallet_balance">Wallet Balance</string>
     <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
     <string name="desc_transaction_history">View all your transactions in one place. This displays a comprehensive list of all the transactions you have made, providing you with a clear overview of your financial activity.</string>
+    <string name="desc_vending_machines">Discover all the available vending machine in one place.</string>
     <string name="desc_user_info">View your profile and account details at a glance.</string>
+    <string name="desc_vending_location">Located at: </string>
+    <string name="desc_sub_total">Sub Total</string>
+    <string name="desc_vat">VAT</string>
+    <string name="desc_grand_total">Grand Total</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -182,6 +189,7 @@
     <string name="t2">April 19 | 7:00 AM</string>
     <string name="t3">- ₱10.00</string>
     <string name="placeholder">default</string>
+    <string name="zero">0</string>
     <string name="title_activity_act_user_info">ActUserInfo</string>
     <!-- Strings used for fragments for navigation -->
     <string name="first_fragment_label">First Fragment</string>
