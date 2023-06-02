@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
+import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -44,6 +45,13 @@ object Utilities {
         }
     }
     fun showRequiredTextField(vararg inputs: Pair<TextInputEditText, TextInputLayout>) {
+        for (input in inputs) {
+            if (input.first.text!!.isEmpty()) {
+                input.second.error = "Required*"
+            }
+        }
+    }
+    fun showRequiredComboBox(vararg inputs: Pair<AutoCompleteTextView, TextInputLayout>) {
         for (input in inputs) {
             if (input.first.text!!.isEmpty()) {
                 input.second.error = "Required*"

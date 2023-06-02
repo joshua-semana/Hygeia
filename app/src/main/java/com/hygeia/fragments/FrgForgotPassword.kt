@@ -22,6 +22,7 @@ import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.FrgForgotPasswordBinding
+import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -54,6 +55,9 @@ class FrgForgotPassword : Fragment() {
                         validateInput(txtEmail.text.toString())
                     } else {
                         clearTextError(txtLayoutEmail)
+                        showRequiredTextField(
+                            txtEmail to txtLayoutEmail
+                        )
                         dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {

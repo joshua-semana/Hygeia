@@ -2,6 +2,7 @@ package com.hygeia.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -46,7 +47,6 @@ class FrgMainHome : Fragment() {
             return root
         }
     }
-
     private fun formatNumber(balance: Any?): String {
         return if (balance.toString() == "0") {
             DecimalFormat("₱ 0.00").format(balance)
