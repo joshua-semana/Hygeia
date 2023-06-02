@@ -20,6 +20,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import com.hygeia.objects.Utilities.msg
+import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit
@@ -128,18 +129,22 @@ object OTPManager {
         }
 
         btnDlgOtpPrimary.setOnClickListener {
-            val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
-                otp!!,
-                txtDlgOtp.text.toString()
-            )
-            auth.signInWithCredential(credential).apply {
-                addOnSuccessListener {
-                    activity.msg("One-time PIN is correct.")
-                    onButtonClicked(ButtonType.VERIFIED)
-                    dialog.dismiss()
-                }
-                addOnFailureListener {
-                    txtLayoutDlgOtp.error = context.getString(R.string.error_otp_incorrect)
+            if (txtDlgOtp.text!!.isEmpty()) {
+                txtLayoutDlgOtp.error = "Required*"
+            } else {
+                val credential: PhoneAuthCredential = PhoneAuthProvider.getCredential(
+                    otp!!,
+                    txtDlgOtp.text.toString()
+                )
+                auth.signInWithCredential(credential).apply {
+                    addOnSuccessListener {
+                        activity.msg("One-time PIN is correct.")
+                        onButtonClicked(ButtonType.VERIFIED)
+                        dialog.dismiss()
+                    }
+                    addOnFailureListener {
+                        txtLayoutDlgOtp.error = context.getString(R.string.error_otp_incorrect)
+                    }
                 }
             }
         }

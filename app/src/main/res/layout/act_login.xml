@@ -31,21 +31,21 @@
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/txtLayoutEmail"
+        android:id="@+id/txtLayoutEmailOrPhoneNumber"
         style="@style/Txt_Layout_Primary"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/elmnt_gap_xl"
-        android:hint="@string/title_email"
+        android:hint="@string/title_email_phone_number"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblDescription">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/txtEmail"
+            android:id="@+id/txtEmailOrPhoneNumber"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="text"
             tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -59,7 +59,7 @@
         app:endIconMode="password_toggle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLayoutEmail">
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutEmailOrPhoneNumber">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/txtPassword"
