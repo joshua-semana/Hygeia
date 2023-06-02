@@ -17,8 +17,7 @@
         <activity
             android:name=".ActSendMoney"
             android:windowSoftInputMode="adjustResize" />
-        <activity
-            android:name=".ActChangePassword" />
+        <activity android:name=".ActChangePassword" />
         <activity
             android:name=".ActUserInfo"
             android:windowSoftInputMode="adjustResize" />

@@ -30,4 +30,7 @@ object UserManager {
             status = get("status") as String
         }
     }
+    fun updateUserBalance(number : DocumentSnapshot){
+        balance = number.get("balance")
+    }
 }
