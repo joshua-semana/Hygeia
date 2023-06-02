@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import com.hygeia.ActPurchase
 import com.hygeia.ActSendMoney
 import com.hygeia.classes.ButtonType
 import com.hygeia.objects.Utilities.dlgInformation
@@ -46,6 +47,10 @@ class FrgMainHome : Fragment() {
             //NAVIGATION
             btnSendMoney.setOnClickListener {
                 startActivity(Intent(requireContext(), ActSendMoney::class.java))
+            }
+
+            btnPurchase.setOnClickListener {
+                startActivity(Intent(requireContext(), ActPurchase::class.java))
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(

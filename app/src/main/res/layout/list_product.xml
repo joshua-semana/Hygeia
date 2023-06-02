@@ -16,14 +16,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:padding="@dimen/elmnt_gap_xl">
+        android:padding="@dimen/elmnt_gap_xl"
+        tools:ignore="ExtraText">
 
         <ImageView
             style="@style/Circle_Lg_50"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/elmnt_gap_md"
             android:clickable="false"
-            android:src="@drawable/ic_machine"
+            android:src="@drawable/ic_product"
             tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
 
         <LinearLayout
@@ -34,7 +35,7 @@
             android:padding="7dp">
 
             <TextView
-                android:id="@+id/lblListMachineName"
+                android:id="@+id/lblListProductNameAndPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="1dp"
@@ -45,7 +46,7 @@
                 tools:ignore="TextContrastCheck" />
 
             <TextView
-                android:id="@+id/lblListMachineLocation"
+                android:id="@+id/lblListProductQuantity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="1dp"
@@ -57,15 +58,58 @@
 
         </LinearLayout>
 
-        <ImageView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/elmnt_gap_md"
-            android:padding="@dimen/elmnt_gap_md"
-            android:src="@drawable/ic_arrow"
-            app:tint="@color/neutral_400"
-            tools:ignore="ContentDescription" />
+            android:backgroundTint="@color/neutral_300"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <ImageButton
+                android:id="@+id/btnListMinus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="2dp"
+                android:src="@drawable/ic_minus"
+                tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/lblListProductCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginHorizontal="12dp"
+            android:fontFamily="@font/lato"
+            android:text="@string/zero"
+            android:textColor="@color/neutral_900"
+            android:textSize="@dimen/text_xl"
+            tools:ignore="TextContrastCheck" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:backgroundTint="@color/neutral_300"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="0dp"
+            app:strokeWidth="0dp">
+
+            <ImageButton
+                android:id="@+id/btnListAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@null"
+                android:padding="2dp"
+                android:src="@drawable/ic_add"
+                tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 
