@@ -50,15 +50,14 @@ class FrgForgotPassword : Fragment() {
         with(bind) {
             //MAIN FUNCTIONS
             btnContinue.setOnClickListener {
+                clearTextError(txtLayoutEmailOrPhoneNumber)
                 if (isInternetConnected(requireContext())) {
                     if (txtEmailOrPhoneNumber.text!!.isNotEmpty()) {
                         validateInput(txtEmailOrPhoneNumber.text?.trim().toString())
                     } else {
-                        clearTextError(txtLayoutEmailOrPhoneNumber)
                         showRequiredTextField(
                             txtEmailOrPhoneNumber to txtLayoutEmailOrPhoneNumber
                         )
-                        dlgStatus(requireContext(), "empty field").show()
                     }
                 } else {
                     dlgStatus(requireContext(), "no internet").show()

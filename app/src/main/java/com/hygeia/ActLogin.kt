@@ -52,8 +52,7 @@ class ActLogin : AppCompatActivity() {
                     if (inputsAreNotEmpty()) {
                         validateInputs(txtEmailOrPhoneNumber.text?.trim().toString(), txtPassword.text.toString())
                     } else {
-                        clearTextError(txtLayoutEmail, txtLayoutPassword)
-                        dlgStatus(this@ActLogin, "empty field").show()
+                        clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
                         showRequiredTextField(
                             txtEmailOrPhoneNumber to txtLayoutEmailOrPhoneNumber,
                             txtPassword to txtLayoutPassword
@@ -81,8 +80,8 @@ class ActLogin : AppCompatActivity() {
             }
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
-                clearTextError(txtLayoutEmail, txtLayoutPassword)
-                clearTextFields(txtEmail,txtPassword)
+                clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
+                clearTextFields(txtEmailOrPhoneNumber,txtPassword)
             }
         }
     }
@@ -98,8 +97,8 @@ class ActLogin : AppCompatActivity() {
         bind.txtLayoutEmailOrPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
     }
-    private fun validateInputs(email: String, password: String) {
-        clearTextError(bind.txtLayoutEmail, bind.txtLayoutPassword)
+    private fun validateInputs(input: String, password: String) {
+        clearTextError(bind.txtLayoutEmailOrPhoneNumber, bind.txtLayoutPassword)
         loading.show()
         with(bind) {
             lifecycleScope.launch(Dispatchers.Main) {

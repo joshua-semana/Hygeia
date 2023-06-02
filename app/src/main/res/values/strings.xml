@@ -128,6 +128,7 @@
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
+    <string name="dlg_body_log_out">Are you sure you want to log out?\nLogging out will end your current session and require you to sign in again.</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
