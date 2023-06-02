@@ -9,7 +9,11 @@
     <item
         android:id="@+id/frgMainQR"
         android:title="@string/nav_transactions"
-        android:icon="@drawable/ic_nav_learn"/>
+        android:icon="@drawable/ic_nav_transactions"/>
+    <item
+        android:id="@+id/frgMainAdminTools"
+        android:icon="@drawable/ic_nav_admin"
+        android:title="@string/nav_admin_tools" />
     <item
         android:id="@+id/frgMainSettings"
         android:icon="@drawable/ic_nav_profile"

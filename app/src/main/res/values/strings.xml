@@ -1,12 +1,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Hygeia</string>
-    <string name="app_name_lower">hygeia</string>
+    <string name="app_name_lower">hygeia! 👋</string>
     <string name="app_version">Copyright © 2023. Hygeia. All rights reserved.</string>
     <string name="app_catchphrase">Your access to your hygiene vendo buddy.</string>
     <!--    Unlock a World of Hygiene Convenience with Hygeia!-->
 
     <!--HEADINGS-->
-    <string name="h1_welcome">Hey! Welcome to</string>
+    <string name="h1_welcome">Hi! Welcome to</string>
     <string name="h1_create_account1">Start building your</string>
     <string name="h1_create_account2">Stay connected and</string>
     <string name="h1_create_account3">Check your account</string>
@@ -22,7 +22,8 @@
     <string name="h1_pin_colored">PIN</string>
     <string name="h1_all_transactions">Transaction History</string>
     <string name="h1_user_info">My information</string>
-    <string name="h1_change_password">Change your account</string>
+    <string name="h1_change_password">Update password</string>
+    <string name="h1_vending_machines">Vending Machines</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
@@ -36,7 +37,7 @@
     <string name="desc_create_account_part1">Kindly provide your personal details — so other users can connect and engage with you.</string>
     <string name="desc_create_account_part2">Please enter your contact details and secure your account — your email and password will serve as your login credentials.</string>
     <string name="desc_create_account_part3">Please take a moment to review your account details before proceeding. We will then send a one-time pin to your number for a quick verification.</string>
-    <string name="desc_forgot_password">Kindly enter the email associated with your account to initiate the password renewal process.  We will then send a one-time pin to your number for a quick verification.</string>
+    <string name="desc_forgot_password">Kindly enter the email or phone number associated with your account to initiate the password renewal process.  We will then send a one-time pin to your number for a quick verification.</string>
     <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number </string>
     <string name="desc_update_password">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="desc_wallet_balance">Wallet Balance</string>
@@ -46,6 +47,7 @@
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
+    <string name="title_email_phone_number">Email or Phone Number</string>
     <string name="title_password">Password</string>
     <string name="title_password_old">Old password</string>
     <string name="title_password_new">New password</string>
@@ -62,6 +64,7 @@
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
     <string name="error_email_format">The email you entered is invalid.</string>
+    <string name="error_email_password_format">The email address or phone number you entered is invalid.</string>
     <string name="error_email_taken">This email is already in use.</string>
     <string name="error_password_incorrect">Incorrect password.</string>
     <string name="error_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
@@ -69,6 +72,7 @@
     <string name="error_old_password_matched">Old password do not match.</string>
     <string name="error_password_criteria">Password does not match the criteria.</string>
     <string name="error_birth_date">Sorry, you must be at least 11 years old to use this application.</string>
+    <string name="error_phone_registered">The phone number you entered is not registered in our system.</string>
     <string name="error_phone_format">The phone number you entered is invalid.</string>
     <string name="error_phone_taken">This phone number is already in use.</string>
     <string name="error_otp_incorrect">The one-time pin you entered is incorrect.</string>
@@ -156,6 +160,7 @@
     <!--BOTTOM MENU NAVIGATION-->
     <string name="nav_home">Home</string>
     <string name="nav_transactions">Transactions</string>
+    <string name="nav_admin_tools">Admin Tools</string>
     <string name="nav_profile">Profile</string>
 
     <!--SPECIFIC ACTIVITIES-->
@@ -212,4 +217,6 @@
     • Updates to Privacy Policy\nWe may update our Privacy Policy from time to time. We will notify you of any material changes by posting the updated Privacy Policy of Hygeia or by other means. Continued use of our services after any modifications constitutes your acceptance of the revised Privacy Policy.
     \n
     </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
