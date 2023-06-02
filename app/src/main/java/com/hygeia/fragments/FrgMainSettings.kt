@@ -39,7 +39,7 @@ class FrgMainSettings : Fragment() {
             }
 
             btnLogOut.setOnClickListener {
-                Utilities.dlgConfirmation(requireContext(), "going back") {
+                Utilities.dlgConfirmation(requireContext(), "log out") {
                     if (it == ButtonType.PRIMARY) {
                         requireActivity().finish()
                     }

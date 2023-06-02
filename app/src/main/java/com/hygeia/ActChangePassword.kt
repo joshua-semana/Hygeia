@@ -22,12 +22,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class ActChangePassword : AppCompatActivity() {
-    private lateinit var bind : ActChangePasswordBinding
+    private lateinit var bind: ActChangePasswordBinding
     private lateinit var auth: FirebaseAuth
 
     private val db = FirebaseFirestore.getInstance()
     private val userRef = db.collection("User")
-    private lateinit var loading : Dialog
+    private lateinit var loading: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,18 +38,20 @@ class ActChangePassword : AppCompatActivity() {
 
         with(bind) {
             btnUpdatePassword.setOnClickListener {
-                if (isInternetConnected(this@ActChangePassword)){
-                    if (inputsAreNotEmpty()){
-                        loading.show()
-                        clearTextError(txtLayoutOldPassword,txtLayoutPassword,txtLayoutConfirmPassword)
+                clearTextError(
+                    txtLayoutOldPassword,
+                    txtLayoutPassword,
+                    txtLayoutConfirmPassword
+                )
+                if (isInternetConnected(this@ActChangePassword)) {
+                    if (inputsAreNotEmpty()) {
+
                         lifecycleScope.launch(Dispatchers.Main) {
-                            if (inputsAreCorrect()){
+                            if (inputsAreCorrect()) {
                                 updatePassword()
                             }
-                            loading.dismiss()
                         }
                     } else {
-                        dlgStatus(this@ActChangePassword,"empty field").show()
                         Utilities.showRequiredTextField(
                             txtOldPassword to txtLayoutOldPassword,
                             txtPassword to txtLayoutPassword,
@@ -57,7 +59,7 @@ class ActChangePassword : AppCompatActivity() {
                         )
                     }
                 } else {
-                    dlgStatus(this@ActChangePassword,"no internet")
+                    dlgStatus(this@ActChangePassword, "no internet")
                 }
             }
             mainLayout.setOnClickListener {
@@ -79,21 +81,36 @@ class ActChangePassword : AppCompatActivity() {
         }
     }
 
-    private fun onBackBtnPressed(){
-        Utilities.dlgConfirmation(this, "going back") {
-            if (it == ButtonType.PRIMARY) {
-                this.finish()
-            }
-        }.show()
+    private fun onBackBtnPressed() {
+        if (inputsAreEmpty()) {
+            this.finish()
+        } else {
+            Utilities.dlgConfirmation(this, "going back") {
+                if (it == ButtonType.PRIMARY) {
+                    this.finish()
+                }
+            }.show()
+        }
     }
+
+    private fun inputsAreEmpty(): Boolean {
+        return when {
+            bind.txtOldPassword.text!!.isNotEmpty() -> false
+            bind.txtPassword.text!!.isNotEmpty() -> false
+            bind.txtConfirmPassword.text!!.isNotEmpty() -> false
+            else -> true
+        }
+    }
+
     private fun inputsAreNotEmpty(): Boolean {
-        return when{
+        return when {
             bind.txtOldPassword.text!!.isEmpty() -> false
             bind.txtPassword.text!!.isEmpty() -> false
             bind.txtConfirmPassword.text!!.isEmpty() -> false
             else -> true
         }
     }
+
     private suspend fun inputsAreCorrect(): Boolean {
         var inputErrorCount = 0
         with(bind) {
@@ -114,9 +131,13 @@ class ActChangePassword : AppCompatActivity() {
         }
         return inputErrorCount == 0
     }
+
     private fun updatePassword() {
         loading.show()
-        auth.signInWithEmailAndPassword(UserManager.email.toString(), bind.txtOldPassword.text.toString()).addOnSuccessListener {
+        auth.signInWithEmailAndPassword(
+            UserManager.email.toString(),
+            bind.txtOldPassword.text.toString()
+        ).addOnSuccessListener {
             it.user!!.updatePassword(bind.txtPassword.text.toString())
             userRef.document(it.user!!.uid)
                 .update("password", bind.txtPassword.text.toString())

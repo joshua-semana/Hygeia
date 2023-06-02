@@ -220,6 +220,12 @@ object Utilities {
             btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
         }
 
+        if (content == "log out") {
+            lblDlgConfirmBody.text = context.getString(R.string.dlg_body_log_out)
+            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, log out"
+            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+        }
+
         btnDlgConfirmPrimary.setOnClickListener {
             onButtonClicked(ButtonType.PRIMARY)
             dialog.dismiss()
