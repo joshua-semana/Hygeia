@@ -28,17 +28,10 @@ class FrgMainHome : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
-
         val (language, greeting) = greetings.entries.random()
-        val fullname = "${UserManager.firstname} ${UserManager.lastname}"
-        val balance = formatNumber(UserManager.balance)
-
         with(bind) {
-            //POPULATE
+            populateMainHome()
             lblGreetings.text = greeting
-            lblUserFullName.text = fullname
-            lblAmountBalance.text = balance
-
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
@@ -63,6 +56,14 @@ class FrgMainHome : Fragment() {
 
             return root
         }
+    }
+    
+    private fun populateMainHome(){
+        val fullname = "${UserManager.firstname} ${UserManager.lastname}"
+        val balance = formatNumber(UserManager.balance)
+
+        bind.lblUserFullName.text = fullname
+        bind.lblAmountBalance.text = balance
     }
 
     private fun onBackPressed() {
