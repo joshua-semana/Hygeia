@@ -69,6 +69,7 @@
     <string name="error_password_incorrect">Incorrect password.</string>
     <string name="error_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="error_password_matched">Passwords do not match.</string>
+    <string name="error_old_password_matched">Old password do not match.</string>
     <string name="error_password_criteria">Password does not match the criteria.</string>
     <string name="error_birth_date">Sorry, you must be at least 11 years old to use this application.</string>
     <string name="error_phone_registered">The phone number you entered is not registered in our system.</string>

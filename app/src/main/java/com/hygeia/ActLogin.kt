@@ -19,10 +19,8 @@ import com.hygeia.objects.Utilities.emailPattern
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
-import com.hygeia.objects.Utilities.dlgError
-import com.hygeia.objects.Utilities.dlgInformation
-import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.phoneNumberPattern
+import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -54,7 +52,7 @@ class ActLogin : AppCompatActivity() {
                     if (inputsAreNotEmpty()) {
                         validateInputs(txtEmailOrPhoneNumber.text?.trim().toString(), txtPassword.text.toString())
                     } else {
-                        clearTextErrors()
+                        clearTextError(txtLayoutEmail, txtLayoutPassword)
                         dlgStatus(this@ActLogin, "empty field").show()
                         showRequiredTextField(
                             txtEmailOrPhoneNumber to txtLayoutEmailOrPhoneNumber,
@@ -83,11 +81,11 @@ class ActLogin : AppCompatActivity() {
             }
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
-                clearTextErrors()
+                clearTextError(txtLayoutEmail, txtLayoutPassword)
+                clearTextFields(txtEmail,txtPassword)
             }
         }
     }
-
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtEmailOrPhoneNumber.text!!.isEmpty() -> false
@@ -100,9 +98,8 @@ class ActLogin : AppCompatActivity() {
         bind.txtLayoutEmailOrPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
     }
-
-    private fun validateInputs(input: String, password: String) {
-        clearTextErrors()
+    private fun validateInputs(email: String, password: String) {
+        clearTextError(bind.txtLayoutEmail, bind.txtLayoutPassword)
         loading.show()
         with(bind) {
             lifecycleScope.launch(Dispatchers.Main) {

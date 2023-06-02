@@ -8,20 +8,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.addCallback
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
-import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.objects.Utilities.passwordPattern
 import com.hygeia.databinding.FrgResetPasswordBinding
+import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.showRequiredTextField
 
 class FrgResetPassword : Fragment() {
 
@@ -43,10 +43,14 @@ class FrgResetPassword : Fragment() {
             btnUpdatePassword.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
                     if (inputsAreNotEmpty()) {
-                        clearTextError()
+                        clearTextError(txtLayoutPassword,txtLayoutConfirmPassword)
                         validateInputs()
                     } else {
                         dlgStatus(requireContext(), "empty field").show()
+                        showRequiredTextField(
+                            txtPassword to txtLayoutPassword,
+                            txtConfirmPassword to txtLayoutConfirmPassword
+                        )
                     }
                 } else {
                     dlgStatus(requireContext(), "no internet").show()
@@ -85,10 +89,6 @@ class FrgResetPassword : Fragment() {
             bind.txtConfirmPassword.text!!.isEmpty() -> false
             else -> true
         }
-    }
-    private fun clearTextError() {
-        bind.txtLayoutPassword.isErrorEnabled = false
-        bind.txtLayoutConfirmPassword.isErrorEnabled = false
     }
     private fun validateInputs() {
         with(bind) {

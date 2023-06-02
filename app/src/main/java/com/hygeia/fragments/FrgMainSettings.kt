@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.hygeia.ActChangePassword
 import com.hygeia.ActUserInfo
+import com.hygeia.classes.ButtonType
 import com.hygeia.databinding.ActUserInfoBinding
 import com.hygeia.databinding.FrgMainSettingsBinding
 import com.hygeia.objects.UserManager
+import com.hygeia.objects.Utilities
 
 class FrgMainSettings : Fragment() {
     private lateinit var bind: FrgMainSettingsBinding
@@ -34,6 +36,14 @@ class FrgMainSettings : Fragment() {
 
             btnChangePassword.setOnClickListener {
                 startActivity(Intent(requireContext(), ActChangePassword::class.java))
+            }
+
+            btnLogOut.setOnClickListener {
+                Utilities.dlgConfirmation(requireContext(), "going back") {
+                    if (it == ButtonType.PRIMARY) {
+                        requireActivity().finish()
+                    }
+                }.show()
             }
 
             return root

@@ -2,10 +2,28 @@ package com.hygeia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.hygeia.databinding.ActUserInfoBinding
+import com.hygeia.objects.UserManager
 
 class ActUserInfo : AppCompatActivity() {
+    private lateinit var bind : ActUserInfoBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.act_user_info)
+        bind = ActUserInfoBinding.inflate(layoutInflater)
+        setContentView(bind.root)
+
+        with(bind){
+            val fullname = "${UserManager.firstname.toString()} ${UserManager.lastname.toString()}"
+            txtFullName.setText(fullname)
+            txtGender.setText(UserManager.gender.toString())
+            txtBirthDate.setText(UserManager.birthdate.toString())
+            txtEmail.setText(UserManager.email.toString())
+            txtPhoneNumber.setText(UserManager.phoneNumber.toString())
+
+
+            btnBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
+            }
+        }
     }
 }
