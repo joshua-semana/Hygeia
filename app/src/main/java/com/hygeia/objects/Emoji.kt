@@ -8,4 +8,5 @@ object Emoji {
     const val Trivia = "🤯"
     const val Confirmation = "🤔"
     const val Lock = "🔒"
+    const val Edit = "⚙️"
 }

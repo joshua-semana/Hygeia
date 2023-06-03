@@ -10,6 +10,7 @@ import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.DataProductAdmin
 import com.hygeia.databinding.ActMachineBinding
 import com.hygeia.objects.MachineManager
+import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.Utilities
 
 class ActMachine : AppCompatActivity() {
@@ -27,13 +28,20 @@ class ActMachine : AppCompatActivity() {
         loading = Utilities.dlgLoading(this@ActMachine)
         setContentView(bind.root)
 
-        //POPULATE
         with(bind) {
+            //POPULATE
             lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
             lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+
+            //MAIN FUNCTIONS
+            vendoDetails.setOnClickListener {
+                dlgEditVendoLocation(this@ActMachine).show()
+            }
         }
 
         getListOfProducts()
+
+
     }
 
     private fun getListOfProducts() {
