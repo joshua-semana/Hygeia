@@ -1,6 +1,7 @@
 package com.hygeia.fragments
 
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,9 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.ActMachine
+import com.hygeia.ActPurchase
 import com.hygeia.adapters.ArrAdpMachines
 import com.hygeia.classes.DataMachines
 import com.hygeia.databinding.FrgAdminToolsBinding
+import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
@@ -66,7 +70,12 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         }
     }
 
-    override fun onMachineItemClick(name: String) {
-        dlgError(requireContext(), name).show()
+    override fun onMachineItemClick(machineID: String) {
+        loading.show()
+        machinesRef.document(machineID.trim()).get().addOnSuccessListener { data ->
+            MachineManager.setMachineInformation(data)
+            loading.dismiss()
+            startActivity(Intent(requireContext(), ActMachine::class.java))
+        }
     }
 }

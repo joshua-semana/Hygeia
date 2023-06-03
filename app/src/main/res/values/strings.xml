@@ -25,12 +25,14 @@
     <string name="h1_change_password">Update password</string>
     <string name="h1_vending_machines">Vending Machines</string>
     <string name="h1_vending_name">Hygeia Vendo</string>
+    <string name="h1_vendo_details">Vendo Details</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
     <string name="h6_actions">Actions</string>
     <string name="h6_latest_transactions">Latest Transactions</string>
     <string name="h6_available_products">Available Products</string>
+    <string name="h6_products">Products</string>
 
     <string name="or">Or</string>
 

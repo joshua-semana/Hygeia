@@ -33,11 +33,11 @@ class ArrAdpMachines(
         holder.name.text = "Vendo #" + listMachines[position].Name
         holder.location.text = listMachines[position].Location
         holder.itemView.setOnClickListener {
-            clickListener.onMachineItemClick(listMachines[position].Name!!)
+            clickListener.onMachineItemClick(listMachines[position].MachineID!!)
         }
     }
 
     interface OnMachineItemClickListener {
-        fun onMachineItemClick(name: String)
+        fun onMachineItemClick(machineID: String)
     }
 }
