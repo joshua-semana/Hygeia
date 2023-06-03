@@ -1,5 +1,6 @@
 package com.hygeia
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +13,6 @@ import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.formatNumber
-import java.text.DecimalFormat
 
 class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListener {
     private lateinit var bind : ActPurchaseBinding
@@ -48,6 +48,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getListOfProducts() {
         loading.show()
         bind.listViewProducts.layoutManager = LinearLayoutManager(this@ActPurchase)
@@ -56,8 +57,8 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         machinesRef.document(machineID).get().apply {
             addOnSuccessListener { parent ->
 
-                val vendoName = "Vendo #${parent.get("Name").toString()}"
-                bind.lblDescVendoID.text = vendoName
+                bind.lblDescVendoID.text = "Vendo No. ${parent.get("Name").toString()}"
+                bind.lblDescVendoLocation.text = "Located at ${parent.get("Location").toString()}"
 
                 val productsRef = parent.reference.collection("Products")
 
@@ -88,8 +89,6 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
             }
         }
     }
-
-
     override fun onAddOrMinusClick(productPrice: Double) {
         grandTotal = productPrice
         vat = productPrice * 0.12
