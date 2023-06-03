@@ -85,6 +85,7 @@
     <string name="error_phone_registered">The phone number you entered is not registered in our system.</string>
     <string name="error_phone_format">The phone number you entered is invalid.</string>
     <string name="error_phone_taken">This phone number is already in use.</string>
+    <string name="error_phone_user_manager">This phone number is your phone number.</string>
     <string name="error_otp_incorrect">The one-time pin you entered is incorrect.</string>
 
     <!--HELPER DESCRIPTION-->

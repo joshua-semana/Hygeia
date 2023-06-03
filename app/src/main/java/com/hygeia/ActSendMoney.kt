@@ -9,43 +9,75 @@ import com.hygeia.objects.UserManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.classes.ButtonType
 import com.hygeia.databinding.ActSendMoneyBinding
+import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.phoneNumberPattern
+import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.text.DecimalFormat
+import java.util.Date
 
+import java.text.SimpleDateFormat
+import java.util.*
 class ActSendMoney : AppCompatActivity() {
     private lateinit var bind: ActSendMoneyBinding
     private lateinit var loading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var userRef = db.collection("User")
+    private var transactionRef = db.collection("Transactions")
 
     private val balance = formatNumber(UserManager.balance)
+    private var phoneNumber = ""
 
+   private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+   private val usedNumbers = mutableSetOf<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActSendMoneyBinding.inflate(layoutInflater)
+        loading = Utilities.dlgLoading(this@ActSendMoney)
         setContentView(bind.root)
 
         with(bind) {
             textWatcher(txtAmount)
             bind.txtLayoutAmount.helperText = "You have $balance in your wallet."
             btnContinue.setOnClickListener {
+                clearTextError(txtLayoutPhoneNumber, txtLayoutAmount)
                 if (isInternetConnected(this@ActSendMoney)) {
-
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        val amountText = txtAmount.text.toString()
-                        val amount = amountText.toDoubleOrNull()
-                        if (amount != null) {
-                            sendMoney(amount)
+                    if(inputsAreNotEmpty()){
+                        loading.show()
+                        phoneNumber = (bind.txtLayoutPhoneNumber.prefixText.toString() + bind.txtPhoneNumber.text.toString()).trim()
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            val amountText = txtAmount.text.toString()
+                            val amount = amountText.toDoubleOrNull()
+                            if (amount != null) {
+                                if (inputsAreCorrect(amount)){
+                                    dlgConfirmation(this@ActSendMoney, "send money"){
+                                        if(it == ButtonType.PRIMARY){
+                                            lifecycleScope.launch(Dispatchers.Main){
+                                                sendMoney(amount)
+                                                finish()
+                                            }
+                                        }
+                                    }.show()
+                                }
+                            }
+                            loading.dismiss()
                         }
+                    } else {
+                        showRequiredTextField(
+                            txtPhoneNumber to txtLayoutPhoneNumber,
+                            txtAmount to txtLayoutAmount
+                        )
                     }
                 } else {
                     dlgStatus(this@ActSendMoney, "no internet").show()
@@ -64,6 +96,34 @@ class ActSendMoney : AppCompatActivity() {
             }
         }
     }
+    private suspend fun inputsAreCorrect(amount: Double): Boolean {
+        var inputErrorCount = 0
+        with(bind){
+            if (phoneNumber.matches(phoneNumberPattern)) {
+                val phoneNumberExists = getPhoneNumberExistenceOf(phoneNumber)
+                if (!phoneNumberExists) {
+                    inputErrorCount++
+                    txtLayoutPhoneNumber.error = getString(R.string.error_phone_registered)
+                }
+                if (phoneNumber == UserManager.phoneNumber){
+                    inputErrorCount++
+                    txtLayoutPhoneNumber.error = getString(R.string.error_phone_user_manager)
+                }
+            } else {
+                inputErrorCount++
+                txtLayoutPhoneNumber.error = getString(R.string.error_phone_format)
+            }
+            if (amount >= UserManager.balance.toString().toDouble()){
+                inputErrorCount++
+                bind.txtLayoutAmount.error = "You only have $balance in your wallet."
+            }
+        }
+        return inputErrorCount == 0
+    }
+    private suspend fun getPhoneNumberExistenceOf(phoneNumber: String): Boolean {
+        val query = userRef.whereEqualTo("phoneNumber", phoneNumber).get().await()
+        return !query.isEmpty
+    }
 
     private suspend fun sendMoney(amount: Double) {
         val senderQuery = userRef.whereEqualTo("phoneNumber", UserManager.phoneNumber).get().await()
@@ -81,21 +141,70 @@ class ActSendMoney : AppCompatActivity() {
 
             userRef.document(getSenderId).update("balance", newSenderBalance)
                 .addOnSuccessListener {
+                    userRef.document(getReceiverId).update("balance", newReceiverBalance)
                     userRef.document(UserManager.uid!!).get().addOnSuccessListener { data ->
                         UserManager.updateUserBalance(data)
                     }
+                    transaction()
                 }
-            userRef.document(getReceiverId).update("balance", newReceiverBalance)
+        }
+    }
+    private fun transaction(){
+        val senderData = hashMapOf(
+            "amount" to bind.txtAmount.text.toString().toDouble(),
+            "dateCreated" to Timestamp(Date()),
+            "phoneNumber" to phoneNumber,
+            "referenceNumber" to getReceiptId(),
+            "type" to "Send Money",
+            "userReference" to UserManager.uid,
+        )
 
+        transactionRef.document().set(senderData)
+            .addOnSuccessListener {
+            val receiverData = hashMapOf(
+                "amount" to bind.txtAmount.text.toString().toDouble(),
+                "dateCreated" to Timestamp(Date()),
+                "phoneNumber" to UserManager.phoneNumber,
+                "referenceNumber" to senderData["referenceNumber"],
+                "type" to "Receive Money",
+                "userReference" to "",
+            )
+            getReceiverId { receiverId ->
+                receiverData["userReference"] = receiverId
+                transactionRef.document().set(receiverData)
+            }
         }
     }
 
-    //    private fun inputsAreNotEmpty() : Boolean{
-//        return when{
-//            bind.txtPhoneNumber.text!!.isEmpty() -> false
-//
-//        }
-//    }
+    private fun getReceiverId(callback: (String) -> Unit){
+        userRef.whereEqualTo("phoneNumber", phoneNumber).get().addOnSuccessListener{
+            val getReceiverId = it.documents[0].id
+            callback(getReceiverId)
+        }
+    }
+    private fun inputsAreNotEmpty() : Boolean{
+        return when{
+            bind.txtPhoneNumber.text!!.isEmpty() -> false
+            bind.txtAmount.text!!.isEmpty() -> false
+            else -> true
+        }
+    }
+   private fun getRandomFourDigits(): Int {
+        val random = Random()
+        var randomNum = random.nextInt(10000)
+        while (usedNumbers.contains(randomNum)) {
+            randomNum = random.nextInt(10000)
+        }
+        usedNumbers.add(randomNum)
+        return randomNum
+    }
+
+   private fun getReceiptId(): String {
+        val currentDate = dateFormat.format(Date())
+        val randomFourDigits = getRandomFourDigits()
+
+        return "$currentDate${String.format("%04d", randomFourDigits)}"
+    }
     private fun textWatcher(textField: EditText) {
         textField.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -110,7 +219,6 @@ class ActSendMoney : AppCompatActivity() {
                     clearTextError(bind.txtLayoutAmount)
                 }
             }
-
             override fun afterTextChanged(s: Editable?) {}
         })
     }

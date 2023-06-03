@@ -23,7 +23,6 @@ import com.hygeia.objects.Utilities.formatNumber
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.text.DecimalFormat
 
 class FrgMainHome : Fragment() {
     private lateinit var bind: FrgMainHomeBinding
@@ -40,7 +39,6 @@ class FrgMainHome : Fragment() {
         loading = Utilities.dlgLoading(requireContext())
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
-
         with(bind) {
             populateMainHome()
             lblGreetings.text = greeting
