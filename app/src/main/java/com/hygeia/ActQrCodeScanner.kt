@@ -11,11 +11,17 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.msg
 
 class ActQrCodeScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
+
+    private var db = FirebaseFirestore.getInstance()
+    private var machineRef = db.collection("Machines")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +42,27 @@ class ActQrCodeScanner : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
             runOnUiThread {
-                startActivity(Intent(applicationContext, ActPurchase::class.java))
-                Toast.makeText(this, "Scan result: ${it.text}", Toast.LENGTH_LONG).show()
+                machineRef.document(it.text).get().addOnSuccessListener { data ->
+                    if (data.getString("Status") == "Online"){
+                        if (data.getLong("User Connected")!! < 2){
+                            MachineManager.machineId = it.text.toString().trim()
+                            startActivity(Intent(applicationContext, ActPurchase::class.java))
+                            finish()
+                        }else {
+                            dlgStatus(this,"machine offline or in use").apply {
+                                setOnDismissListener {
+                                    finish()
+                                }
+                            }.show()
+                        }
+                    } else {
+                        dlgStatus(this,"machine offline or in use").apply {
+                            setOnDismissListener {
+                                finish()
+                            }
+                        }.show()
+                    }
+                }
             }
         }
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS

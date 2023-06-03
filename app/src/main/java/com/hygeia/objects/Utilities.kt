@@ -148,6 +148,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
         }
 
+        if (content == "machine offline or in use") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_machine_offline_or_in_use)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }

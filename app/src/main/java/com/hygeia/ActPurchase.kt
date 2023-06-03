@@ -9,6 +9,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
+import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
@@ -26,7 +27,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     private var vat = 0.00
     private var grandTotal = 0.00
 
-    private val machineID = "GP1wZD9P9NVZfGjS1gJp"
+    private val machineID = MachineManager.machineId
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +55,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         bind.listViewProducts.layoutManager = LinearLayoutManager(this@ActPurchase)
         listOfProducts = arrayListOf()
 
-        machinesRef.document(machineID).get().apply {
+        machinesRef.document(machineID.toString()).get().apply {
             addOnSuccessListener { parent ->
 
                 bind.lblDescVendoID.text = "Vendo No. ${parent.get("Name").toString()}"

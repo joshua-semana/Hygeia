@@ -20,6 +20,8 @@ object MachineManager {
     var name: String? = null
     var status: String? = null
     var userConnected: String? = null
+    var machineId : String? = null
+
 
     fun setMachineInformation(machineInfo: DocumentSnapshot) {
         with(machineInfo) {
@@ -28,6 +30,7 @@ object MachineManager {
             name = get("Name") as String?
             status = get("Status") as String?
             userConnected = get("User Connected") as String?
+            machineId = get("MachineID") as String?
         }
     }
 
