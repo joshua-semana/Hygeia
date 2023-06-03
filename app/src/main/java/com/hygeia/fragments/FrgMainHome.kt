@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.ActPurchase
+import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
 import com.hygeia.classes.ButtonType
 import com.hygeia.objects.Utilities.dlgInformation
@@ -60,7 +61,7 @@ class FrgMainHome : Fragment() {
             }
 
             btnPurchase.setOnClickListener {
-                startActivity(Intent(requireContext(), ActPurchase::class.java))
+                startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(

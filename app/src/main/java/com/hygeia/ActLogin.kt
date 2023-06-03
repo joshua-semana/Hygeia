@@ -100,7 +100,6 @@ class ActLogin : AppCompatActivity() {
             else -> true
         }
     }
-
     private fun clearTextErrors() {
         bind.txtLayoutEmailOrPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
