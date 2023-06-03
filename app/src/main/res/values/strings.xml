@@ -70,6 +70,10 @@
     <string name="title_birth_date">Birth date</string>
     <string name="title_phone_number">Phone number</string>
     <string name="title_amount">Amount</string>
+    <string name="title_location">Location</string>
+    <string name="title_product_name">Product Name</string>
+    <string name="title_product_price">Product Price</string>
+    <string name="title_product_quantity">Product Quantity</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -113,6 +117,7 @@
     <string name="btn_save">Save</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_back">Back</string>
+    <string name="btn_update">Update</string>
 
     <string name="btn_okay">Okay</string>
     <string name="btn_got_it">Got it</string>
@@ -141,9 +146,15 @@
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
     <string name="dlg_body_log_out">Are you sure you want to log out?\nLogging out will end your current session and require you to sign in again.</string>
+    <string name="dlg_send_money">Are you sure you want to send this amount to the recipient\'s account?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
+
+    <string name="dlg_title_vendo_detail">Edit Vendo Detail</string>
+    <string name="dlg_body_vendo_detail">You can update the location of this Vendo.\nVendo No.</string>
+    <string name="dlg_title_product_detail">Edit Product Details</string>
+    <string name="dlg_body_product_detail">Here are all the information you can update for this product.</string>
 
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
@@ -186,7 +197,6 @@
     <string-array name="gender">
         <item>Male</item>
         <item>Female</item>
-        <item>Prefer not to say</item>
     </string-array>
 
     <!--LIST TRANSACTION-->
@@ -196,11 +206,6 @@
     <string name="placeholder">default</string>
     <string name="zero">0</string>
     <string name="title_activity_act_user_info">ActUserInfo</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
     <string name="terms_and_conditions"><b>Terms and Conditions:</b>\n\n
     • Acceptance of Terms\nBy accessing and using Hygeia, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, please refrain from using our services.
@@ -231,6 +236,4 @@
     • Updates to Privacy Policy\nWe may update our Privacy Policy from time to time. We will notify you of any material changes by posting the updated Privacy Policy of Hygeia or by other means. Continued use of our services after any modifications constitutes your acceptance of the revised Privacy Policy.
     \n
     </string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -29,6 +29,8 @@
         android:layout_marginTop="@dimen/elmnt_gap_lg"
         android:layout_marginEnd="@dimen/mx"
         android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         app:cardCornerRadius="@dimen/radius_md"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -69,7 +71,6 @@
                 tools:ignore="VisualLintLongText" />
 
             <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardBtnEditVendoDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -79,7 +80,8 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:strokeWidth="0dp">
+                app:strokeWidth="0dp"
+                tools:ignore="DuplicateClickableBoundsCheck,TouchTargetSizeCheck">
 
                 <ImageButton
                     android:layout_width="wrap_content"
