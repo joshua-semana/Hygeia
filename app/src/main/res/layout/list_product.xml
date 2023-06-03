@@ -20,6 +20,7 @@
         tools:ignore="ExtraText">
 
         <ImageView
+            android:id="@+id/imgListProduct"
             style="@style/Circle_Lg_50"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/elmnt_gap_md"

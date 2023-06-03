@@ -1,5 +1,6 @@
 package com.hygeia
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +37,7 @@ class ActLogin : AppCompatActivity() {
 
     private var emailAddress = ""
     private var phoneNumber = ""
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         FirebaseApp.initializeApp(this)
@@ -61,6 +63,12 @@ class ActLogin : AppCompatActivity() {
                 } else {
                     dlgStatus(this@ActLogin, "no internet").show()
                 }
+            }
+
+            btnAutoLogin.setOnClickListener {
+                txtEmailOrPhoneNumber.setText("joshuadrummer14@gmail.com")
+                txtPassword.setText("Admin1!?")
+                btnLogin.performClick()
             }
 
             //ELEMENT BEHAVIOR

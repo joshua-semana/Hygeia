@@ -1,13 +1,15 @@
 package com.hygeia.fragments
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.view.KeyEvent
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.ActPurchase
 import com.hygeia.ActSendMoney
 import com.hygeia.classes.ButtonType
@@ -17,24 +19,41 @@ import com.hygeia.databinding.FrgMainHomeBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
+import com.hygeia.objects.Utilities.formatNumber
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.DecimalFormat
 
 class FrgMainHome : Fragment() {
     private lateinit var bind: FrgMainHomeBinding
+    private lateinit var loading: Dialog
+
+    private var db = FirebaseFirestore.getInstance()
+    private var userRef = db.collection("User")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
+        loading = Utilities.dlgLoading(requireContext())
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
+
         with(bind) {
             populateMainHome()
             lblGreetings.text = greeting
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
+            }
+
+            cardWallet.setOnClickListener {
+                loading.show()
+                lifecycleScope.launch(Dispatchers.Main) {
+                    getWalletBalance()
+                }
             }
 
             //NAVIGATION
@@ -57,8 +76,15 @@ class FrgMainHome : Fragment() {
             return root
         }
     }
-    
-    private fun populateMainHome(){
+
+    private suspend fun getWalletBalance() {
+        val query = userRef.document(UserManager.uid!!).get().await()
+        val balance = formatNumber(query.get("balance"))
+        bind.lblAmountBalance.text = balance
+        loading.dismiss()
+    }
+
+    private fun populateMainHome() {
         val fullname = "${UserManager.firstname} ${UserManager.lastname}"
         val balance = formatNumber(UserManager.balance)
 
@@ -72,15 +98,5 @@ class FrgMainHome : Fragment() {
                 requireActivity().finish()
             }
         }.show()
-    }
-
-    private fun formatNumber(balance: Any?): String {
-        return if (balance.toString() == "0") {
-            DecimalFormat("₱ 0.00").format(balance)
-        } else if (balance.toString().contains(".")) {
-            DecimalFormat("₱ #,###.##").format(balance)
-        } else {
-            DecimalFormat("₱ #,###.00").format(balance)
-        }
     }
 }

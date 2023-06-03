@@ -24,7 +24,7 @@
     <TextView
         android:id="@+id/lblDescVendoID"
         style="@style/Text_Description"
-        android:text="@string/placeholder"
+        android:text="@string/desc_vendo_num"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingVendoName"
