@@ -15,6 +15,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
+import java.text.DecimalFormat
 
 object Utilities {
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
@@ -34,6 +35,13 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
+    fun formatNumber(balance: Any?): String {
+        return when (balance) {
+            0 -> "₱0.00"
+            else -> DecimalFormat("₱#,##0.00").format(balance)
+        }
+    }
+
     fun clearTextFields(vararg textFields: EditText) {
         for (textField in textFields){
             textField.text.clear()

@@ -5,22 +5,26 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FirebaseFirestore
-import com.hygeia.adapters.ArrAdpMachines
 import com.hygeia.adapters.ArrAdpProducts
-import com.hygeia.classes.DataMachines
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
-import com.hygeia.objects.Utilities
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
+import com.hygeia.objects.Utilities.formatNumber
+import java.text.DecimalFormat
 
-class ActPurchase : AppCompatActivity() {
+class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListener {
     private lateinit var bind : ActPurchaseBinding
     private lateinit var listOfProducts: ArrayList<DataProducts>
     private lateinit var loading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
+
+    private var subTotal = 0.00
+    private var vat = 0.00
+    private var grandTotal = 0.00
 
     private val machineID = "GP1wZD9P9NVZfGjS1gJp"
 
@@ -29,7 +33,19 @@ class ActPurchase : AppCompatActivity() {
         bind = ActPurchaseBinding.inflate(layoutInflater)
         loading = dlgLoading(this@ActPurchase)
         setContentView(bind.root)
+
+        //POPULATE
         getListOfProducts()
+        updatePurchaseBreakdown()
+    }
+
+    private fun updatePurchaseBreakdown() {
+        with(bind) {
+            lblWalletBalanceNumber.text = formatNumber(UserManager.balance)
+            lblSubTotalNumber.text = formatNumber(subTotal)
+            lblTaxNumber.text = formatNumber(vat)
+            lblGrandTotalNumber.text = formatNumber(grandTotal)
+        }
     }
 
     private fun getListOfProducts() {
@@ -40,8 +56,8 @@ class ActPurchase : AppCompatActivity() {
         machinesRef.document(machineID).get().apply {
             addOnSuccessListener { parent ->
 
-                val vendoRef = "Vendo #${parent.get("Name").toString()}"
-                bind.lblDescVendoID.text = vendoRef
+                val vendoName = "Vendo #${parent.get("Name").toString()}"
+                bind.lblDescVendoID.text = vendoName
 
                 val productsRef = parent.reference.collection("Products")
 
@@ -61,7 +77,7 @@ class ActPurchase : AppCompatActivity() {
 
                             listOfProducts.add(product)
                         }
-                        bind.listViewProducts.adapter = ArrAdpProducts(listOfProducts)
+                        bind.listViewProducts.adapter = ArrAdpProducts(listOfProducts, this@ActPurchase)
                         loading.dismiss()
                     }
                 }
@@ -71,5 +87,13 @@ class ActPurchase : AppCompatActivity() {
                 loading.dismiss()
             }
         }
+    }
+
+
+    override fun onAddOrMinusClick(productPrice: Double) {
+        grandTotal = productPrice
+        vat = productPrice * 0.12
+        subTotal = grandTotal - vat
+        updatePurchaseBreakdown()
     }
 }

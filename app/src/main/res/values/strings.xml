@@ -51,6 +51,7 @@
     <string name="desc_sub_total">Sub Total</string>
     <string name="desc_vat">VAT</string>
     <string name="desc_grand_total">Grand Total</string>
+    <string name="desc_vendo_num">Vendo #</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -89,6 +90,7 @@
 
     <!--BUTTONS-->
     <string name="btn_login">Login</string>
+    <string name="btn_auto_login">Auto Login</string>
     <string name="btn_create_account">Create an account</string>
     <string name="btn_forgot_password">Forgot password?</string>
     <string name="btn_continue">Continue</string>

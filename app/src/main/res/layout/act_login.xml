@@ -81,6 +81,17 @@
         tools:ignore="VisualLintButtonSize" />
 
     <Button
+        android:id="@+id/btnAutoLogin"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
+        android:layout_marginBottom="@dimen/btn_stack_mb"
+        android:text="@string/btn_auto_login"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+    <Button
         android:id="@+id/btnLogin"
         style="@style/Btn_Primary"
         android:layout_width="match_parent"

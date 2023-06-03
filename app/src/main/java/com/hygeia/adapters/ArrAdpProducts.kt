@@ -7,12 +7,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.hygeia.ActPurchase
 import com.hygeia.R
 import com.hygeia.classes.DataProducts
-import java.text.DecimalFormat
+import com.hygeia.objects.Utilities.formatNumber
 
 class ArrAdpProducts(
-    private val listProducts: ArrayList<DataProducts>) : RecyclerView.Adapter<ArrAdpProducts.ViewHolder>() {
+    private val listProducts: ArrayList<DataProducts>,
+    private val clickListener: ActPurchase
+    ) : RecyclerView.Adapter<ArrAdpProducts.ViewHolder>() {
+
+    private var totalPrice: Double = 0.00
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameAndPrice : TextView = itemView.findViewById(R.id.lblListProductNameAndPrice)
         val quantity : TextView = itemView.findViewById(R.id.lblListProductQuantity)
@@ -27,31 +33,56 @@ class ArrAdpProducts(
     }
 
     override fun getItemCount(): Int {
-        return listProducts.size
+        return listProducts.count { it.Quantity!!.toDouble() > 0 }
     }
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        with(holder) {
-            with(listProducts[position]) {
-                nameAndPrice.text = "$Name (₱$Price.00)"
-                quantity.text = "$Quantity items available"
-                count.text = "$Count"
+        val product = getNonZeroQuantityProduct(position)
+        if (product != null) {
+            with(holder) {
+                with(product) {
+                    nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
+                    quantity.text = "$Quantity items available"
+                    count.text = "$Count"
 
-                btnAdd.setOnClickListener {
-                    if (Count < Quantity!!.toInt()) {
-                        Count++
-                        count.text = "$Count"
+                    btnAdd.setOnClickListener {
+                        if (Count < Quantity!!.toInt()) {
+                            Count++
+                            count.text = "$Count"
+                            totalPrice += Price!!.toDouble()
+                        }
+                        clickListener.onAddOrMinusClick(totalPrice)
                     }
-                }
 
-                btnMinus.setOnClickListener {
-                    if (Count != 0) {
-                        Count--
-                        count.text = "$Count"
+                    btnMinus.setOnClickListener {
+                        if (Count != 0) {
+                            Count--
+                            count.text = "$Count"
+                            totalPrice -= Price!!.toDouble()
+                        }
+                        clickListener.onAddOrMinusClick(totalPrice)
                     }
                 }
             }
         }
     }
+
+    private fun getNonZeroQuantityProduct(position: Int): DataProducts? {
+        var count = 0
+        for (product in listProducts) {
+            if (product.Quantity!!.toDouble() > 0) {
+                if (count == position) {
+                    return product
+                }
+                count++
+            }
+        }
+        return null
+    }
+
+    interface OnProductItemClickListener {
+        fun onAddOrMinusClick(productPrice: Double)
+    }
+
 }

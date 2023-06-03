@@ -1,8 +1,13 @@
 package com.hygeia.objects
 
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 
 object UserManager {
+
+    private var userRef = FirebaseFirestore.getInstance().collection("User")
+
     var uid: String? = null
     var balance: Any? = null
     var birthdate: String? = null
@@ -33,4 +38,9 @@ object UserManager {
     fun updateUserBalance(number : DocumentSnapshot){
         balance = number.get("balance")
     }
+//
+//    suspend fun getWalletBalance() {
+//        val query = userRef.document(uid!!).get().await()
+//        balance = query.get("balance")
+//    }
 }
