@@ -28,6 +28,7 @@ import java.util.Date
 
 import java.text.SimpleDateFormat
 import java.util.*
+
 class ActSendMoney : AppCompatActivity() {
     private lateinit var bind: ActSendMoneyBinding
     private lateinit var loading: Dialog
@@ -39,8 +40,8 @@ class ActSendMoney : AppCompatActivity() {
     private val balance = formatNumber(UserManager.balance)
     private var phoneNumber = ""
 
-   private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
-   private val usedNumbers = mutableSetOf<Int>()
+    private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
+    private val usedNumbers = mutableSetOf<Int>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActSendMoneyBinding.inflate(layoutInflater)
@@ -53,19 +54,21 @@ class ActSendMoney : AppCompatActivity() {
             btnContinue.setOnClickListener {
                 clearTextError(txtLayoutPhoneNumber, txtLayoutAmount)
                 if (isInternetConnected(this@ActSendMoney)) {
-                    if(inputsAreNotEmpty()){
+                    if (inputsAreNotEmpty()) {
                         loading.show()
-                        phoneNumber = (bind.txtLayoutPhoneNumber.prefixText.toString() + bind.txtPhoneNumber.text.toString()).trim()
+                        phoneNumber =
+                            (bind.txtLayoutPhoneNumber.prefixText.toString() + bind.txtPhoneNumber.text.toString()).trim()
                         lifecycleScope.launch(Dispatchers.Main) {
                             val amountText = txtAmount.text.toString()
                             val amount = amountText.toDoubleOrNull()
                             if (amount != null) {
-                                if (inputsAreCorrect(amount)){
-                                    dlgConfirmation(this@ActSendMoney, "send money"){
-                                        if(it == ButtonType.PRIMARY){
-                                            lifecycleScope.launch(Dispatchers.Main){
+                                if (inputsAreCorrect(amount)) {
+                                    dlgConfirmation(this@ActSendMoney, "send money") {
+                                        if (it == ButtonType.PRIMARY) {
+                                            lifecycleScope.launch(Dispatchers.Main) {
                                                 sendMoney(amount)
                                                 finish()
+                                                TODO("SHOW RECEIPT!")
                                             }
                                         }
                                     }.show()
@@ -96,16 +99,17 @@ class ActSendMoney : AppCompatActivity() {
             }
         }
     }
+
     private suspend fun inputsAreCorrect(amount: Double): Boolean {
         var inputErrorCount = 0
-        with(bind){
+        with(bind) {
             if (phoneNumber.matches(phoneNumberPattern)) {
                 val phoneNumberExists = getPhoneNumberExistenceOf(phoneNumber)
                 if (!phoneNumberExists) {
                     inputErrorCount++
                     txtLayoutPhoneNumber.error = getString(R.string.error_phone_registered)
                 }
-                if (phoneNumber == UserManager.phoneNumber){
+                if (phoneNumber == UserManager.phoneNumber) {
                     inputErrorCount++
                     txtLayoutPhoneNumber.error = getString(R.string.error_phone_user_manager)
                 }
@@ -113,13 +117,14 @@ class ActSendMoney : AppCompatActivity() {
                 inputErrorCount++
                 txtLayoutPhoneNumber.error = getString(R.string.error_phone_format)
             }
-            if (amount >= UserManager.balance.toString().toDouble()){
+            if (UserManager.balance.toString().toDouble() < amount) {
                 inputErrorCount++
                 bind.txtLayoutAmount.error = "You only have $balance in your wallet."
             }
         }
         return inputErrorCount == 0
     }
+
     private suspend fun getPhoneNumberExistenceOf(phoneNumber: String): Boolean {
         val query = userRef.whereEqualTo("phoneNumber", phoneNumber).get().await()
         return !query.isEmpty
@@ -149,7 +154,8 @@ class ActSendMoney : AppCompatActivity() {
                 }
         }
     }
-    private fun transaction(){
+
+    private fun transaction() {
         val senderData = hashMapOf(
             "amount" to bind.txtAmount.text.toString().toDouble(),
             "dateCreated" to Timestamp(Date()),
@@ -161,35 +167,37 @@ class ActSendMoney : AppCompatActivity() {
 
         transactionRef.document().set(senderData)
             .addOnSuccessListener {
-            val receiverData = hashMapOf(
-                "amount" to bind.txtAmount.text.toString().toDouble(),
-                "dateCreated" to Timestamp(Date()),
-                "phoneNumber" to UserManager.phoneNumber,
-                "referenceNumber" to senderData["referenceNumber"],
-                "type" to "Receive Money",
-                "userReference" to "",
-            )
-            getReceiverId { receiverId ->
-                receiverData["userReference"] = receiverId
-                transactionRef.document().set(receiverData)
+                val receiverData = hashMapOf(
+                    "amount" to bind.txtAmount.text.toString().toDouble(),
+                    "dateCreated" to Timestamp(Date()),
+                    "phoneNumber" to UserManager.phoneNumber,
+                    "referenceNumber" to senderData["referenceNumber"],
+                    "type" to "Receive Money",
+                    "userReference" to "",
+                )
+                getReceiverId { receiverId ->
+                    receiverData["userReference"] = receiverId
+                    transactionRef.document().set(receiverData)
+                }
             }
-        }
     }
 
-    private fun getReceiverId(callback: (String) -> Unit){
-        userRef.whereEqualTo("phoneNumber", phoneNumber).get().addOnSuccessListener{
+    private fun getReceiverId(callback: (String) -> Unit) {
+        userRef.whereEqualTo("phoneNumber", phoneNumber).get().addOnSuccessListener {
             val getReceiverId = it.documents[0].id
             callback(getReceiverId)
         }
     }
-    private fun inputsAreNotEmpty() : Boolean{
-        return when{
+
+    private fun inputsAreNotEmpty(): Boolean {
+        return when {
             bind.txtPhoneNumber.text!!.isEmpty() -> false
             bind.txtAmount.text!!.isEmpty() -> false
             else -> true
         }
     }
-   private fun getRandomFourDigits(): Int {
+
+    private fun getRandomFourDigits(): Int {
         val random = Random()
         var randomNum = random.nextInt(10000)
         while (usedNumbers.contains(randomNum)) {
@@ -199,12 +207,13 @@ class ActSendMoney : AppCompatActivity() {
         return randomNum
     }
 
-   private fun getReceiptId(): String {
+    private fun getReceiptId(): String {
         val currentDate = dateFormat.format(Date())
         val randomFourDigits = getRandomFourDigits()
 
         return "$currentDate${String.format("%04d", randomFourDigits)}"
     }
+
     private fun textWatcher(textField: EditText) {
         textField.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -219,6 +228,7 @@ class ActSendMoney : AppCompatActivity() {
                     clearTextError(bind.txtLayoutAmount)
                 }
             }
+
             override fun afterTextChanged(s: Editable?) {}
         })
     }

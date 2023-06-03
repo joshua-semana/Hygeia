@@ -74,8 +74,8 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         loading.show()
         machinesRef.document(machineID.trim()).get().addOnSuccessListener { data ->
             MachineManager.setMachineInformation(data)
-            loading.dismiss()
             startActivity(Intent(requireContext(), ActMachine::class.java))
+            loading.dismiss()
         }
     }
 }

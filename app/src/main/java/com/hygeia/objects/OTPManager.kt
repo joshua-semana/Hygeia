@@ -13,14 +13,12 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.FirebaseException
 import com.google.firebase.FirebaseTooManyRequestsException
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import com.hygeia.objects.Utilities.msg
-import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.delay
 import java.util.concurrent.TimeUnit

@@ -229,8 +229,8 @@ object Utilities {
         }
 
         if (content == "send money") {
-            lblDlgConfirmBody.text = context.getString(R.string.dlg_body_going_back)
-            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, Send Money"
+            lblDlgConfirmBody.text = context.getString(R.string.dlg_send_money)
+            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
             btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
         }
 

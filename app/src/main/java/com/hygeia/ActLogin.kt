@@ -66,8 +66,8 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("roenleonardo03@gmail.com")
-                txtPassword.setText("Admin@123")
+                txtEmailOrPhoneNumber.setText("09087788795")
+                txtPassword.setText("Admin1!?")
                 btnLogin.performClick()
             }
 
