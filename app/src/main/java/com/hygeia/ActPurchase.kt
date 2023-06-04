@@ -12,6 +12,7 @@ import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
+import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
@@ -38,8 +39,9 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     private var grandTotal = 0.00
     private var totalCount = 0
 
+
+    private val machineID = MachineManager.machineId
     private var machineName = ""
-    private val machineID = "GP1wZD9P9NVZfGjS1gJp"
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
     private val usedNumbers = mutableSetOf<Int>()
@@ -151,7 +153,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         bind.listViewProducts.layoutManager = LinearLayoutManager(this@ActPurchase)
         listOfProducts = arrayListOf()
 
-        machinesRef.document(machineID).get().apply {
+        machinesRef.document(machineID.toString()).get().apply {
             addOnSuccessListener { parent ->
 
                 machineName = parent.get("Name").toString()
