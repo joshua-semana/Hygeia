@@ -67,15 +67,16 @@ class ActSendMoney : AppCompatActivity() {
                                         if (it == ButtonType.PRIMARY) {
                                             lifecycleScope.launch(Dispatchers.Main) {
                                                 sendMoney(amount)
-                                                finish()
                                             }
+                                        } else {
+                                            loading.dismiss()
                                         }
                                     }.show()
                                 }
                             }
-                            loading.dismiss()
                         }
                     } else {
+                        loading.dismiss()
                         showRequiredTextField(
                             txtPhoneNumber to txtLayoutPhoneNumber,
                             txtAmount to txtLayoutAmount
@@ -177,6 +178,14 @@ class ActSendMoney : AppCompatActivity() {
                 getReceiverId { receiverId ->
                     receiverData["User Reference"] = receiverId
                     transactionRef.document().set(receiverData)
+                }
+
+                loading.dismiss()
+                dlgStatus(this@ActSendMoney, "success send money").apply {
+                    setOnDismissListener {
+                        finish()
+                    }
+                    show()
                 }
             }
     }
