@@ -20,7 +20,8 @@
         android:text="@string/h1_vendo_details"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintOverlap" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/vendoDetails"
@@ -30,8 +31,6 @@
         android:layout_marginTop="@dimen/elmnt_gap_lg"
         android:layout_marginEnd="@dimen/mx"
         android:backgroundTint="@color/white"
-        android:clickable="true"
-        android:focusable="true"
         app:cardCornerRadius="@dimen/radius_md"
         app:cardElevation="0dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -52,10 +51,9 @@
                 android:layout_marginEnd="@dimen/elmnt_gap_md"
                 android:text="@string/placeholder"
                 android:textColor="@color/neutral_900"
-                app:layout_constraintEnd_toStartOf="@+id/cardBtnEditVendoDetails"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:ignore="VisualLintLongText" />
+                tools:ignore="VisualLintLongText,VisualLintOverlap" />
 
             <TextView
                 android:id="@+id/lblDescVendoLocation"
@@ -66,7 +64,6 @@
                 android:text="@string/placeholder"
                 android:textColor="@color/neutral_900"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/cardBtnEditVendoDetails"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/lblDescVendoID"
                 tools:ignore="VisualLintLongText" />
@@ -85,6 +82,7 @@
                 tools:ignore="DuplicateClickableBoundsCheck,TouchTargetSizeCheck">
 
                 <ImageButton
+                    android:id="@+id/btnVendoDetailEdit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -114,10 +112,56 @@
         android:layout_marginTop="@dimen/elmnt_gap_xl"
         android:layout_marginEnd="@dimen/mx"
         android:layout_marginBottom="@dimen/mx"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/vendoStatus"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblTitle"
         tools:listitem="@layout/list_product_admin" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/vendoStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginBottom="@dimen/mx"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/neutral_300"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="@dimen/elmnt_gap_xl">
+
+            <TextView
+                android:id="@+id/lblVendoStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="VisualLintLongText,VisualLintOverlap" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/switchVendoStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SpeakableTextPresentCheck" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

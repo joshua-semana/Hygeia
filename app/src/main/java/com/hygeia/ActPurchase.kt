@@ -68,8 +68,8 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                     } else {
                         dlgConfirmation(this@ActPurchase, "purchase") {
                             if (it == ButtonType.PRIMARY) {
+                                loading.show()
                                 saveTransaction()
-                                updateUserBalance()
                             }
                         }.show()
                     }
@@ -144,6 +144,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                 }
             }
             docRef.update("Number", totalCount)
+            updateUserBalance()
         }
     }
 
@@ -151,6 +152,20 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         userRef.document(UserManager.uid!!.trim()).update("balance", UserManager.balance.toString().toDouble() - grandTotal)
         userRef.document(UserManager.uid!!).get().addOnSuccessListener { data ->
             UserManager.updateUserBalance(data)
+        }
+        finishTransaction()
+    }
+
+    private fun finishTransaction() {
+        loading.dismiss()
+        dlgStatus(this@ActPurchase, "success purchase").apply {
+            setOnDismissListener {
+                machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+                    .addOnSuccessListener {
+                        finish()
+                    }
+            }
+            show()
         }
     }
 

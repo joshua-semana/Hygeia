@@ -2,6 +2,7 @@ package com.hygeia.objects
 
 object Emoji {
     const val Success = "🥳"
+    const val Purchase = "☺️"
     const val Error = "🧐"
     const val NoInternet = "😵"
     const val Exception = "😱"
