@@ -5,15 +5,22 @@ import android.app.Dialog
 import android.graphics.Color
 import android.content.Context
 import android.graphics.drawable.ColorDrawable
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.WindowManager
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.R
+import com.hygeia.classes.ButtonType
+import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.dlgError
+import com.hygeia.objects.Utilities.msg
 
 object MachineManager {
 
@@ -23,7 +30,6 @@ object MachineManager {
     var location: String? = null
     var name: String? = null
     var status: String? = null
-  
     var userConnected: Long? = null
     var machineId : String? = null
 
@@ -33,7 +39,6 @@ object MachineManager {
             location = get("Location") as String?
             name = get("Name") as String?
             status = get("Status") as String?
-
             userConnected = get("User Connected") as Long?
             machineId = get("MachineID") as String?
 
@@ -62,7 +67,8 @@ object MachineManager {
             if (txtDlgVendoDetail.text!!.isEmpty()) {
                 txtLayoutDlgVendoDetail.error = "Required*"
             } else {
-                //TODO
+                machineRef.document(MachineManager.uid!!).update("Location", txtDlgVendoDetail.text.toString())
+                dialog.dismiss()
             }
         }
 
@@ -73,7 +79,7 @@ object MachineManager {
         return dialog
     }
 
-    fun dlgEditProduct(context: Context, productID: String) : Dialog {
+    fun dlgEditProduct(context: Context, productID: String, onButtonClicked: (type: ButtonType) -> Unit) : Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_product_detail)
         dialog.setCancelable(false)
@@ -100,7 +106,25 @@ object MachineManager {
         }
 
         btnDlgProductDetailPrimary.setOnClickListener {
-
+            onButtonClicked(ButtonType.PRIMARY)
+            clearTextError(
+                txtLayoutDlgProductName,
+                txtLayoutDlgProductPrice,
+                txtLayoutDlgProductQuantity
+            )
+            if (txtDlgProductName.text!!.isNotEmpty() && txtDlgProductPrice.text!!.isNotEmpty() &&
+                txtDlgProductQuantity.text!!.isNotEmpty()){
+                if (txtDlgProductQuantity.text.toString().toLong() > 10){
+                    txtLayoutDlgProductQuantity.error = "The maximum items per product is less than or equal to 10"
+                }
+            }else {
+                Utilities.showRequiredTextField(
+                    txtDlgProductName to txtLayoutDlgProductName,
+                    txtDlgProductPrice to txtLayoutDlgProductPrice,
+                    txtDlgProductQuantity to txtLayoutDlgProductQuantity
+                )
+            }
+            dialog.dismiss()
         }
 
         btnDlgProductDetailSecondary.setOnClickListener {
@@ -109,4 +133,6 @@ object MachineManager {
 
         return dialog
     }
+
+
 }

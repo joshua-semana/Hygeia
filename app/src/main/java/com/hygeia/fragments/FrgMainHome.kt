@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.ActMain
 import com.hygeia.ActPurchase
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
@@ -143,7 +144,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     private fun onBackPressed() {
         dlgConfirmation(requireContext(), "log out") {
             if (it == ButtonType.PRIMARY) {
-                requireActivity().finish()
+                userRef.document(UserManager.uid!!).update("status", "inactive")
+                    .addOnSuccessListener {
+                        requireActivity().finish()
+                    }
             }
         }.show()
     }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.ActChangePassword
 import com.hygeia.ActUserInfo
 import com.hygeia.classes.ButtonType
@@ -16,6 +17,8 @@ import com.hygeia.objects.Utilities
 
 class FrgMainSettings : Fragment() {
     private lateinit var bind: FrgMainSettingsBinding
+    private var db = FirebaseFirestore.getInstance()
+    private var userRef = db.collection("User")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,7 +44,10 @@ class FrgMainSettings : Fragment() {
             btnLogOut.setOnClickListener {
                 Utilities.dlgConfirmation(requireContext(), "log out") {
                     if (it == ButtonType.PRIMARY) {
-                        requireActivity().finish()
+                        userRef.document(UserManager.uid!!).update("status", "inactive")
+                            .addOnSuccessListener {
+                                requireActivity().finish()
+                            }
                     }
                 }.show()
             }

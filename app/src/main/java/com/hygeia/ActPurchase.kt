@@ -4,21 +4,25 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
 import com.hygeia.objects.MachineManager
+import com.hygeia.objects.MachineManager.machineRef
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.isInternetConnected
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -54,20 +58,51 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         //POPULATE
         getListOfProducts()
         updatePurchaseBreakdown()
-
-        bind.btnPurchase.setOnClickListener {
-            if (grandTotal == 0.00) {
-                dlgStatus(this@ActPurchase, "empty cart").show()
-            } else if (grandTotal > UserManager.balance.toString().toDouble()) {
-                dlgStatus(this@ActPurchase, "insufficient funds").show()
-            } else {
-                dlgConfirmation(this@ActPurchase, "purchase") {
-                    if (it == ButtonType.PRIMARY) {
-                        saveTransaction()
-                        updateUserBalance()
+        with(bind){
+            btnPurchase.setOnClickListener {
+                if (isInternetConnected(applicationContext)){
+                    if (grandTotal == 0.00) {
+                        dlgStatus(this@ActPurchase, "empty cart").show()
+                    } else if (grandTotal > UserManager.balance.toString().toDouble()) {
+                        dlgStatus(this@ActPurchase, "insufficient funds").show()
+                    } else {
+                        dlgConfirmation(this@ActPurchase, "purchase") {
+                            if (it == ButtonType.PRIMARY) {
+                                saveTransaction()
+                                updateUserBalance()
+                            }
+                        }.show()
                     }
-                }.show()
+                }else {
+                    dlgStatus(this@ActPurchase, "no internet").show()
+                }
             }
+            btnBack.setOnClickListener{
+                onBackBtnPressed()
+            }
+            onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackBtnPressed()
+                }
+            })
+        }
+    }
+
+    private fun onBackBtnPressed() {
+        if (grandTotal == 0.00) {
+            machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+                .addOnSuccessListener {
+                    finish()
+                }
+        } else {
+            dlgConfirmation(this@ActPurchase, "going back") {
+                if (it == ButtonType.PRIMARY) {
+                    machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+                        .addOnSuccessListener {
+                            finish()
+                        }
+                }
+            }.show()
         }
     }
 

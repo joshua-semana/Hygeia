@@ -162,6 +162,13 @@ object Utilities {
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_machine_offline_or_in_use)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
+
+        if (content == "QR code is not registered") {
+            lblDlgInfoEmoji.text = Emoji.Exception
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_qr_code_not_registered)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
         if (content == "insufficient funds") {
             lblDlgInfoEmoji.text = Emoji.Error
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
