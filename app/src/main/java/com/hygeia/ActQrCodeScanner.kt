@@ -1,7 +1,6 @@
 package com.hygeia
 
 import android.content.Intent
-import android.health.connect.datatypes.units.Length
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -11,11 +10,10 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.objects.MachineManager
-import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgStatus
-import com.hygeia.objects.Utilities.msg
 
 class ActQrCodeScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
@@ -44,10 +42,16 @@ class ActQrCodeScanner : AppCompatActivity() {
             runOnUiThread {
                 machineRef.document(it.text).get().addOnSuccessListener { data ->
                     if (data.getString("Status") == "Online"){
-                        if (data.getLong("User Connected")!! < 2){
+                        if (data.getLong("User Connected")!! < 1){
                             MachineManager.machineId = it.text.toString().trim()
-                            startActivity(Intent(applicationContext, ActPurchase::class.java))
-                            finish()
+                            val updateUserConnected = hashMapOf<String, Any>(
+                                "User Connected" to FieldValue.increment(1)
+                            )
+                            machineRef.document(it.text).update(updateUserConnected)
+                                .addOnSuccessListener {
+                                    startActivity(Intent(applicationContext, ActPurchase::class.java))
+                                    finish()
+                            }
                         }else {
                             dlgStatus(this,"machine offline or in use").apply {
                                 setOnDismissListener {
