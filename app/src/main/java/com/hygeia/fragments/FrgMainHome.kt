@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.ActMain
 import com.hygeia.ActPurchase
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
@@ -61,7 +62,7 @@ class FrgMainHome : Fragment() {
             }
 
             btnPurchase.setOnClickListener {
-                startActivity(Intent(requireContext(), ActPurchase::class.java))
+                startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(
@@ -94,7 +95,10 @@ class FrgMainHome : Fragment() {
     private fun onBackPressed() {
         dlgConfirmation(requireContext(), "log out") {
             if (it == ButtonType.PRIMARY) {
-                requireActivity().finish()
+                userRef.document(UserManager.uid!!).update("status", "inactive")
+                    .addOnSuccessListener {
+                        requireActivity().finish()
+                    }
             }
         }.show()
     }

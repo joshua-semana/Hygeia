@@ -4,15 +4,23 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
+import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProductAdmin
 import com.hygeia.databinding.ActMachineBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.MachineManager.dlgEditProduct
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.isInternetConnected
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind : ActMachineBinding
@@ -37,6 +45,10 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
                 dlgEditVendoLocation(this@ActMachine).show()
+            }
+
+            btnBack.setOnClickListener {
+                onBackPressed()
             }
         }
 
@@ -85,6 +97,30 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     }
 
     override fun onProductEditItemClick(productID: String) {
-        dlgEditProduct(this@ActMachine, productID).show()
+        TODO("Not yet implemented")
     }
+
+//    override fun onProductEditItemClick(productID: String) {
+//        if (isInternetConnected(applicationContext)){
+//            dlgEditProduct(this@ActMachine, productID){
+//                if(it == ButtonType.PRIMARY){
+//
+////                            val productUpdatedData = hashMapOf<String, Any>(
+////                                "Name" to txtDlgProductName.text.toString(),
+////                                "Price" to txtDlgProductPrice.text.toString().toLong(),
+////                                "Quantity" to txtDlgProductQuantity.text.toString().toLong()
+////                            )
+////                            MachineManager.machineRef.document(MachineManager.uid!!.trim()).get().addOnSuccessListener{ parent ->
+////                                parent.reference.collection("Products").document(productID)
+////                                    .update(productUpdatedData).addOnSuccessListener {
+////                                        dialog.dismiss()
+////                                    }
+////                            }
+//                    }
+//                }
+//            }
+//        }else {
+//            Utilities.dlgStatus(this@ActMachine, "no internet").show()
+//        }
+//    }
 }

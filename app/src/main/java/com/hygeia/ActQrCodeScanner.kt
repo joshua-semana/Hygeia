@@ -1,9 +1,11 @@
 package com.hygeia
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -14,6 +16,9 @@ import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities.dlgStatus
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class ActQrCodeScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
@@ -21,6 +26,7 @@ class ActQrCodeScanner : AppCompatActivity() {
     private var db = FirebaseFirestore.getInstance()
     private var machineRef = db.collection("Machines")
 
+    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_qr_code_scanner)
@@ -39,29 +45,42 @@ class ActQrCodeScanner : AppCompatActivity() {
 
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {
-            runOnUiThread {
-                machineRef.document(it.text).get().addOnSuccessListener { data ->
-                    if (data.getString("Status") == "Online"){
-                        if (data.getLong("User Connected")!! < 1){
-                            MachineManager.machineId = it.text.toString().trim()
-                            val updateUserConnected = hashMapOf<String, Any>(
-                                "User Connected" to FieldValue.increment(1)
-                            )
-                            machineRef.document(it.text).update(updateUserConnected)
-                                .addOnSuccessListener {
-                                    startActivity(Intent(applicationContext, ActPurchase::class.java))
-                                    finish()
-                            }
-                        }else {
-                            dlgStatus(this,"machine offline or in use").apply {
-                                setOnDismissListener {
-                                    finish()
+            runOnUiThread{
+                lifecycleScope.launch(Dispatchers.Main){
+                    val query = machineRef.whereEqualTo("MachineID", it.text.trim()).get().await()
+                    if (!query.isEmpty){
+                        val document = query.documents[0]
+                        val machineID = document.getString("MachineID")
+                        val status = document.getString("Status")
+                        val userConnected = document.getLong("User Connected")
+                            if (status == "Online"){
+                                if (userConnected!! < 1){
+                                    val updatedUserConnected = hashMapOf<String, Any>(
+                                        "User Connected" to FieldValue.increment(1)
+                                    )
+                                    MachineManager.machineId = machineID
+                                    machineRef.document(machineID.toString()).update(updatedUserConnected)
+                                        .addOnSuccessListener {
+                                            startActivity(Intent(applicationContext, ActPurchase::class.java))
+                                            finish()
+                                        }
+                                }else{
+                                    dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                                        setOnDismissListener {
+                                            finish()
+                                        }
+                                    }.show()
                                 }
-                            }.show()
-                        }
-                    } else {
-                        dlgStatus(this,"machine offline or in use").apply {
-                            setOnDismissListener {
+                            }else{
+                                dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                                    setOnDismissListener {
+                                        finish()
+                                    }
+                                }.show()
+                            }
+                    }else{
+                        dlgStatus(this@ActQrCodeScanner,"QR code is not registered").apply {
+                            setOnDismissListener{
                                 finish()
                             }
                         }.show()
@@ -69,6 +88,7 @@ class ActQrCodeScanner : AppCompatActivity() {
                 }
             }
         }
+
         codeScanner.errorCallback = ErrorCallback { // or ErrorCallback.SUPPRESS
             runOnUiThread {
                 Toast.makeText(this, "Camera initialization error: ${it.message}",

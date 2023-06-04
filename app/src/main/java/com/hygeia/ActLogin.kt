@@ -22,6 +22,7 @@ import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -151,12 +152,24 @@ class ActLogin : AppCompatActivity() {
 
     private fun attemptEmailLogin(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).apply {
-            addOnSuccessListener {
-                userRef.document(it.user!!.uid).get().addOnSuccessListener { data ->
+            addOnSuccessListener {id ->
+                val uid = id.user!!.uid
+                userRef.document(uid).get().addOnSuccessListener { data ->
                     loading.dismiss()
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    startActivity(Intent(applicationContext, ActMain::class.java))
+                    userRef.document(uid).update("status", "active")
+                        .addOnSuccessListener {
+                            startActivity(Intent(applicationContext, ActMain::class.java))
+                        }
+
+//                    when (UserManager.status) {
+//                        "inactive" -> {
+//
+//                        }
+//                        "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
+//                        else -> null
+//                    }
                 }
             }
             addOnFailureListener {

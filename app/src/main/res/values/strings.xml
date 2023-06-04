@@ -141,6 +141,7 @@
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
     <string name="dlg_body_machine_offline_or_in_use">This machine is either offline or in use for now. Please try again later</string>
+    <string name="dlg_body_qr_code_not_registered">The QR code you scanned is not registered in our system.</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
     <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
