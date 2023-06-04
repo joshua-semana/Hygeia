@@ -143,11 +143,14 @@
     <string name="dlg_body_machine_offline_or_in_use">This machine is either offline or in use for now. Please try again later</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
+    <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
+    <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
     <string name="dlg_body_log_out">Are you sure you want to log out?\nLogging out will end your current session and require you to sign in again.</string>
     <string name="dlg_send_money">Are you sure you want to send this amount to the recipient\'s account?</string>
+    <string name="dlg_purchase">Are you sure you want to purchase this selection of items?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>

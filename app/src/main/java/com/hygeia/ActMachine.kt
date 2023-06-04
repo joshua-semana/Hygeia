@@ -10,10 +10,11 @@ import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.DataProductAdmin
 import com.hygeia.databinding.ActMachineBinding
 import com.hygeia.objects.MachineManager
+import com.hygeia.objects.MachineManager.dlgEditProduct
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.Utilities
 
-class ActMachine : AppCompatActivity() {
+class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind : ActMachineBinding
     private lateinit var listOfProducts: ArrayList<DataProductAdmin>
     private lateinit var loading: Dialog
@@ -40,8 +41,6 @@ class ActMachine : AppCompatActivity() {
         }
 
         getListOfProducts()
-
-
     }
 
     private fun getListOfProducts() {
@@ -73,7 +72,7 @@ class ActMachine : AppCompatActivity() {
 
                             listOfProducts.add(product)
                         }
-                        bind.listViewMachineDetail.adapter = ArrAdpProductAdmin(listOfProducts)
+                        bind.listViewMachineDetail.adapter = ArrAdpProductAdmin(listOfProducts, this@ActMachine)
                         loading.dismiss()
                     }
                 }
@@ -83,5 +82,9 @@ class ActMachine : AppCompatActivity() {
                 loading.dismiss()
             }
         }
+    }
+
+    override fun onProductEditItemClick(productID: String) {
+        dlgEditProduct(this@ActMachine, productID).show()
     }
 }

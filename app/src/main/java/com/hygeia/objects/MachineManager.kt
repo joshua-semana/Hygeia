@@ -11,17 +11,21 @@ import android.widget.TextView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.R
+import com.hygeia.objects.Utilities.dlgError
 
 object MachineManager {
+
+    val machineRef = FirebaseFirestore.getInstance().collection("Machines")
 
     var uid: String? = null
     var location: String? = null
     var name: String? = null
     var status: String? = null
+  
     var userConnected: String? = null
     var machineId : String? = null
-
 
     fun setMachineInformation(machineInfo: DocumentSnapshot) {
         with(machineInfo) {
@@ -29,8 +33,10 @@ object MachineManager {
             location = get("Location") as String?
             name = get("Name") as String?
             status = get("Status") as String?
+
             userConnected = get("User Connected") as String?
             machineId = get("MachineID") as String?
+
         }
     }
 
@@ -67,12 +73,40 @@ object MachineManager {
         return dialog
     }
 
-    fun dlgEditProduct(context: Context) : Dialog {
+    fun dlgEditProduct(context: Context, productID: String) : Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_product_detail)
         dialog.setCancelable(false)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        
+
+        val lblDlgProductDetailEmoji = dialog.findViewById<TextView>(R.id.lblDlgProductDetailEmoji)
+        val txtLayoutDlgProductName = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductName)
+        val txtLayoutDlgProductPrice = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductPrice)
+        val txtLayoutDlgProductQuantity = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductQuantity)
+        val txtDlgProductName = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductName)
+        val txtDlgProductPrice = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductPrice)
+        val txtDlgProductQuantity = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductQuantity)
+        val btnDlgProductDetailPrimary = dialog.findViewById<Button>(R.id.btnDlgProductDetailPrimary)
+        val btnDlgProductDetailSecondary = dialog.findViewById<Button>(R.id.btnDlgProductDetailSecondary)
+
+        lblDlgProductDetailEmoji.text = Emoji.Edit
+
+        machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
+            parent.reference.collection("Products").document(productID).get().addOnSuccessListener { child ->
+                txtDlgProductName.setText(child.getString("Name"))
+                txtDlgProductPrice.setText(child.get("Price").toString())
+                txtDlgProductQuantity.setText(child.get("Quantity").toString())
+            }
+        }
+
+        btnDlgProductDetailPrimary.setOnClickListener {
+
+        }
+
+        btnDlgProductDetailSecondary.setOnClickListener {
+            dialog.dismiss()
+        }
+
         return dialog
     }
 }

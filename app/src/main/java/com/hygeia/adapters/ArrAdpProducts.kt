@@ -41,7 +41,7 @@ class ArrAdpProducts(
         val product = getNonZeroQuantityProduct(position)
         if (product != null) {
             with(holder) {
-                with(product) {
+                with(listProducts[position]) {
                     nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
                     quantity.text = "$Quantity items available"
                     count.text = "$Count"
@@ -68,7 +68,7 @@ class ArrAdpProducts(
         }
     }
 
-    private fun getNonZeroQuantityProduct(position: Int): DataProducts? {
+    fun getNonZeroQuantityProduct(position: Int): DataProducts? {
         var count = 0
         for (product in listProducts) {
             if (product.Quantity!!.toDouble() > 0) {

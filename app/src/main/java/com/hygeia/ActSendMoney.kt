@@ -68,7 +68,6 @@ class ActSendMoney : AppCompatActivity() {
                                             lifecycleScope.launch(Dispatchers.Main) {
                                                 sendMoney(amount)
                                                 finish()
-                                                TODO("SHOW RECEIPT!")
                                             }
                                         }
                                     }.show()
@@ -157,26 +156,26 @@ class ActSendMoney : AppCompatActivity() {
 
     private fun transaction() {
         val senderData = hashMapOf(
-            "amount" to bind.txtAmount.text.toString().toDouble(),
-            "dateCreated" to Timestamp(Date()),
-            "phoneNumber" to phoneNumber,
-            "referenceNumber" to getReceiptId(),
-            "type" to "Send Money",
-            "userReference" to UserManager.uid,
+            "Amount" to bind.txtAmount.text.toString().toDouble(),
+            "Date Created" to Timestamp(Date()),
+            "Number" to phoneNumber,
+            "Reference Number" to getReceiptId(),
+            "Type" to "Send Money",
+            "User Reference" to UserManager.uid,
         )
 
         transactionRef.document().set(senderData)
             .addOnSuccessListener {
                 val receiverData = hashMapOf(
-                    "amount" to bind.txtAmount.text.toString().toDouble(),
-                    "dateCreated" to Timestamp(Date()),
-                    "phoneNumber" to UserManager.phoneNumber,
-                    "referenceNumber" to senderData["referenceNumber"],
-                    "type" to "Receive Money",
-                    "userReference" to "",
+                    "Amount" to bind.txtAmount.text.toString().toDouble(),
+                    "Date Created" to Timestamp(Date()),
+                    "Number" to UserManager.phoneNumber,
+                    "Reference Number" to senderData["Reference Number"],
+                    "Type" to "Receive Money",
+                    "User Reference" to "",
                 )
                 getReceiverId { receiverId ->
-                    receiverData["userReference"] = receiverId
+                    receiverData["User Reference"] = receiverId
                     transactionRef.document().set(receiverData)
                 }
             }

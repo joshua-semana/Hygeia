@@ -102,7 +102,7 @@
         android:backgroundTint="@color/white"
         app:cardCornerRadius="@dimen/radius_md"
         app:cardElevation="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnContinue"
+        app:layout_constraintBottom_toTopOf="@+id/btnPurchase"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/neutral_300"
@@ -211,7 +211,7 @@
     </com.google.android.material.card.MaterialCardView>
 
     <Button
-        android:id="@+id/btnContinue"
+        android:id="@+id/btnPurchase"
         style="@style/Btn_Primary"
         android:layout_width="match_parent"
         android:text="@string/btn_purchase"

@@ -154,6 +154,19 @@ object Utilities {
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_machine_offline_or_in_use)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
+        if (content == "insufficient funds") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_insufficient_funds)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "empty cart") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_3)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_empty_cart)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
 
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
@@ -237,6 +250,12 @@ object Utilities {
 
         if (content == "send money") {
             lblDlgConfirmBody.text = context.getString(R.string.dlg_send_money)
+            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
+            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+        }
+
+        if (content == "purchase") {
+            lblDlgConfirmBody.text = context.getString(R.string.dlg_purchase)
             btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
             btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
         }
