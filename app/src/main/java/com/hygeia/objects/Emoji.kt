@@ -9,4 +9,5 @@ object Emoji {
     const val Confirmation = "🤔"
     const val Lock = "🔒"
     const val Edit = "⚙️"
+    const val Receipt = "🧾"
 }

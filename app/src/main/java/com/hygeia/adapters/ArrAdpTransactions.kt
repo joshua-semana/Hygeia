@@ -7,10 +7,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.google.type.Date
 import com.hygeia.R
 import com.hygeia.classes.DataMachines
 import com.hygeia.classes.DataTransactions
 import com.hygeia.objects.Utilities
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class ArrAdpTransactions(
     private val listTransactions: ArrayList<DataTransactions>,
@@ -38,21 +41,31 @@ class ArrAdpTransactions(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             with(listTransactions[position]) {
-                if (Type == "Send Money") {
-                    image.setImageResource(R.drawable.ic_money_send)
-                    type.text = "Send money to"
-                    amount.text = "- ${Utilities.formatNumber(Amount)}"
-                } else if (Type == "Receive Money") {
-                    image.setImageResource(R.drawable.ic_money_receive)
-                    type.text = "Receive money from"
-                    amount.text = "+ ${Utilities.formatNumber(Amount)}"
-                } else if (Type == "Purchase") {
-                    image.setImageResource(R.drawable.ic_product)
-                    type.text = "Purchase items"
-                    amount.text = "- ${Utilities.formatNumber(Amount)}"
+                when (Type) {
+                    "Send Money" -> {
+                        image.setImageResource(R.drawable.ic_money_send)
+                        type.text = "Send money to"
+                        amount.text = "- ${Utilities.formatNumber(Amount)}"
+                        number.text = Number
+                    }
+                    "Receive Money" -> {
+                        image.setImageResource(R.drawable.ic_money_receive)
+                        type.text = "Receive money from"
+                        amount.text = "+ ${Utilities.formatNumber(Amount)}"
+                        number.text = Number
+                    }
+                    "Purchase" -> {
+                        image.setImageResource(R.drawable.ic_product)
+                        type.text = "Purchase items"
+                        amount.text = "- ${Utilities.formatNumber(Amount)}"
+                        number.text = "$Number products"
+                    }
                 }
 
-                number.text = Number
+                val dateTime: java.util.Date = DateCreated!!.toDate()
+                val format = SimpleDateFormat("MMMM d, y", Locale.getDefault())
+                val dateString = format.format(dateTime)
+                date.text = dateString
             }
 
             itemView.setOnClickListener {

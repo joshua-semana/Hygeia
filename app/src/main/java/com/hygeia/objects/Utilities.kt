@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
+import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
@@ -13,14 +14,21 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.Timestamp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.type.Date
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 object Utilities {
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
     val phoneNumberPattern = "^\\+639\\d{9}\$|^09\\d{9}\$".toRegex()
     val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
+
+    val transactionRef = FirebaseFirestore.getInstance().collection("Transactions")
 
     val greetings = hashMapOf(
         "Filipino" to "Mabuhay!",
@@ -175,6 +183,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
+        if (content == "success send money") {
+            lblDlgInfoEmoji.text = Emoji.Success
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_2)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_send_money)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
@@ -280,6 +295,79 @@ object Utilities {
 
         btnDlgConfirmSecondary.setOnClickListener {
             onButtonClicked(ButtonType.SECONDARY)
+            dialog.dismiss()
+        }
+
+        return dialog
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun dlgTransactionDetails(context: Context, transactionID: String): Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_transaction_details)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val lblDlgTransactionEmoji = dialog.findViewById<TextView>(R.id.lblDlgTransactionEmoji)
+        //val lblDlgTransactionTitle = dialog.findViewById<TextView>(R.id.lblDlgTransactionTitle)
+        val lblDlgTransactionBody = dialog.findViewById<TextView>(R.id.lblDlgTransactionBody)
+        val lblDlgTransactionTotalAmount = dialog.findViewById<TextView>(R.id.lblDlgTransactionTotalAmount)
+        val lblDescTransactionIdentifier = dialog.findViewById<TextView>(R.id.lblDescTransactionIdentifier)
+        val lblDescTransactionDate = dialog.findViewById<TextView>(R.id.lblDescTransactionDate)
+        val lblDescTransactionTime = dialog.findViewById<TextView>(R.id.lblDescTransactionTime)
+        val lblDescTransactionReference = dialog.findViewById<TextView>(R.id.lblDescTransactionReference)
+        val lblDescTransactionItemsTitle = dialog.findViewById<TextView>(R.id.lblDescTransactionItemsTitle)
+        val lblDescTransactionItemsContent = dialog.findViewById<TextView>(R.id.lblDescTransactionItemsContent)
+        val divider2 = dialog.findViewById<View>(R.id.divider2)
+        val btnDlgTransactionPrimary = dialog.findViewById<Button>(R.id.btnDlgTransactionPrimary)
+
+        lblDlgTransactionEmoji.text = Emoji.Receipt
+
+        transactionRef.document(transactionID.trim()).get().addOnSuccessListener { data ->
+
+            val timestamp: Timestamp = data.get("Date Created") as Timestamp
+            val date: java.util.Date = timestamp.toDate()
+            val formatDate = SimpleDateFormat("MMMM d, y", Locale.getDefault())
+            val dateString = formatDate.format(date)
+            val formatTime = SimpleDateFormat("hh:mm a", Locale.getDefault())
+            val timeString = formatTime.format(date)
+
+            lblDlgTransactionBody.text = "Here are all the details for this transaction."
+            lblDescTransactionDate.text = "Transaction Date: $dateString"
+            lblDescTransactionTime.text = "Transaction Time: $timeString"
+            lblDescTransactionReference.text = "Reference No.: ${data.get("Reference Number")}"
+
+            if (data.getString("Type") == "Send Money") {
+                lblDlgTransactionTotalAmount.text = "- ${formatNumber(data.get("Amount"))}"
+                lblDescTransactionIdentifier.text = "Receiver No.: ${data.get("Number")}"
+            } else if (data.getString("Type") == "Receive Money") {
+                lblDlgTransactionTotalAmount.text = "+ ${formatNumber(data.get("Amount"))}"
+                lblDescTransactionIdentifier.text = "Sender No.: ${data.get("Number")}"
+            } else if (data.getString("Type") == "Purchase") {
+                divider2.visibility = View.VISIBLE
+                lblDescTransactionItemsTitle.visibility = View.VISIBLE
+                lblDescTransactionItemsContent.visibility = View.VISIBLE
+
+                lblDlgTransactionTotalAmount.text = "- ${formatNumber(data.get("Amount"))}"
+                lblDescTransactionIdentifier.text = "Vendo No.: ${data.get("Vendo")}"
+
+                data.reference.collection("Items").get().addOnSuccessListener { dataItems ->
+                    val items = mutableListOf<String>()
+
+                    for (document in dataItems) {
+                        val name = document.getString("Name")
+                        val price = document.getString("Price")
+                        val quantity = document.getLong("Quantity")
+                        val total = price!!.toDouble() * quantity!!.toDouble()
+                        items.add("${quantity}pc(s) $name - ${formatNumber(total)}")
+                    }
+                    val formattedText = items.joinToString("\n")
+                    lblDescTransactionItemsContent.text = formattedText.dropLast(0)
+                }
+            }
+        }
+
+        btnDlgTransactionPrimary.setOnClickListener {
             dialog.dismiss()
         }
 
