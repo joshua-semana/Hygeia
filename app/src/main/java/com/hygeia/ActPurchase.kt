@@ -103,7 +103,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                         docRef.collection("Items").document().set(subData)
 
                         //UPDATE Product Quantity
-                        val productsRef = machinesRef.document(machineID).collection("Products")
+                        val productsRef = machinesRef.document(machineID.toString()).collection("Products")
                         productsRef.document(product.ID!!).update("Quantity", product.Quantity!!.toInt() - product.Count)
                     }
                 }

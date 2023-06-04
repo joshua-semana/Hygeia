@@ -9,11 +9,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.ActPurchase
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
+import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
+import com.hygeia.classes.DataTransactions
 import com.hygeia.objects.Utilities.dlgInformation
 import com.hygeia.objects.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
@@ -25,12 +29,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-class FrgMainHome : Fragment() {
+class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListener {
     private lateinit var bind: FrgMainHomeBinding
+    private lateinit var listOfTransactions: ArrayList<DataTransactions>
     private lateinit var loading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var userRef = db.collection("User")
+    private var transactionRef = db.collection("Transactions")
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,7 +60,11 @@ class FrgMainHome : Fragment() {
                 lifecycleScope.launch(Dispatchers.Main) {
                     getWalletBalance()
                 }
+                getListOfTransactions()
             }
+
+            //POPULATE
+            getListOfTransactions()
 
             //NAVIGATION
             btnSendMoney.setOnClickListener {
@@ -61,7 +72,7 @@ class FrgMainHome : Fragment() {
             }
 
             btnPurchase.setOnClickListener {
-                startActivity(Intent(requireContext(), ActPurchase::class.java))
+                startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(
@@ -73,6 +84,44 @@ class FrgMainHome : Fragment() {
                 })
 
             return root
+        }
+    }
+
+    private fun getListOfTransactions() {
+        loading.show()
+        bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
+        listOfTransactions = arrayListOf()
+
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3)
+
+        query.get().apply {
+            addOnSuccessListener { data ->
+                if (!data.isEmpty) {
+                    bind.coverTransaction.visibility = View.GONE
+                    for (item in data.documents) {
+                        val transactionId = item.id
+                        val transactionAmount = item.get("Amount")
+                        val transactionDate: Timestamp = item.get("Date Created") as Timestamp
+                        val transactionNumber = item.get("Number")
+                        val transactionReference = item.get("Reference Number")
+                        val transactionType = item.get("Type")
+
+                        val transaction = DataTransactions(
+                            transactionId,
+                            transactionAmount,
+                            transactionDate,
+                            transactionNumber.toString(),
+                            transactionReference.toString(),
+                            transactionType.toString()
+                        )
+
+                        listOfTransactions.add(transaction)
+                    }
+                    bind.listViewTransactionHistory.adapter =
+                        ArrAdpTransactions(listOfTransactions, this@FrgMainHome)
+                }
+                loading.dismiss()
+            }
         }
     }
 
@@ -97,5 +146,9 @@ class FrgMainHome : Fragment() {
                 requireActivity().finish()
             }
         }.show()
+    }
+
+    override fun onTransactionItemClick(ID: String) {
+        Utilities.dlgTransactionDetails(requireContext(), ID).show()
     }
 }

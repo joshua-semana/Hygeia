@@ -146,4 +146,57 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblSendMoney" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listViewTransactionHistory"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblLatestTransactions"
+        tools:listitem="@layout/list_transaction"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/coverTransaction"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/mx"
+        app:layout_constraintBottom_toBottomOf="@+id/listViewTransactionHistory"
+        app:layout_constraintEnd_toEndOf="@+id/listViewTransactionHistory"
+        app:layout_constraintStart_toStartOf="@+id/listViewTransactionHistory"
+        app:layout_constraintTop_toTopOf="@+id/listViewTransactionHistory">
+
+        <TextView
+            android:id="@+id/lblEmoji"
+            style="@style/Text_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/emo_hiding"
+            android:textSize="@dimen/text_emoji_lg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/desc_empty_transaction"
+            android:textAlignment="center"
+            android:textColor="@color/neutral_500"
+            android:textSize="@dimen/text_md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEmoji" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -46,7 +46,7 @@
     <string name="desc_update_password">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="desc_wallet_balance">Wallet Balance</string>
     <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
-    <string name="desc_transaction_history">View all your transactions in one place. This displays a comprehensive list of all the transactions you have made, providing you with a clear overview of your financial activity.</string>
+    <string name="desc_transaction_history">View all your transactions in one place.</string>
     <string name="desc_vending_machines">Discover all the available vending machine in one place.</string>
     <string name="desc_user_info">View your profile and account details at a glance.</string>
     <string name="desc_vending_location">Located at: </string>
@@ -54,6 +54,8 @@
     <string name="desc_vat">VAT</string>
     <string name="desc_grand_total">Grand Total</string>
     <string name="desc_vendo_num">Vendo #</string>
+    <string name="desc_items">Items:</string>
+    <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment. </string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -145,12 +147,15 @@
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
     <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
     <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
+    <string name="dlg_body_send_money">You have successfully sent money to your recipient\'s account.</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
     <string name="dlg_body_log_out">Are you sure you want to log out?\nLogging out will end your current session and require you to sign in again.</string>
     <string name="dlg_send_money">Are you sure you want to send this amount to the recipient\'s account?</string>
     <string name="dlg_purchase">Are you sure you want to purchase this selection of items?</string>
+    <string name="dlg_title_transaction_details">Transaction Details</string>
+    <string name="dlg_receipt_total_amount">Total Amount</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
@@ -207,7 +212,7 @@
     <string name="t1">Send Money</string>
     <string name="t2">April 19 | 7:00 AM</string>
     <string name="t3">- ₱10.00</string>
-    <string name="placeholder">default</string>
+    <string name="placeholder">Please wait ...</string>
     <string name="zero">0</string>
     <string name="title_activity_act_user_info">ActUserInfo</string>
 
@@ -240,4 +245,5 @@
     • Updates to Privacy Policy\nWe may update our Privacy Policy from time to time. We will notify you of any material changes by posting the updated Privacy Policy of Hygeia or by other means. Continued use of our services after any modifications constitutes your acceptance of the revised Privacy Policy.
     \n
     </string>
+    <string name="emo_hiding">😶‍🌫️</string>
 </resources>

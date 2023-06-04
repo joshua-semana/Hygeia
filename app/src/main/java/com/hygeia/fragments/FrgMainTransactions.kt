@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.DataTransactions
 import com.hygeia.databinding.FrgMainTransactionsBinding
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgTransactionDetails
 
 class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClickListener {
 
@@ -43,35 +47,42 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
         listOfTransactions = arrayListOf()
 
-        transactionRef.get().apply {
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid)//.orderBy("Date Created", Query.Direction.DESCENDING)
+
+        query.get().apply {
             addOnSuccessListener { data ->
-                for (item in data.documents) {
-                    val transactionId = item.id
-                    val transactionAmount = item.get("Amount")
-                    val transactionDate = item.get("Date Created")
-                    val transactionNumber = item.get("Number")
-                    val transactionReference = item.get("Reference Number")
-                    val transactionType = item.get("Type")
+                if (!data.isEmpty) {
+                    bind.coverTransaction.visibility = View.GONE
 
-                    val transaction = DataTransactions(
-                        transactionId,
-                        transactionAmount,
-                        transactionDate.toString(),
-                        transactionNumber.toString(),
-                        transactionReference.toString(),
-                        transactionType.toString()
-                    )
+                    for (item in data.documents) {
+                        val transactionId = item.id
+                        val transactionAmount = item.get("Amount")
+                        val transactionDate: Timestamp = item.get("Date Created") as Timestamp
+                        val transactionNumber = item.get("Number")
+                        val transactionReference = item.get("Reference Number")
+                        val transactionType = item.get("Type")
 
-                    listOfTransactions.add(transaction)
+                        val transaction = DataTransactions(
+                            transactionId,
+                            transactionAmount,
+                            transactionDate,
+                            transactionNumber.toString(),
+                            transactionReference.toString(),
+                            transactionType.toString()
+                        )
+
+                        listOfTransactions.add(transaction)
+                    }
+                    bind.listViewTransactionHistory.adapter =
+                        ArrAdpTransactions(listOfTransactions, this@FrgMainTransactions)
                 }
-                bind.listViewTransactionHistory.adapter = ArrAdpTransactions(listOfTransactions, this@FrgMainTransactions)
                 loading.dismiss()
             }
         }
     }
 
     override fun onTransactionItemClick(ID: String) {
-        TODO("Not yet implemented")
+        dlgTransactionDetails(requireContext(), ID).show()
     }
 
 }

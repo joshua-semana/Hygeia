@@ -24,7 +24,7 @@ object MachineManager {
     var name: String? = null
     var status: String? = null
   
-    var userConnected: String? = null
+    var userConnected: Long? = null
     var machineId : String? = null
 
     fun setMachineInformation(machineInfo: DocumentSnapshot) {
@@ -34,7 +34,7 @@ object MachineManager {
             name = get("Name") as String?
             status = get("Status") as String?
 
-            userConnected = get("User Connected") as String?
+            userConnected = get("User Connected") as Long?
             machineId = get("MachineID") as String?
 
         }
