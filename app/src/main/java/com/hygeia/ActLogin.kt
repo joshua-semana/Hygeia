@@ -158,18 +158,16 @@ class ActLogin : AppCompatActivity() {
                     loading.dismiss()
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    userRef.document(uid).update("status", "active")
-                        .addOnSuccessListener {
-                            startActivity(Intent(applicationContext, ActMain::class.java))
+                    when (UserManager.status) {
+                        "inactive" -> {
+                            userRef.document(uid).update("status", "active")
+                                .addOnSuccessListener {
+                                    startActivity(Intent(applicationContext, ActMain::class.java))
+                                }
                         }
-
-//                    when (UserManager.status) {
-//                        "inactive" -> {
-//
-//                        }
-//                        "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
-//                        else -> null
-//                    }
+                        "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
+                        else -> null
+                    }
                 }
             }
             addOnFailureListener {
@@ -185,7 +183,16 @@ class ActLogin : AppCompatActivity() {
                 loading.dismiss()
                 UserManager.setUserInformation(data)
                 clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                startActivity(Intent(applicationContext, ActMain::class.java))
+                when (UserManager.status) {
+                    "inactive" -> {
+                        userRef.document(query.documents[0].id).update("status", "active")
+                            .addOnSuccessListener {
+                                startActivity(Intent(applicationContext, ActMain::class.java))
+                            }
+                    }
+                    "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
+                    else -> null
+                }
             }
         } else {
             loading.dismiss()

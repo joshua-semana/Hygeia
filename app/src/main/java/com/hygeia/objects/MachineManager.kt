@@ -9,6 +9,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.WindowManager
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
@@ -46,7 +47,7 @@ object MachineManager {
     }
 
     @SuppressLint("SetTextI18n")
-    fun dlgEditVendoLocation(context : Context): Dialog {
+    fun dlgEditVendoLocation(context : Context, onButtonClicked: (type: ButtonType) -> Unit): Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_vendo_detail)
         dialog.setCancelable(false)
@@ -67,8 +68,10 @@ object MachineManager {
             if (txtDlgVendoDetail.text!!.isEmpty()) {
                 txtLayoutDlgVendoDetail.error = "Required*"
             } else {
-                machineRef.document(MachineManager.uid!!).update("Location", txtDlgVendoDetail.text.toString())
-                dialog.dismiss()
+                machineRef.document(MachineManager.uid!!).update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
+                    onButtonClicked(ButtonType.PRIMARY)
+                    dialog.dismiss()
+                }
             }
         }
 
@@ -106,7 +109,6 @@ object MachineManager {
         }
 
         btnDlgProductDetailPrimary.setOnClickListener {
-            onButtonClicked(ButtonType.PRIMARY)
             clearTextError(
                 txtLayoutDlgProductName,
                 txtLayoutDlgProductPrice,
@@ -116,6 +118,19 @@ object MachineManager {
                 txtDlgProductQuantity.text!!.isNotEmpty()){
                 if (txtDlgProductQuantity.text.toString().toLong() > 10){
                     txtLayoutDlgProductQuantity.error = "The maximum items per product is less than or equal to 10"
+                }  else {
+                    val productUpdatedData = hashMapOf<String, Any>(
+                        "Name" to txtDlgProductName.text.toString(),
+                        "Price" to txtDlgProductPrice.text.toString().toLong(),
+                        "Quantity" to txtDlgProductQuantity.text.toString().toLong()
+                    )
+                        machineRef.document(MachineManager.uid!!.trim()).get().addOnSuccessListener{ parent ->
+                        parent.reference.collection("Products").document(productID)
+                            .update(productUpdatedData).addOnSuccessListener {
+                                onButtonClicked(ButtonType.PRIMARY)
+                                dialog.dismiss()
+                            }
+                    }
                 }
             }else {
                 Utilities.showRequiredTextField(
@@ -124,13 +139,10 @@ object MachineManager {
                     txtDlgProductQuantity to txtLayoutDlgProductQuantity
                 )
             }
-            dialog.dismiss()
         }
-
         btnDlgProductDetailSecondary.setOnClickListener {
             dialog.dismiss()
         }
-
         return dialog
     }
 

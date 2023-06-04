@@ -5,6 +5,7 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.firestore.FieldValue
@@ -18,6 +19,7 @@ import com.hygeia.objects.MachineManager.dlgEditProduct
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,9 +46,17 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
-                dlgEditVendoLocation(this@ActMachine).show()
+                dlgEditVendoLocation(this@ActMachine) {
+                    if(isInternetConnected(applicationContext)){
+                        if(it == ButtonType.PRIMARY){
+                                lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
+                                lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+                            }
+                        }else{
+                            dlgStatus(this@ActMachine, "no internet").show()
+                        }
+                    }.show()
             }
-
             btnBack.setOnClickListener {
                 onBackPressed()
             }
@@ -97,30 +107,14 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     }
 
     override fun onProductEditItemClick(productID: String) {
-        TODO("Not yet implemented")
+        if (isInternetConnected(applicationContext)){
+            dlgEditProduct(this@ActMachine, productID){
+                if(it == ButtonType.PRIMARY) {
+                    getListOfProducts()
+                }
+            }.show()
+        }else {
+            dlgStatus(this@ActMachine, "no internet").show()
+        }
     }
-
-//    override fun onProductEditItemClick(productID: String) {
-//        if (isInternetConnected(applicationContext)){
-//            dlgEditProduct(this@ActMachine, productID){
-//                if(it == ButtonType.PRIMARY){
-//
-////                            val productUpdatedData = hashMapOf<String, Any>(
-////                                "Name" to txtDlgProductName.text.toString(),
-////                                "Price" to txtDlgProductPrice.text.toString().toLong(),
-////                                "Quantity" to txtDlgProductQuantity.text.toString().toLong()
-////                            )
-////                            MachineManager.machineRef.document(MachineManager.uid!!.trim()).get().addOnSuccessListener{ parent ->
-////                                parent.reference.collection("Products").document(productID)
-////                                    .update(productUpdatedData).addOnSuccessListener {
-////                                        dialog.dismiss()
-////                                    }
-////                            }
-//                    }
-//                }
-//            }
-//        }else {
-//            Utilities.dlgStatus(this@ActMachine, "no internet").show()
-//        }
-//    }
 }
