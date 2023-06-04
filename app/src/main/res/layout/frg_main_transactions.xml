@@ -24,4 +24,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
         tools:ignore="VisualLintLongText" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listViewTransactionHistory"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription"
+        tools:listitem="@layout/list_transaction"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

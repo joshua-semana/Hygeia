@@ -61,7 +61,7 @@ class FrgMainHome : Fragment() {
             }
 
             btnPurchase.setOnClickListener {
-                startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
+                startActivity(Intent(requireContext(), ActPurchase::class.java))
             }
 
             requireActivity().onBackPressedDispatcher.addCallback(

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hygeia.R
@@ -11,13 +12,15 @@ import com.hygeia.classes.DataProductAdmin
 import com.hygeia.objects.Utilities.formatNumber
 
 class ArrAdpProductAdmin(
-    private val listProducts: ArrayList<DataProductAdmin>
+    private val listProducts: ArrayList<DataProductAdmin>,
+    private val clickListener: OnProductEditItemClickListener
     ) : RecyclerView.Adapter<ArrAdpProductAdmin.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameAndPrice : TextView = itemView.findViewById(R.id.lblListProductAdminNameAndPrice)
         val quantity : TextView = itemView.findViewById(R.id.lblListProductAdminQuantity)
         val slot : TextView = itemView.findViewById(R.id.lblListProductAdminSlot)
+        val btnEdit : ImageButton = itemView.findViewById(R.id.btnListProductEdit)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -36,7 +39,15 @@ class ArrAdpProductAdmin(
                 nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
                 quantity.text = "$Quantity items available"
                 slot.text = "Vendo Slot: $Slot"
+
+                btnEdit.setOnClickListener {
+                    clickListener.onProductEditItemClick(ID!!)
+                }
             }
         }
+    }
+
+    interface OnProductEditItemClickListener {
+        fun onProductEditItemClick(productID: String)
     }
 }
