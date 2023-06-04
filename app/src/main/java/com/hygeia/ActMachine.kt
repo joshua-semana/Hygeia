@@ -17,6 +17,7 @@ import com.hygeia.databinding.ActMachineBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.MachineManager.dlgEditProduct
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
+import com.hygeia.objects.MachineManager.machineId
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.dlgStatus
@@ -32,7 +33,6 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
 
-    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActMachineBinding.inflate(layoutInflater)
@@ -41,8 +41,9 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
         with(bind) {
             //POPULATE
-            lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
-            lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+            populateView()
+            getListOfProducts()
+            bind.switchVendoStatus.isChecked = MachineManager.status == "Online"
 
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
@@ -56,13 +57,39 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             dlgStatus(this@ActMachine, "no internet").show()
                         }
                     }.show()
+
+            switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
+                loading.show()
+                if (isChecked) {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Online").addOnSuccessListener {
+                        MachineManager.status = "Online"
+                        populateView()
+                        loading.dismiss()
+                    }
+                } else {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Offline").addOnSuccessListener {
+                        MachineManager.status = "Offline"
+                        populateView()
+                        loading.dismiss()
+                    }
+                }
             }
+
+            btnVendoDetailEdit.setOnClickListener {
+                dlgEditVendoLocation(this@ActMachine).show()
+            }
+            
             btnBack.setOnClickListener {
                 onBackPressed()
             }
         }
+    }
 
-        getListOfProducts()
+    @SuppressLint("SetTextI18n")
+    private fun populateView() {
+        bind.lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
+        bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+        bind.lblVendoStatus.text = "Vendo status is currently: \"${MachineManager.status}\""
     }
 
     private fun getListOfProducts() {

@@ -56,9 +56,16 @@ class ArrAdpTransactions(
                     }
                     "Purchase" -> {
                         image.setImageResource(R.drawable.ic_product)
-                        type.text = "Purchase items"
+
                         amount.text = "- ${Utilities.formatNumber(Amount)}"
-                        number.text = "$Number products"
+                        if (Number == "1") {
+                            number.text = "$Number product"
+                            type.text = "Purchase item"
+                        } else {
+                            number.text = "$Number products"
+                            type.text = "Purchase items"
+                        }
+
                     }
                 }
 

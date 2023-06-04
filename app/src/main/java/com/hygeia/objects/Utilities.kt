@@ -190,6 +190,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
         }
 
+        if (content == "success purchase") {
+            lblDlgInfoEmoji.text = Emoji.Purchase
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_purchase_complete)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_purchase)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_sure)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }

@@ -29,7 +29,7 @@ class ArrAdpMachines(
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.name.text = "Vendo #" + listMachines[position].Name
+        holder.name.text = "Vendo No. " + listMachines[position].Name
         holder.location.text = listMachines[position].Location
         holder.itemView.setOnClickListener {
             clickListener.onMachineItemClick(listMachines[position].MachineID!!)

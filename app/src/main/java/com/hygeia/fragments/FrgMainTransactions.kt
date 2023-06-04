@@ -47,7 +47,7 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
         listOfTransactions = arrayListOf()
 
-        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid)//.orderBy("Date Created", Query.Direction.DESCENDING)
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).orderBy("Date Created", Query.Direction.DESCENDING)
 
         query.get().apply {
             addOnSuccessListener { data ->

@@ -108,18 +108,22 @@ class ActSendMoney : AppCompatActivity() {
                 if (!phoneNumberExists) {
                     inputErrorCount++
                     txtLayoutPhoneNumber.error = getString(R.string.error_phone_registered)
+                    loading.dismiss()
                 }
                 if (phoneNumber == UserManager.phoneNumber) {
                     inputErrorCount++
                     txtLayoutPhoneNumber.error = getString(R.string.error_phone_user_manager)
+                    loading.dismiss()
                 }
             } else {
                 inputErrorCount++
                 txtLayoutPhoneNumber.error = getString(R.string.error_phone_format)
+                loading.dismiss()
             }
             if (UserManager.balance.toString().toDouble() < amount) {
                 inputErrorCount++
                 bind.txtLayoutAmount.error = "You only have $balance in your wallet."
+                loading.dismiss()
             }
         }
         return inputErrorCount == 0
