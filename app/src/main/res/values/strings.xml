@@ -54,8 +54,8 @@
     <string name="desc_vat">VAT</string>
     <string name="desc_grand_total">Grand Total</string>
     <string name="desc_vendo_num">Vendo #</string>
-    <string name="desc_items">Items:</string>
-    <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment. </string>
+    <string name="desc_items">Item(s):</string>
+    <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -76,6 +76,8 @@
     <string name="title_product_name">Product Name</string>
     <string name="title_product_price">Product Price</string>
     <string name="title_product_quantity">Product Quantity</string>
+    <string name="title_status_online">Online</string>
+    <string name="title_status_offline">Offline</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -136,6 +138,7 @@
     <string name="dlg_placeholder_body">Dialog content</string>
     <string name="dlg_title_positive_1">Hooray!</string>
     <string name="dlg_title_positive_2">Yippee!</string>
+    <string name="dlg_title_purchase_complete">Purchase Complete</string>
     <string name="dlg_title_negative_1">Uh-oh!</string>
     <string name="dlg_title_negative_2">Oh no!</string>
     <string name="dlg_title_negative_3">Hmm…</string>
@@ -149,6 +152,7 @@
     <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
     <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
     <string name="dlg_body_send_money">You have successfully sent money to your recipient\'s account.</string>
+    <string name="dlg_body_purchase">Thank you for choosing our service! We appreciate your support and trust in our platform.</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>

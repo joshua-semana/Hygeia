@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.hygeia.ActMain
 import com.hygeia.ActPurchase
 import com.hygeia.ActQrCodeScanner
@@ -93,7 +94,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
         listOfTransactions = arrayListOf()
 
-        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3)
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3).orderBy("Date Created", Query.Direction.DESCENDING)
 
         query.get().apply {
             addOnSuccessListener { data ->
