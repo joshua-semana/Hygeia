@@ -4,11 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.ButtonType
@@ -19,12 +15,8 @@ import com.hygeia.objects.MachineManager.dlgEditProduct
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.MachineManager.machineId
 import com.hygeia.objects.Utilities
-import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind : ActMachineBinding
     private lateinit var listOfProducts: ArrayList<DataProductAdmin>
@@ -33,6 +25,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActMachineBinding.inflate(layoutInflater)
@@ -48,15 +41,15 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
                 dlgEditVendoLocation(this@ActMachine) {
-                    if(isInternetConnected(applicationContext)){
-                        if(it == ButtonType.PRIMARY){
-                                lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
-                                lblDescVendoLocation.text = "Located at ${MachineManager.location}"
-                            }
-                        }else{
-                            dlgStatus(this@ActMachine, "no internet").show()
+                    if (isInternetConnected(applicationContext)) {
+                        if (it == ButtonType.PRIMARY) {
+                            populateView()
                         }
-                    }.show()
+                    } else {
+                        dlgStatus(this@ActMachine, "no internet").show()
+                    }
+                }.show()
+            }
 
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
                 loading.show()
@@ -76,9 +69,9 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }
 
             btnVendoDetailEdit.setOnClickListener {
-                dlgEditVendoLocation(this@ActMachine).show()
+                //dlgEditVendoLocation(this@ActMachine).show()
             }
-            
+
             btnBack.setOnClickListener {
                 onBackPressed()
             }
@@ -100,7 +93,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         machinesRef.document(MachineManager.uid.toString()).get().apply {
             addOnSuccessListener { parent ->
 
-                val productsRef = parent.reference.collection("Products")
+                val productsRef = parent.reference.collection("Products").orderBy("Slot")
 
                 productsRef.get().apply {
                     addOnSuccessListener { child ->
@@ -110,13 +103,15 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             val productPrice = item.get("Price")
                             val productQuantity = item.get("Quantity")
                             val productSlot = item.get("Slot")
+                            val productStatus = item.get("Status")
 
                             val product = DataProductAdmin(
                                 productId,
                                 productName.toString(),
                                 productPrice.toString(),
                                 productQuantity.toString(),
-                                productSlot.toString().toInt()
+                                productSlot.toString().toInt(),
+                                productStatus.toString().toInt()
                             )
 
                             listOfProducts.add(product)
