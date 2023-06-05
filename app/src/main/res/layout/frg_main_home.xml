@@ -30,6 +30,51 @@
         app:layout_constraintTop_toBottomOf="@+id/lblGreetings" />
 
     <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardPoints"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/mx"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_lg"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toBottomOf="@+id/lblUserFullName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/lblGreetings"
+        app:rippleColor="@color/warning_50"
+        app:strokeColor="@color/warning_50"
+        app:strokeWidth="1dp"
+        tools:ignore="TouchTargetSizeCheck">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_circle_warning"
+                android:padding="6dp"
+                android:src="@drawable/ic_star"
+                tools:ignore="ContentDescription,ImageContrastCheck" />
+
+            <TextView
+                android:id="@+id/lblHygeiaPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="6dp"
+                android:layout_marginEnd="10dp"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardWallet"
         style="@style/Card_Wallet"
         android:clickable="true"
@@ -103,17 +148,27 @@
         app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblActions"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/btnPurchase"
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_buy"
         app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnPurchaseUsingPoints"
         app:layout_constraintStart_toEndOf="@+id/btnSendMoney"
         app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
-        tools:ignore="ContentDescription,SpeakableTextPresentCheck" />
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/btnPurchaseUsingPoints"
+        style="@style/Circle_Lg_50"
+        android:src="@drawable/ic_use_points"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPurchase"
+        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <TextView
         android:id="@+id/lblSendMoney"
@@ -140,6 +195,18 @@
         tools:ignore="TextContrastCheck" />
 
     <TextView
+        android:id="@+id/lblPurchaseUsingPoints"
+        style="@style/Text_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_purchase_using_points"
+        app:layout_constraintEnd_toEndOf="@+id/btnPurchaseUsingPoints"
+        app:layout_constraintStart_toStartOf="@+id/btnPurchaseUsingPoints"
+        app:layout_constraintTop_toBottomOf="@+id/btnPurchase"
+        tools:ignore="TextContrastCheck" />
+
+    <TextView
         android:id="@+id/lblLatestTransactions"
         style="@style/Text_H6_Title"
         android:text="@string/h6_latest_transactions"
@@ -158,7 +225,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblLatestTransactions"
-        tools:listitem="@layout/list_transaction"/>
+        tools:listitem="@layout/list_transaction" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/coverTransaction"
@@ -182,7 +249,8 @@
             android:textSize="@dimen/text_emoji_lg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
 
         <TextView
             android:id="@+id/lblMessage"

@@ -71,8 +71,8 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("roenleonardo03@gmail.com")
-                txtPassword.setText("Admin@123")
+                txtEmailOrPhoneNumber.setText("09087788795")
+                txtPassword.setText("Admin1!?")
                 btnLogin.performClick()
             }
 
@@ -165,21 +165,26 @@ class ActLogin : AppCompatActivity() {
                 userRef.document(uid).get().addOnSuccessListener { data ->
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    when (UserManager.status) {
-                        "inactive" -> {
-                            userRef.document(uid).update("status", "active")
-                                .addOnSuccessListener {
-                                    loading.dismiss()
-                                    startActivity(Intent(applicationContext, ActMain::class.java))
-                                }
-                        }
-
-                        "active" -> {
+                    userRef.document(uid).update("status", "active")
+                        .addOnSuccessListener {
                             loading.dismiss()
-                            dlgStatus(this@ActLogin,"user already active").show()
+                            startActivity(Intent(applicationContext, ActMain::class.java))
                         }
-                        else -> null
-                    }
+//                    when (UserManager.status) {
+//                        "inactive" -> {
+//                            userRef.document(uid).update("status", "active")
+//                                .addOnSuccessListener {
+//                                    loading.dismiss()
+//                                    startActivity(Intent(applicationContext, ActMain::class.java))
+//                                }
+//                        }
+//
+//                        "active" -> {
+//                            loading.dismiss()
+//                            dlgStatus(this@ActLogin,"user already active").show()
+//                        }
+//                        else -> null
+//                    }
                 }
             }
             addOnFailureListener {
@@ -195,20 +200,25 @@ class ActLogin : AppCompatActivity() {
             userRef.document(query.documents[0].id).get().addOnSuccessListener { data ->
                 UserManager.setUserInformation(data)
                 clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                when (UserManager.status) {
-                    "inactive" -> {
-                        userRef.document(query.documents[0].id).update("status", "active")
-                            .addOnSuccessListener {
-                                loading.dismiss()
-                                startActivity(Intent(applicationContext, ActMain::class.java))
-                            }
-                    }
-                    "active" -> {
+                userRef.document(query.documents[0].id).update("status", "active")
+                    .addOnSuccessListener {
                         loading.dismiss()
-                        dlgStatus(this@ActLogin,"user already active").show()
+                        startActivity(Intent(applicationContext, ActMain::class.java))
                     }
-                    else -> null
-                }
+//                when (UserManager.status) {
+//                    "inactive" -> {
+//                        userRef.document(query.documents[0].id).update("status", "active")
+//                            .addOnSuccessListener {
+//                                loading.dismiss()
+//                                startActivity(Intent(applicationContext, ActMain::class.java))
+//                            }
+//                    }
+//                    "active" -> {
+//                        loading.dismiss()
+//                        dlgStatus(this@ActLogin,"user already active").show()
+//                    }
+//                    else -> null
+//                }
             }
         } else {
             loading.dismiss()

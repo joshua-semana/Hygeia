@@ -70,7 +70,8 @@
 
         </LinearLayout>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/btnEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -78,6 +79,17 @@
             android:background="@drawable/bg_squircle_300"
             android:padding="8dp"
             android:src="@drawable/ic_edit"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/btnPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/elmnt_gap_md"
+            android:background="@drawable/bg_squircle_300"
+            android:padding="8dp"
+            android:src="@drawable/ic_points"
             tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     </LinearLayout>
