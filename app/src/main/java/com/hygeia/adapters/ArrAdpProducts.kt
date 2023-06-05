@@ -33,7 +33,7 @@ class ArrAdpProducts(
     }
 
     override fun getItemCount(): Int {
-        return listProducts.count { it.Quantity!!.toDouble() > 0 }
+        return listProducts.count { it.Quantity!!.toDouble() > 0 && it.Status != 0}
     }
 
     @SuppressLint("SetTextI18n")
@@ -41,7 +41,7 @@ class ArrAdpProducts(
         val product = getNonZeroQuantityProduct(position)
         if (product != null) {
             with(holder) {
-                with(listProducts[position]) {
+                with(product) {
                     nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
                     quantity.text = "$Quantity items available"
                     count.text = "$Count"
@@ -71,7 +71,7 @@ class ArrAdpProducts(
     fun getNonZeroQuantityProduct(position: Int): DataProducts? {
         var count = 0
         for (product in listProducts) {
-            if (product.Quantity!!.toDouble() > 0) {
+            if (product.Quantity!!.toDouble() > 0 && product.Status != 0) {
                 if (count == position) {
                     return product
                 }

@@ -56,6 +56,7 @@
     <string name="desc_vendo_num">Vendo #</string>
     <string name="desc_items">Item(s):</string>
     <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
+    <string name="desc_vendo_slot_status">Vendo slot status</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -145,6 +146,7 @@
     <string name="dlg_title_trivia">Trivia!</string>
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
+    <string name="dlg_body_user_in_use">This account is already logged in on another device. Please try again later.</string>
     <string name="dlg_body_machine_offline_or_in_use">This machine is either offline or in use for now. Please try again later</string>
     <string name="dlg_body_qr_code_not_registered">The QR code you scanned is not registered in our system.</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>

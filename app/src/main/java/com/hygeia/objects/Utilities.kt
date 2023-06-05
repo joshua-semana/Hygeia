@@ -197,6 +197,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_sure)
         }
 
+        if (content == "user already active") {
+            lblDlgInfoEmoji.text = Emoji.NoInternet
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_user_in_use)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }

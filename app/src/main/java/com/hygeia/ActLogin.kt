@@ -38,6 +38,7 @@ class ActLogin : AppCompatActivity() {
 
     private var emailAddress = ""
     private var phoneNumber = ""
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,7 +54,10 @@ class ActLogin : AppCompatActivity() {
             btnLogin.setOnClickListener {
                 if (isInternetConnected(applicationContext)) {
                     if (inputsAreNotEmpty()) {
-                        validateInputs(txtEmailOrPhoneNumber.text?.trim().toString(), txtPassword.text.toString())
+                        validateInputs(
+                            txtEmailOrPhoneNumber.text?.trim().toString(),
+                            txtPassword.text.toString()
+                        )
                     } else {
                         clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
                         showRequiredTextField(
@@ -90,10 +94,11 @@ class ActLogin : AppCompatActivity() {
             btnCreateAccount.setOnClickListener {
                 startActivity(Intent(this@ActLogin, ActCreateAccount::class.java))
                 clearTextError(txtLayoutEmailOrPhoneNumber, txtLayoutPassword)
-                clearTextFields(txtEmailOrPhoneNumber,txtPassword)
+                clearTextFields(txtEmailOrPhoneNumber, txtPassword)
             }
         }
     }
+
     private fun inputsAreNotEmpty(): Boolean {
         return when {
             bind.txtEmailOrPhoneNumber.text!!.isEmpty() -> false
@@ -101,10 +106,12 @@ class ActLogin : AppCompatActivity() {
             else -> true
         }
     }
+
     private fun clearTextErrors() {
         bind.txtLayoutEmailOrPhoneNumber.isErrorEnabled = false
         bind.txtLayoutPassword.isErrorEnabled = false
     }
+
     private fun validateInputs(input: String, password: String) {
         clearTextError(bind.txtLayoutEmailOrPhoneNumber, bind.txtLayoutPassword)
         loading.show()
@@ -116,21 +123,22 @@ class ActLogin : AppCompatActivity() {
                         attemptEmailLogin(emailAddress, password)
                     } else {
                         loading.dismiss()
-                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
+                        txtLayoutEmailOrPhoneNumber.error =
+                            getString(R.string.error_email_registered)
                     }
-                }
-                else if (input.matches(phoneNumberPattern)) {
+                } else if (input.matches(phoneNumberPattern)) {
                     getPhoneNumber(input)
                     if (phoneNumber.isNotEmpty()) {
                         attemptPhoneNumberLogin(phoneNumber, password)
                     } else {
                         loading.dismiss()
-                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                        txtLayoutEmailOrPhoneNumber.error =
+                            getString(R.string.error_phone_registered)
                     }
-                }
-                else {
+                } else {
                     loading.dismiss()
-                    txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_password_format)
+                    txtLayoutEmailOrPhoneNumber.error =
+                        getString(R.string.error_email_password_format)
                 }
             }
         }
@@ -152,20 +160,24 @@ class ActLogin : AppCompatActivity() {
 
     private fun attemptEmailLogin(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password).apply {
-            addOnSuccessListener {id ->
+            addOnSuccessListener { id ->
                 val uid = id.user!!.uid
                 userRef.document(uid).get().addOnSuccessListener { data ->
-                    loading.dismiss()
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
                     when (UserManager.status) {
                         "inactive" -> {
                             userRef.document(uid).update("status", "active")
                                 .addOnSuccessListener {
+                                    loading.dismiss()
                                     startActivity(Intent(applicationContext, ActMain::class.java))
                                 }
                         }
-                        "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
+
+                        "active" -> {
+                            loading.dismiss()
+                            dlgStatus(this@ActLogin,"user already active").show()
+                        }
                         else -> null
                     }
                 }
@@ -176,21 +188,25 @@ class ActLogin : AppCompatActivity() {
             }
         }
     }
+
     private suspend fun attemptPhoneNumberLogin(number: String, password: String) {
         val query = userRef.whereEqualTo("phoneNumber", number).get().await()
         if (query.documents[0].getString("password") == password) {
             userRef.document(query.documents[0].id).get().addOnSuccessListener { data ->
-                loading.dismiss()
                 UserManager.setUserInformation(data)
                 clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
                 when (UserManager.status) {
                     "inactive" -> {
                         userRef.document(query.documents[0].id).update("status", "active")
                             .addOnSuccessListener {
+                                loading.dismiss()
                                 startActivity(Intent(applicationContext, ActMain::class.java))
                             }
                     }
-                    "active" -> dlgError(this@ActLogin, "This email or phone number is already active").show()
+                    "active" -> {
+                        loading.dismiss()
+                        dlgStatus(this@ActLogin,"user already active").show()
+                    }
                     else -> null
                 }
             }

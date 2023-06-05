@@ -20,7 +20,7 @@
         tools:ignore="ExtraText">
 
         <ImageView
-            android:id="@+id/imgListProduct"
+            android:id="@+id/imgListProductAdmin"
             style="@style/Circle_Lg_50"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/elmnt_gap_md"
@@ -70,26 +70,15 @@
 
         </LinearLayout>
 
-        <com.google.android.material.card.MaterialCardView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/elmnt_gap_md"
-            android:backgroundTint="@color/neutral_300"
-            app:cardCornerRadius="8dp"
-            app:cardElevation="0dp"
-            app:strokeWidth="0dp">
-
-            <ImageButton
-                android:id="@+id/btnListProductEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@null"
-                android:padding="8dp"
-                android:src="@drawable/ic_edit"
-                tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-        </com.google.android.material.card.MaterialCardView>
+            android:background="@drawable/bg_squircle_300"
+            android:padding="8dp"
+            android:src="@drawable/ic_edit"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     </LinearLayout>
 

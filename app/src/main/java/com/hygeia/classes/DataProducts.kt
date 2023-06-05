@@ -6,5 +6,6 @@ data class DataProducts (
     val Price : String? = null,
     val Quantity : String? = null,
     val Slot : Int? = null,
+    val Status : Int? = null,
     var Count: Int = 0
 )

@@ -50,6 +50,23 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                     } else {
                         dlgStatus(this@ActMachine, "no internet").show()
                     }
+                }.show()
+            }
+
+            switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
+                loading.show()
+                if (isChecked) {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Online").addOnSuccessListener {
+                        MachineManager.status = "Online"
+                        populateView()
+                        loading.dismiss()
+                    }
+                } else {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Offline").addOnSuccessListener {
+                        MachineManager.status = "Offline"
+                        populateView()
+                        loading.dismiss()
+                    }
                 }
 
                 dialog.setOnDismissListener{
@@ -106,7 +123,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         machinesRef.document(MachineManager.uid.toString()).get().apply {
             addOnSuccessListener { parent ->
 
-                val productsRef = parent.reference.collection("Products")
+                val productsRef = parent.reference.collection("Products").orderBy("Slot")
 
                 productsRef.get().apply {
                     addOnSuccessListener { child ->
@@ -116,13 +133,15 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             val productPrice = item.get("Price")
                             val productQuantity = item.get("Quantity")
                             val productSlot = item.get("Slot")
+                            val productStatus = item.get("Status")
 
                             val product = DataProductAdmin(
                                 productId,
                                 productName.toString(),
                                 productPrice.toString(),
                                 productQuantity.toString(),
-                                productSlot.toString().toInt()
+                                productSlot.toString().toInt(),
+                                productStatus.toString().toInt()
                             )
 
                             listOfProducts.add(product)

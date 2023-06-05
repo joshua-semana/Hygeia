@@ -19,11 +19,12 @@
         android:padding="@dimen/elmnt_gap_xl">
 
         <ImageView
+            android:id="@+id/imgListMachine"
             style="@style/Circle_Lg_50"
             android:layout_gravity="center_vertical"
             android:layout_marginEnd="@dimen/elmnt_gap_md"
             android:clickable="false"
-            android:src="@drawable/ic_machine"
+            android:src="@drawable/ic_machine_online"
             tools:ignore="ContentDescription,ImageContrastCheck,SpeakableTextPresentCheck" />
 
         <LinearLayout
@@ -66,7 +67,7 @@
             android:padding="@dimen/elmnt_gap_md"
             android:src="@drawable/ic_arrow"
             app:tint="@color/neutral_400"
-            tools:ignore="ContentDescription" />
+            tools:ignore="ContentDescription,ImageContrastCheck" />
 
     </LinearLayout>
 

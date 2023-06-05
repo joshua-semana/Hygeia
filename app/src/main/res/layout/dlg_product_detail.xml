@@ -124,6 +124,50 @@
                 tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/productStatus"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/white"
+            app:cardCornerRadius="@dimen/radius_md"
+            app:cardElevation="0dp"
+            android:layout_marginTop="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtLayoutDlgProductQuantity"
+            app:strokeColor="@color/neutral_700"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingHorizontal="@dimen/elmnt_gap_xl">
+
+                <TextView
+                    android:id="@+id/lblVendoStatus"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/desc_vendo_slot_status"
+                    android:textColor="@color/neutral_900"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="VisualLintLongText,VisualLintOverlap" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/switchVendoSlotStatus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:checked="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="SpeakableTextPresentCheck" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <Button
             android:id="@+id/btnDlgProductDetailPrimary"
             style="@style/Btn_Primary"
@@ -135,7 +179,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/btnDlgProductDetailSecondary"
-            app:layout_constraintTop_toBottomOf="@+id/txtLayoutDlgProductQuantity"
+            app:layout_constraintTop_toBottomOf="@+id/productStatus"
             tools:ignore="VisualLintButtonSize,DuplicateSpeakableTextCheck" />
 
         <Button
@@ -150,7 +194,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/btnDlgProductDetailPrimary"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtLayoutDlgProductQuantity"
+            app:layout_constraintTop_toBottomOf="@+id/productStatus"
             tools:ignore="VisualLintButtonSize" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
