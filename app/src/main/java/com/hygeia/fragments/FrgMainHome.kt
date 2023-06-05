@@ -55,6 +55,8 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
+            }
+
             if (Utilities.isInternetConnected(requireContext())) {
                 populateMainHome()
                 lblGreetings.text = greeting
@@ -85,6 +87,12 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                     requireActivity().startActivity(intent)
                 }
 
+                btnPurchaseUsingPoints.setOnClickListener {
+                    val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                    intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
+                    requireActivity().startActivity(intent)
+                }
+
                 requireActivity().onBackPressedDispatcher.addCallback(
                     viewLifecycleOwner,
                     object : OnBackPressedCallback(true) {
@@ -95,6 +103,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             } else {
                 Utilities.dlgStatus(requireContext(), "no internet").show()
             }
+
             return root
         }
     }

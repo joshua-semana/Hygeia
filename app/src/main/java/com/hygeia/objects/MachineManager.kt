@@ -39,7 +39,8 @@ object MachineManager {
 
     @SuppressLint("SetTextI18n")
     fun dlgEditVendoLocation(
-        context: Context
+        context: Context,
+        onButtonClicked: (type: ButtonType) -> Unit
     ): Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_vendo_detail)
@@ -70,11 +71,9 @@ object MachineManager {
                         dialog.dismiss()
                     }
             }
-
-            btnDlgVendoDetailSecondary.setOnClickListener {
-                dialog.dismiss()
-            }
-
+        }
+        btnDlgVendoDetailSecondary.setOnClickListener {
+            dialog.dismiss()
         }
         return dialog
     }

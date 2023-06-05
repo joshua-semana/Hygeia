@@ -83,7 +83,7 @@ class ActQrCodeScanner : AppCompatActivity() {
                             .addOnSuccessListener {
                                 when (intent.getStringExtra("From ActQrCodeScanner")) {
                                     "ActPurchase" -> startActivity(Intent(applicationContext, ActPurchase::class.java))
-//                                   "ACTIVITY_2" -> Activity2()
+                                    "ActPurchaseUsingStars" -> startActivity(Intent(applicationContext, ActPurchaseUsingStars::class.java))
                                     else -> null
                                 }
                                 finish()
