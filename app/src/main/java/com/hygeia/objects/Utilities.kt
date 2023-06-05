@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.Date
+import com.google.zxing.Result
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import java.text.DecimalFormat

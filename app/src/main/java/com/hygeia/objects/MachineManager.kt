@@ -41,8 +41,7 @@ object MachineManager {
 
     @SuppressLint("SetTextI18n")
     fun dlgEditVendoLocation(
-        context: Context,
-        onButtonClicked: (type: ButtonType) -> Unit
+        context: Context
     ): Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_vendo_detail)
@@ -68,8 +67,14 @@ object MachineManager {
             } else {
                 machineRef.document(uid!!)
                     .update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
+<<<<<<< Updated upstream
                     onButtonClicked(ButtonType.PRIMARY)
                     dialog.dismiss()
+=======
+                        location = txtDlgVendoDetail.text.toString()
+                        dialog.dismiss()
+                    }
+>>>>>>> Stashed changes
             }
         }
 

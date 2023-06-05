@@ -42,6 +42,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
+<<<<<<< Updated upstream
                 val dialog = dlgEditVendoLocation(this@ActMachine) {
                     if (isInternetConnected(applicationContext)) {
                         if (it == ButtonType.PRIMARY) {
@@ -69,6 +70,9 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                     }
                 }
 
+=======
+                val dialog = dlgEditVendoLocation(this@ActMachine)
+>>>>>>> Stashed changes
                 dialog.setOnDismissListener{
                     loading.show()
                     val txtDlgVendoDetail = dialog.findViewById<TextInputEditText>(R.id.txtDlgVendoDetail)
@@ -80,7 +84,6 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                         }
                     populateView()
                 }
-
                 dialog.show()
 
                 switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
