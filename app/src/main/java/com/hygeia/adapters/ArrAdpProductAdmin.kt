@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hygeia.R
@@ -20,7 +20,7 @@ class ArrAdpProductAdmin(
         val nameAndPrice : TextView = itemView.findViewById(R.id.lblListProductAdminNameAndPrice)
         val quantity : TextView = itemView.findViewById(R.id.lblListProductAdminQuantity)
         val slot : TextView = itemView.findViewById(R.id.lblListProductAdminSlot)
-        val btnEdit : ImageButton = itemView.findViewById(R.id.btnListProductEdit)
+        val image : ImageView = itemView.findViewById(R.id.imgListProductAdmin)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,10 +37,23 @@ class ArrAdpProductAdmin(
         with(holder) {
             with(listProducts[position]) {
                 nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
-                quantity.text = "$Quantity items available"
+                quantity.text = "$Quantity item(s) available"
                 slot.text = "Vendo Slot: $Slot"
 
-                btnEdit.setOnClickListener {
+                if (Status == 0) {
+                    image.setImageResource(R.drawable.ic_product_disabled)
+                    image.setBackgroundResource(R.drawable.bg_circle_300)
+                } else {
+                    if (Quantity == "0") {
+                        image.setImageResource(R.drawable.ic_product_empty)
+                        image.setBackgroundResource(R.drawable.bg_circle_danger_50)
+                    } else {
+                        image.setImageResource(R.drawable.ic_product)
+                        image.setBackgroundResource(R.drawable.bg_circle_50)
+                    }
+                }
+
+                itemView.setOnClickListener {
                     clickListener.onProductEditItemClick(ID!!)
                 }
             }

@@ -5,5 +5,6 @@ data class DataProductAdmin (
     val Name : String? = null,
     val Price : String? = null,
     val Quantity : String? = null,
-    val Slot : Int? = null
+    val Slot : Int? = null,
+    val Status : Int? = null
 )

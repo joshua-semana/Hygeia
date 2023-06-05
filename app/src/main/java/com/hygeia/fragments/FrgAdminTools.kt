@@ -52,7 +52,9 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         bind.listViewMachines.layoutManager = LinearLayoutManager(requireContext())
         listOfMachines = arrayListOf()
 
-        machinesRef.get().apply {
+        val query = machinesRef.orderBy("Name")
+
+        query.get().apply {
             addOnSuccessListener { data ->
                 if (!data.isEmpty) {
                     for (item in data.documents) {
