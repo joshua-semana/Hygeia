@@ -24,7 +24,6 @@ object MachineManager {
     var location: String? = null
     var name: String? = null
     var status: String? = null
-    var userConnected: Long? = null
     var machineId: String? = null
 
     fun setMachineInformation(machineInfo: DocumentSnapshot) {
@@ -33,7 +32,6 @@ object MachineManager {
             location = get("Location") as String?
             name = get("Name") as String?
             status = get("Status") as String?
-            userConnected = get("User Connected") as Long?
             machineId = get("MachineID") as String?
 
         }
@@ -67,14 +65,9 @@ object MachineManager {
             } else {
                 machineRef.document(uid!!)
                     .update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
-<<<<<<< Updated upstream
-                    onButtonClicked(ButtonType.PRIMARY)
-                    dialog.dismiss()
-=======
                         location = txtDlgVendoDetail.text.toString()
                         dialog.dismiss()
                     }
->>>>>>> Stashed changes
             }
         }
 
@@ -97,14 +90,20 @@ object MachineManager {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val lblDlgProductDetailEmoji = dialog.findViewById<TextView>(R.id.lblDlgProductDetailEmoji)
-        val txtLayoutDlgProductName = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductName)
-        val txtLayoutDlgProductPrice = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductPrice)
-        val txtLayoutDlgProductQuantity = dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductQuantity)
+        val txtLayoutDlgProductName =
+            dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductName)
+        val txtLayoutDlgProductPrice =
+            dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductPrice)
+        val txtLayoutDlgProductQuantity =
+            dialog.findViewById<TextInputLayout>(R.id.txtLayoutDlgProductQuantity)
         val txtDlgProductName = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductName)
         val txtDlgProductPrice = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductPrice)
-        val txtDlgProductQuantity = dialog.findViewById<TextInputEditText>(R.id.txtDlgProductQuantity)
-        val btnDlgProductDetailPrimary = dialog.findViewById<Button>(R.id.btnDlgProductDetailPrimary)
-        val btnDlgProductDetailSecondary = dialog.findViewById<Button>(R.id.btnDlgProductDetailSecondary)
+        val txtDlgProductQuantity =
+            dialog.findViewById<TextInputEditText>(R.id.txtDlgProductQuantity)
+        val btnDlgProductDetailPrimary =
+            dialog.findViewById<Button>(R.id.btnDlgProductDetailPrimary)
+        val btnDlgProductDetailSecondary =
+            dialog.findViewById<Button>(R.id.btnDlgProductDetailSecondary)
         val switchVendoSlotStatus = dialog.findViewById<SwitchMaterial>(R.id.switchVendoSlotStatus)
 
         lblDlgProductDetailEmoji.text = Emoji.Edit
@@ -161,5 +160,42 @@ object MachineManager {
         return dialog
     }
 
+    @SuppressLint("SetTextI18n")
+    fun dlgEditProductPoints(
+        context: Context,
+        productID: String,
+        onButtonClicked: (type: ButtonType) -> Unit
+    ): Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_product_points)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+        val lblDlgProductRewardEmoji = dialog.findViewById<TextView>(R.id.lblDlgProductRewardEmoji)
+        val lblDlgProductRewardTitle = dialog.findViewById<TextView>(R.id.lblDlgProductRewardTitle)
+        val descDlgProductReward = dialog.findViewById<TextView>(R.id.descDlgProductReward)
+        val txtLayoutPriceInPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutPriceInPoints)
+        val txtLayoutRewardPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutRewardPoints)
+        val txtPriceInPoints = dialog.findViewById<TextInputEditText>(R.id.txtPriceInPoints)
+        val txtRewardPoints = dialog.findViewById<TextInputEditText>(R.id.txtRewardPoints)
+        val btnDlgProductRewardPrimary = dialog.findViewById<Button>(R.id.btnDlgProductRewardPrimary)
+        val btnDlgProductRewardSecondary = dialog.findViewById<Button>(R.id.btnDlgProductRewardSecondary)
+
+        lblDlgProductRewardEmoji.text = Emoji.Star
+
+        machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
+            parent.reference.collection("Products").document(productID).get()
+                .addOnSuccessListener { child ->
+                    descDlgProductReward.text = "Here are all the information you can update for ${child.getString("Name")}."
+                    txtPriceInPoints.setText(child.get("Price in Points").toString())
+                    txtRewardPoints.setText(child.get("Reward Points").toString())
+                }
+        }
+
+        btnDlgProductRewardSecondary.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        return dialog
+    }
 }

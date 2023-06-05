@@ -189,7 +189,8 @@ class ActCreateAccount : AppCompatActivity() {
             "status" to "inactive",
             "role" to "standard",
             "balance" to 0,
-            "dateCreated" to Timestamp(Date())
+            "dateCreated" to Timestamp(Date()),
+            "points" to 1
         )
 
         auth.createUserWithEmailAndPassword(emailAddress, password)

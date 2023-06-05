@@ -11,4 +11,5 @@ object Emoji {
     const val Lock = "🔒"
     const val Edit = "⚙️"
     const val Receipt = "🧾"
+    const val Star = "🌟"
 }
