@@ -49,14 +49,15 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                         if (it == ButtonType.PRIMARY) {
                             loading.show()
                             machineRef.document(machineId!!).get().addOnSuccessListener { data ->
-                                lblDescVendoLocation.text = "Located at ${data.getString("Location")}"
+                                lblDescVendoLocation.text =
+                                    "Located at ${data.getString("Location")}"
                                 loading.dismiss()
                             }
                         }
                     } else {
                         dlgStatus(this@ActMachine, "no internet").show()
                     }
-                }
+                }.show()
             }
 
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
@@ -76,9 +77,10 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             loading.dismiss()
                         }
                 }
-                
-            btnBack.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
+
+                btnBack.setOnClickListener {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
     }
