@@ -15,7 +15,6 @@ import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
 import com.hygeia.objects.MachineManager
-import com.hygeia.objects.MachineManager.machineRef
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
