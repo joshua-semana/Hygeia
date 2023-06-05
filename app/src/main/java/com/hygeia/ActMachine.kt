@@ -56,7 +56,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                     } else {
                         dlgStatus(this@ActMachine, "no internet").show()
                     }
-                }.show()
+                }
             }
 
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
@@ -76,9 +76,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             loading.dismiss()
                         }
                 }
-
-            }
-
+                
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }

@@ -65,16 +65,17 @@ object MachineManager {
             } else {
                 machineRef.document(uid!!)
                     .update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
+                        onButtonClicked(ButtonType.PRIMARY)
                         location = txtDlgVendoDetail.text.toString()
                         dialog.dismiss()
                     }
             }
-        }
 
-        btnDlgVendoDetailSecondary.setOnClickListener {
-            dialog.dismiss()
-        }
+            btnDlgVendoDetailSecondary.setOnClickListener {
+                dialog.dismiss()
+            }
 
+        }
         return dialog
     }
 

@@ -15,7 +15,9 @@ import com.hygeia.classes.DataTransactions
 import com.hygeia.databinding.FrgMainTransactionsBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.dlgTransactionDetails
+import com.hygeia.objects.Utilities.isInternetConnected
 
 class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClickListener {
 
@@ -34,10 +36,12 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
         bind = FrgMainTransactionsBinding.inflate(inflater, container, false)
         loading = Utilities.dlgLoading(requireContext())
         with(bind) {
-
-            //POPULATE
-            getListOfTransactions()
-
+            if (isInternetConnected(requireContext())){
+                //POPULATE
+                getListOfTransactions()
+            }else {
+                dlgStatus(requireContext(),"no internet").show()
+            }
             return root
         }
     }

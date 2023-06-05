@@ -14,6 +14,8 @@ import com.hygeia.databinding.ActUserInfoBinding
 import com.hygeia.databinding.FrgMainSettingsBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.isInternetConnected
 
 class FrgMainSettings : Fragment() {
     private lateinit var bind: FrgMainSettingsBinding
@@ -36,20 +38,27 @@ class FrgMainSettings : Fragment() {
             btnViewMyInfo.setOnClickListener {
                 startActivity(Intent(requireContext(), ActUserInfo::class.java))
             }
-
             btnChangePassword.setOnClickListener {
-                startActivity(Intent(requireContext(), ActChangePassword::class.java))
+                if (isInternetConnected(requireContext())){
+                    startActivity(Intent(requireContext(), ActChangePassword::class.java))
+                }else {
+                    dlgStatus(requireContext(),"no internet").show()
+                }
             }
 
             btnLogOut.setOnClickListener {
-                Utilities.dlgConfirmation(requireContext(), "log out") {
-                    if (it == ButtonType.PRIMARY) {
-                        userRef.document(UserManager.uid!!).update("status", "inactive")
-                            .addOnSuccessListener {
-                                requireActivity().finish()
-                            }
-                    }
-                }.show()
+                if (isInternetConnected(requireContext())){
+                    Utilities.dlgConfirmation(requireContext(), "log out") {
+                        if (it == ButtonType.PRIMARY) {
+                            userRef.document(UserManager.uid!!).update("status", "inactive")
+                                .addOnSuccessListener {
+                                    requireActivity().finish()
+                                }
+                        }
+                    }.show()
+                }else {
+                    dlgStatus(requireContext(),"no internet").show()
+                }
             }
 
             return root

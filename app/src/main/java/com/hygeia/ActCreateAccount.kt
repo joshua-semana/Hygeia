@@ -178,10 +178,12 @@ class ActCreateAccount : AppCompatActivity() {
 
     private fun createAccount() {
         loading.show()
+        val convertedFirstName = firstname.lowercase(Locale.getDefault()).capitalize(Locale.getDefault())
+        val convertedLastName = lastname.lowercase(Locale.getDefault()).capitalize(Locale.getDefault())
         val userData = hashMapOf(
             "gender" to gender,
-            "firstname" to firstname,
-            "lastname" to lastname,
+            "firstname" to convertedFirstName,
+            "lastname" to convertedLastName,
             "birthdate" to birthdate,
             "email" to emailAddress,
             "phoneNumber" to phoneNumber,
