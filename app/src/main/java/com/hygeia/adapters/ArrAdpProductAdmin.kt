@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -21,6 +22,8 @@ class ArrAdpProductAdmin(
         val quantity : TextView = itemView.findViewById(R.id.lblListProductAdminQuantity)
         val slot : TextView = itemView.findViewById(R.id.lblListProductAdminSlot)
         val image : ImageView = itemView.findViewById(R.id.imgListProductAdmin)
+        val btnEdit : ImageButton = itemView.findViewById(R.id.btnEdit)
+        val btnPoints : ImageButton = itemView.findViewById(R.id.btnPoints)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -53,8 +56,12 @@ class ArrAdpProductAdmin(
                     }
                 }
 
-                itemView.setOnClickListener {
+                btnEdit.setOnClickListener {
                     clickListener.onProductEditItemClick(ID!!)
+                }
+
+                btnPoints.setOnClickListener {
+                    clickListener.onProductEditPointsClick(ID!!)
                 }
             }
         }
@@ -62,5 +69,6 @@ class ArrAdpProductAdmin(
 
     interface OnProductEditItemClickListener {
         fun onProductEditItemClick(productID: String)
+        fun onProductEditPointsClick(productID: String)
     }
 }

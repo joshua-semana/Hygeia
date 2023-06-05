@@ -13,8 +13,10 @@ import com.hygeia.classes.DataProductAdmin
 import com.hygeia.databinding.ActMachineBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.MachineManager.dlgEditProduct
+import com.hygeia.objects.MachineManager.dlgEditProductPoints
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.MachineManager.machineId
+import com.hygeia.objects.MachineManager.machineRef
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
@@ -42,28 +44,19 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
-                val dialog = dlgEditVendoLocation(this@ActMachine) {
+                dlgEditVendoLocation(this@ActMachine) {
                     if (isInternetConnected(applicationContext)) {
                         if (it == ButtonType.PRIMARY) {
-                            populateView()
+                            loading.show()
+                            machineRef.document(machineId!!).get().addOnSuccessListener { data ->
+                                lblDescVendoLocation.text = "Located at ${data.getString("Location")}"
+                                loading.dismiss()
+                            }
                         }
                     } else {
                         dlgStatus(this@ActMachine, "no internet").show()
                     }
                 }
-                dialog.setOnDismissListener{
-                    loading.show()
-                    val txtDlgVendoDetail = dialog.findViewById<TextInputEditText>(R.id.txtDlgVendoDetail)
-                    machinesRef.document(machineId!!.trim()).update("Location", txtDlgVendoDetail.text.toString())
-                        .addOnSuccessListener {
-                            MachineManager.location = txtDlgVendoDetail.text.toString()
-                            populateView()
-                            loading.dismiss()
-                        }
-                    populateView()
-                }
-
-                dialog.show()
             }
 
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
@@ -83,7 +76,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             loading.dismiss()
                         }
                 }
-            }
+                
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -128,7 +121,8 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
                             listOfProducts.add(product)
                         }
-                        bind.listViewMachineDetail.adapter = ArrAdpProductAdmin(listOfProducts, this@ActMachine)
+                        bind.listViewMachineDetail.adapter =
+                            ArrAdpProductAdmin(listOfProducts, this@ActMachine)
                         loading.dismiss()
                     }
                 }
@@ -139,14 +133,27 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }
         }
     }
+
     override fun onProductEditItemClick(productID: String) {
-        if (isInternetConnected(applicationContext)){
-            dlgEditProduct(this@ActMachine, productID){
-                if(it == ButtonType.PRIMARY) {
+        if (isInternetConnected(applicationContext)) {
+            dlgEditProduct(this@ActMachine, productID) {
+                if (it == ButtonType.PRIMARY) {
                     getListOfProducts()
                 }
             }.show()
-        }else {
+        } else {
+            dlgStatus(this@ActMachine, "no internet").show()
+        }
+    }
+
+    override fun onProductEditPointsClick(productID: String) {
+        if (isInternetConnected(applicationContext)) {
+            dlgEditProductPoints(this@ActMachine, productID) {
+                if (it == ButtonType.PRIMARY) {
+                    getListOfProducts()
+                }
+            }.show()
+        } else {
             dlgStatus(this@ActMachine, "no internet").show()
         }
     }

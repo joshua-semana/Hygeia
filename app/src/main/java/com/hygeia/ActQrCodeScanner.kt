@@ -1,6 +1,5 @@
 package com.hygeia
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,7 +11,6 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities.dlgStatus
@@ -20,13 +18,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+
 class ActQrCodeScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
 
     private var db = FirebaseFirestore.getInstance()
     private var machineRef = db.collection("Machines")
-
-    @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_qr_code_scanner)
@@ -44,48 +41,9 @@ class ActQrCodeScanner : AppCompatActivity() {
         codeScanner.isFlashEnabled = false // Whether to enable flash or not
 
         // Callbacks
-        codeScanner.decodeCallback = DecodeCallback {
+        codeScanner.decodeCallback = DecodeCallback {qrCodeResult ->
             runOnUiThread{
-                lifecycleScope.launch(Dispatchers.Main){
-                    val query = machineRef.whereEqualTo("MachineID", it.text.trim()).get().await()
-                    if (!query.isEmpty){
-                        val document = query.documents[0]
-                        val machineID = document.getString("MachineID")
-                        val status = document.getString("Status")
-                        val userConnected = document.getLong("User Connected")
-                            if (status == "Online"){
-                                if (userConnected!! < 1){
-                                    val updatedUserConnected = hashMapOf<String, Any>(
-                                        "User Connected" to FieldValue.increment(1)
-                                    )
-                                    MachineManager.machineId = machineID
-                                    machineRef.document(machineID.toString()).update(updatedUserConnected)
-                                        .addOnSuccessListener {
-                                            startActivity(Intent(applicationContext, ActPurchase::class.java))
-                                            finish()
-                                        }
-                                }else{
-                                    dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
-                                        setOnDismissListener {
-                                            finish()
-                                        }
-                                    }.show()
-                                }
-                            }else{
-                                dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
-                                    setOnDismissListener {
-                                        finish()
-                                    }
-                                }.show()
-                            }
-                    }else{
-                        dlgStatus(this@ActQrCodeScanner,"QR code is not registered").apply {
-                            setOnDismissListener{
-                                finish()
-                            }
-                        }.show()
-                    }
-                }
+                toPurchase(qrCodeResult.text)
             }
         }
 
@@ -105,9 +63,52 @@ class ActQrCodeScanner : AppCompatActivity() {
         super.onResume()
         codeScanner.startPreview()
     }
-
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+    }
+
+    private fun toPurchase(qrCodeText : String){
+        lifecycleScope.launch(Dispatchers.Main){
+            val query = machineRef.whereEqualTo("MachineID", qrCodeText).get().await()
+            if (!query.isEmpty){
+                val document = query.documents[0]
+                val machineID = document.getString("MachineID")
+                val status = document.getString("Status")
+                val userConnected = document.getLong("User Connected")
+                if (status == "Online"){
+                    if (userConnected!! < 1){
+                        MachineManager.machineId = machineID
+                        machineRef.document(machineID.toString()).update("User Connected", 1)
+                            .addOnSuccessListener {
+                                when (intent.getStringExtra("From ActQrCodeScanner")) {
+                                    "ActPurchase" -> startActivity(Intent(applicationContext, ActPurchase::class.java))
+//                                   "ACTIVITY_2" -> Activity2()
+                                    else -> null
+                                }
+                                finish()
+                            }
+                    }else{
+                        dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                            setOnDismissListener {
+                                finish()
+                            }
+                        }.show()
+                    }
+                }else{
+                    dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                        setOnDismissListener {
+                            finish()
+                        }
+                    }.show()
+                }
+            }else{
+                dlgStatus(this@ActQrCodeScanner,"QR code is not registered").apply {
+                    setOnDismissListener{
+                        finish()
+                    }
+                }.show()
+            }
+        }
     }
 }

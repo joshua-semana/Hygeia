@@ -19,6 +19,7 @@ object UserManager {
     var phoneNumber: String? = null
     var role: String? = null
     var status: String? = null
+    var points: Any? = null
 
     fun setUserInformation(userInfo: DocumentSnapshot) {
         with(userInfo) {
@@ -33,6 +34,7 @@ object UserManager {
             phoneNumber = get("phoneNumber") as String
             role = get("role") as String
             status = get("status") as String
+            points = get("points")
         }
     }
     fun updateUserBalance(number : DocumentSnapshot){

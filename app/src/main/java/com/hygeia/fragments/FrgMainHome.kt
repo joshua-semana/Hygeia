@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.hygeia.ActMain
-import com.hygeia.ActPurchase
+import com.hygeia.ActPurchaseUsingStars
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataTransactions
+import com.hygeia.databinding.ActPurchaseUsingStarsBinding
 import com.hygeia.objects.Utilities.dlgInformation
 import com.hygeia.objects.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
@@ -27,6 +27,7 @@ import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatPoints
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -49,6 +50,11 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
         with(bind) {
+            populateMainHome()
+            lblGreetings.text = greeting
+            //MAIN FUNCTIONS
+            lblGreetings.setOnClickListener {
+                dlgInformation(requireContext(), language).show()
             if (Utilities.isInternetConnected(requireContext())) {
                 populateMainHome()
                 lblGreetings.text = greeting
@@ -74,7 +80,9 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 }
 
                 btnPurchase.setOnClickListener {
-                    startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
+                    val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                    intent.putExtra("From ActQrCodeScanner", "ActPurchase")
+                    requireActivity().startActivity(intent)
                 }
 
                 requireActivity().onBackPressedDispatcher.addCallback(
@@ -143,9 +151,11 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             UserManager.setUserInformation(it)
             val fullname = "${UserManager.firstname} ${UserManager.lastname}"
             val balance = formatNumber(UserManager.balance)
+            val points = formatPoints(UserManager.points.toString().toDouble())
 
             bind.lblUserFullName.text = fullname
             bind.lblAmountBalance.text = balance
+            bind.lblHygeiaPoints.text = points
             loading.dismiss()
         }
     }

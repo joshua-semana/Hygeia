@@ -16,7 +16,6 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.type.Date
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import java.text.DecimalFormat
@@ -47,6 +46,13 @@ object Utilities {
         return when (balance) {
             0 -> "₱0.00"
             else -> DecimalFormat("₱#,##0.00").format(balance)
+        }
+    }
+
+    fun formatPoints(points: Any?): String {
+        return when (points) {
+            0 -> "0.00"
+            else -> DecimalFormat("#,##0.00").format(points)
         }
     }
 

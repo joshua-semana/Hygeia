@@ -45,6 +45,7 @@
     <string name="desc_otp">Please enter the one-time PIN (OTP) that we sent to your number </string>
     <string name="desc_update_password">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
     <string name="desc_wallet_balance">Wallet Balance</string>
+    <string name="desc_stars_balance">Hygeia Stars Balance</string>
     <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
     <string name="desc_transaction_history">View all your transactions in one place.</string>
     <string name="desc_vending_machines">Discover all the available vending machine in one place.</string>
@@ -53,6 +54,7 @@
     <string name="desc_sub_total">Sub Total</string>
     <string name="desc_vat">VAT</string>
     <string name="desc_grand_total">Grand Total</string>
+    <string name="desc_total_stars">Total of Hygeia Stars to Spend</string>
     <string name="desc_vendo_num">Vendo #</string>
     <string name="desc_items">Item(s):</string>
     <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
@@ -79,6 +81,8 @@
     <string name="title_product_quantity">Product Quantity</string>
     <string name="title_status_online">Online</string>
     <string name="title_status_offline">Offline</string>
+    <string name="title_product_price_in_points">Product Price in Hygeia Stars</string>
+    <string name="title_product_reward_in_points">Product Reward in Hygeia Stars</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -112,6 +116,7 @@
     <string name="btn_resend">Resend Code</string>
     <string name="btn_send_money">Send</string>
     <string name="btn_purchase">Purchase</string>
+    <string name="btn_purchase_using_points">Use Stars</string>
     <string name="btn_log_out">Log Out</string>
     <string name="btn_view_information">View my info</string>
     <string name="btn_change_password">Change password</string>
@@ -171,6 +176,7 @@
     <string name="dlg_body_vendo_detail">You can update the location of this Vendo.\nVendo No.</string>
     <string name="dlg_title_product_detail">Edit Product Details</string>
     <string name="dlg_body_product_detail">Here are all the information you can update for this product.</string>
+    <string name="dlg_title_product_points">Edit Product Reward Points</string>
 
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>

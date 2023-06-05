@@ -2,27 +2,33 @@ package com.hygeia
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.zxing.Result
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
 import com.hygeia.objects.MachineManager
-import com.hygeia.objects.MachineManager.machineRef
 import com.hygeia.objects.UserManager
+import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.isInternetConnected
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -48,6 +54,8 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
     private val usedNumbers = mutableSetOf<Int>()
+
+    private var qrCode = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActPurchaseBinding.inflate(layoutInflater)
@@ -86,7 +94,6 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
             })
         }
     }
-
     private fun onBackBtnPressed() {
         if (grandTotal == 0.00) {
             machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
@@ -159,7 +166,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         loading.dismiss()
         dlgStatus(this@ActPurchase, "success purchase").apply {
             setOnDismissListener {
-                machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+                machinesRef.document(machineID.toString()).update("User Connected", 0)
                     .addOnSuccessListener {
                         finish()
                     }
