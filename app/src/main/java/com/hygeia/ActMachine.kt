@@ -50,25 +50,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                     } else {
                         dlgStatus(this@ActMachine, "no internet").show()
                     }
-                }.show()
-            }
-
-            switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
-                loading.show()
-                if (isChecked) {
-                    machinesRef.document(machineId!!.trim()).update("Status", "Online").addOnSuccessListener {
-                        MachineManager.status = "Online"
-                        populateView()
-                        loading.dismiss()
-                    }
-                } else {
-                    machinesRef.document(machineId!!.trim()).update("Status", "Offline").addOnSuccessListener {
-                        MachineManager.status = "Offline"
-                        populateView()
-                        loading.dismiss()
-                    }
                 }
-
                 dialog.setOnDismissListener{
                     loading.show()
                     val txtDlgVendoDetail = dialog.findViewById<TextInputEditText>(R.id.txtDlgVendoDetail)
@@ -82,28 +64,28 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                 }
 
                 dialog.show()
+            }
 
-                switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
-                    loading.show()
-                    if (isChecked) {
-                        machinesRef.document(machineId!!.trim()).update("Status", "Online")
-                            .addOnSuccessListener {
-                                MachineManager.status = "Online"
-                                populateView()
-                                loading.dismiss()
-                            }
-                    } else {
-                        machinesRef.document(machineId!!.trim()).update("Status", "Offline")
-                            .addOnSuccessListener {
-                                MachineManager.status = "Offline"
-                                populateView()
-                                loading.dismiss()
-                            }
-                    }
+            switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
+                loading.show()
+                if (isChecked) {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Online")
+                        .addOnSuccessListener {
+                            MachineManager.status = "Online"
+                            populateView()
+                            loading.dismiss()
+                        }
+                } else {
+                    machinesRef.document(machineId!!.trim()).update("Status", "Offline")
+                        .addOnSuccessListener {
+                            MachineManager.status = "Offline"
+                            populateView()
+                            loading.dismiss()
+                        }
                 }
-                btnBack.setOnClickListener {
-                    onBackPressedDispatcher.onBackPressed()
-                }
+            }
+            btnBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
             }
         }
     }

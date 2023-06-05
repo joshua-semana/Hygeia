@@ -56,6 +56,7 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
 
         query.get().apply {
             addOnSuccessListener { data ->
+                listOfMachines.clear()
                 if (!data.isEmpty) {
                     for (item in data.documents) {
                         val machine : DataMachines? = item.toObject(DataMachines::class.java)
@@ -72,6 +73,10 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        getListOfMachines()
+    }
     override fun onMachineItemClick(machineID: String) {
         loading.show()
         machinesRef.document(machineID.trim()).get().addOnSuccessListener { data ->

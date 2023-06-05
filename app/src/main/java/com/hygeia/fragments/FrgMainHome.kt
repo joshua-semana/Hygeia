@@ -40,7 +40,6 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     private var userRef = db.collection("User")
     private var transactionRef = db.collection("Transactions")
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,41 +49,44 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
         with(bind) {
-            populateMainHome()
-            lblGreetings.text = greeting
-            //MAIN FUNCTIONS
-            lblGreetings.setOnClickListener {
-                dlgInformation(requireContext(), language).show()
-            }
-
-            cardWallet.setOnClickListener {
-                loading.show()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    getWalletBalance()
+            if (Utilities.isInternetConnected(requireContext())) {
+                populateMainHome()
+                lblGreetings.text = greeting
+                //MAIN FUNCTIONS
+                lblGreetings.setOnClickListener {
+                    dlgInformation(requireContext(), language).show()
                 }
-                getListOfTransactions()
-            }
 
-            //POPULATE
-            getListOfTransactions()
-
-            //NAVIGATION
-            btnSendMoney.setOnClickListener {
-                startActivity(Intent(requireContext(), ActSendMoney::class.java))
-            }
-
-            btnPurchase.setOnClickListener {
-                startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
-            }
-
-            requireActivity().onBackPressedDispatcher.addCallback(
-                viewLifecycleOwner,
-                object : OnBackPressedCallback(true) {
-                    override fun handleOnBackPressed() {
-                        onBackPressed()
+                cardWallet.setOnClickListener {
+                    loading.show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        getWalletBalance()
                     }
-                })
+                    getListOfTransactions()
+                }
 
+                //POPULATE
+                getListOfTransactions()
+
+                //NAVIGATION
+                btnSendMoney.setOnClickListener {
+                    startActivity(Intent(requireContext(), ActSendMoney::class.java))
+                }
+
+                btnPurchase.setOnClickListener {
+                    startActivity(Intent(requireContext(), ActQrCodeScanner::class.java))
+                }
+
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    viewLifecycleOwner,
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            onBackPressed()
+                        }
+                    })
+            } else {
+                Utilities.dlgStatus(requireContext(), "no internet").show()
+            }
             return root
         }
     }
@@ -98,6 +100,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
         query.get().apply {
             addOnSuccessListener { data ->
+                listOfTransactions.clear()
                 if (!data.isEmpty) {
                     bind.coverTransaction.visibility = View.GONE
                     for (item in data.documents) {
@@ -156,6 +159,11 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                     }
             }
         }.show()
+    }
+    override fun onResume() {
+        super.onResume()
+        populateMainHome()
+        getListOfTransactions()
     }
 
     override fun onTransactionItemClick(ID: String) {
