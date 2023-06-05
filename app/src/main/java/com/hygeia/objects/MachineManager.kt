@@ -70,7 +70,6 @@ object MachineManager {
                     .update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
                     onButtonClicked(ButtonType.PRIMARY)
                     dialog.dismiss()
-                }
             }
         }
 

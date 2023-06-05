@@ -8,6 +8,7 @@ import android.text.TextWatcher
 import com.hygeia.objects.UserManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,7 +55,7 @@ class ActSendMoney : AppCompatActivity() {
             btnContinue.setOnClickListener {
                 clearTextError(txtLayoutPhoneNumber, txtLayoutAmount)
                 if (isInternetConnected(this@ActSendMoney)) {
-                    if (inputsAreNotEmpty()) {
+                    if (!inputsAreEmpty()) {
                         loading.show()
                         phoneNumber =
                             (bind.txtLayoutPhoneNumber.prefixText.toString() + bind.txtPhoneNumber.text.toString()).trim()
@@ -95,8 +96,25 @@ class ActSendMoney : AppCompatActivity() {
             }
             //NAVIGATION
             btnBack.setOnClickListener {
-                onBackPressedDispatcher.onBackPressed()
+                onBackBtnPressed()
             }
+            onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackBtnPressed()
+                }
+            })
+        }
+    }
+
+    private fun onBackBtnPressed() {
+        if (inputsAreEmpty()) {
+            this.finish()
+        } else {
+            dlgConfirmation(this, "going back") {
+                if (it == ButtonType.PRIMARY) {
+                    this.finish()
+                }
+            }.show()
         }
     }
 
@@ -201,10 +219,10 @@ class ActSendMoney : AppCompatActivity() {
         }
     }
 
-    private fun inputsAreNotEmpty(): Boolean {
+    private fun inputsAreEmpty(): Boolean {
         return when {
-            bind.txtPhoneNumber.text!!.isEmpty() -> false
-            bind.txtAmount.text!!.isEmpty() -> false
+            bind.txtPhoneNumber.text!!.isNotEmpty() -> false
+            bind.txtAmount.text!!.isNotEmpty() -> false
             else -> true
         }
     }

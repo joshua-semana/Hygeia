@@ -5,6 +5,7 @@ import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.ButtonType
@@ -17,8 +18,9 @@ import com.hygeia.objects.MachineManager.machineId
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
+
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
-    private lateinit var bind : ActMachineBinding
+    private lateinit var bind: ActMachineBinding
     private lateinit var listOfProducts: ArrayList<DataProductAdmin>
     private lateinit var loading: Dialog
 
@@ -40,7 +42,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
             //MAIN FUNCTIONS
             vendoDetails.setOnClickListener {
-                dlgEditVendoLocation(this@ActMachine) {
+                val dialog = dlgEditVendoLocation(this@ActMachine) {
                     if (isInternetConnected(applicationContext)) {
                         if (it == ButtonType.PRIMARY) {
                             populateView()
@@ -66,14 +68,42 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                         loading.dismiss()
                     }
                 }
-            }
 
-            btnVendoDetailEdit.setOnClickListener {
-                //dlgEditVendoLocation(this@ActMachine).show()
-            }
+                dialog.setOnDismissListener{
+                    loading.show()
+                    val txtDlgVendoDetail = dialog.findViewById<TextInputEditText>(R.id.txtDlgVendoDetail)
+                    machinesRef.document(machineId!!.trim()).update("Location", txtDlgVendoDetail.text.toString())
+                        .addOnSuccessListener {
+                            MachineManager.location = txtDlgVendoDetail.text.toString()
+                            populateView()
+                            loading.dismiss()
+                        }
+                    populateView()
+                }
 
-            btnBack.setOnClickListener {
-                onBackPressed()
+                dialog.show()
+
+                switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
+                    loading.show()
+                    if (isChecked) {
+                        machinesRef.document(machineId!!.trim()).update("Status", "Online")
+                            .addOnSuccessListener {
+                                MachineManager.status = "Online"
+                                populateView()
+                                loading.dismiss()
+                            }
+                    } else {
+                        machinesRef.document(machineId!!.trim()).update("Status", "Offline")
+                            .addOnSuccessListener {
+                                MachineManager.status = "Offline"
+                                populateView()
+                                loading.dismiss()
+                            }
+                    }
+                }
+                btnBack.setOnClickListener {
+                    onBackPressedDispatcher.onBackPressed()
+                }
             }
         }
     }
@@ -127,7 +157,6 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }
         }
     }
-
     override fun onProductEditItemClick(productID: String) {
         if (isInternetConnected(applicationContext)){
             dlgEditProduct(this@ActMachine, productID){
