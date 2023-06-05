@@ -135,11 +135,16 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     }
 
     private fun populateMainHome() {
-        val fullname = "${UserManager.firstname} ${UserManager.lastname}"
-        val balance = formatNumber(UserManager.balance)
+        loading.show()
+        userRef.document(UserManager.uid!!).get().addOnSuccessListener {
+            UserManager.setUserInformation(it)
+            val fullname = "${UserManager.firstname} ${UserManager.lastname}"
+            val balance = formatNumber(UserManager.balance)
 
-        bind.lblUserFullName.text = fullname
-        bind.lblAmountBalance.text = balance
+            bind.lblUserFullName.text = fullname
+            bind.lblAmountBalance.text = balance
+            loading.dismiss()
+        }
     }
 
     private fun onBackPressed() {

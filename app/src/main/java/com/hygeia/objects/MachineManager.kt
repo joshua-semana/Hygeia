@@ -68,10 +68,8 @@ object MachineManager {
             if (txtDlgVendoDetail.text!!.isEmpty()) {
                 txtLayoutDlgVendoDetail.error = "Required*"
             } else {
-                machineRef.document(MachineManager.uid!!).update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
                     onButtonClicked(ButtonType.PRIMARY)
                     dialog.dismiss()
-                }
             }
         }
 
@@ -121,7 +119,7 @@ object MachineManager {
                 }  else {
                     val productUpdatedData = hashMapOf<String, Any>(
                         "Name" to txtDlgProductName.text.toString(),
-                        "Price" to txtDlgProductPrice.text.toString().toLong(),
+                        "Price" to txtDlgProductPrice.text.toString().toDouble(),
                         "Quantity" to txtDlgProductQuantity.text.toString().toLong()
                     )
                         machineRef.document(MachineManager.uid!!.trim()).get().addOnSuccessListener{ parent ->
