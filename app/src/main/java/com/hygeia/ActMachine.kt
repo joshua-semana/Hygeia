@@ -76,6 +76,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             loading.dismiss()
                         }
                 }
+
             }
 
             btnBack.setOnClickListener {

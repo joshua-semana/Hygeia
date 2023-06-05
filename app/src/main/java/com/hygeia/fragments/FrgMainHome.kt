@@ -51,11 +51,53 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
         with(bind) {
+<<<<<<< Updated upstream
             populateMainHome()
             lblGreetings.text = greeting
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
+=======
+            if (Utilities.isInternetConnected(requireContext())) {
+                populateMainHome()
+                lblGreetings.text = greeting
+                //MAIN FUNCTIONS
+                lblGreetings.setOnClickListener {
+                    dlgInformation(requireContext(), language).show()
+                }
+
+                cardWallet.setOnClickListener {
+                    loading.show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        getWalletBalance()
+                    }
+                    getListOfTransactions()
+                }
+
+                //POPULATE
+                getListOfTransactions()
+
+                //NAVIGATION
+                btnSendMoney.setOnClickListener {
+                    startActivity(Intent(requireContext(), ActSendMoney::class.java))
+                }
+
+                btnPurchase.setOnClickListener {
+                    val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                    intent.putExtra("From ActQrCodeScanner", "ActPurchase")
+                    requireActivity().startActivity(intent)
+                }
+
+                requireActivity().onBackPressedDispatcher.addCallback(
+                    viewLifecycleOwner,
+                    object : OnBackPressedCallback(true) {
+                        override fun handleOnBackPressed() {
+                            onBackPressed()
+                        }
+                    })
+            } else {
+                Utilities.dlgStatus(requireContext(), "no internet").show()
+>>>>>>> Stashed changes
             }
 
             cardWallet.setOnClickListener {
