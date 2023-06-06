@@ -172,7 +172,6 @@ object MachineManager {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         val lblDlgProductRewardEmoji = dialog.findViewById<TextView>(R.id.lblDlgProductRewardEmoji)
-        val lblDlgProductRewardTitle = dialog.findViewById<TextView>(R.id.lblDlgProductRewardTitle)
         val descDlgProductReward = dialog.findViewById<TextView>(R.id.descDlgProductReward)
         val txtLayoutPriceInPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutPriceInPoints)
         val txtLayoutRewardPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutRewardPoints)
@@ -190,6 +189,38 @@ object MachineManager {
                     txtPriceInPoints.setText(child.get("Price in Points").toString())
                     txtRewardPoints.setText(child.get("Reward Points").toString())
                 }
+        }
+
+        btnDlgProductRewardPrimary.setOnClickListener {
+            clearTextError(
+                txtLayoutPriceInPoints,
+                txtLayoutRewardPoints
+            )
+            if ( txtPriceInPoints.text!!.isNotEmpty() &&
+                txtRewardPoints.text!!.isNotEmpty()
+            ) {
+                if (txtPriceInPoints.text.toString().toDouble() == 0.0) {
+                    txtLayoutPriceInPoints.error =
+                        "The Reward points cannot be 0."
+                } else {
+                    val productUpdatedData = hashMapOf<String, Any>(
+                        "Price in Points" to txtPriceInPoints.text.toString().toDouble(),
+                        "Reward Points" to txtRewardPoints.text.toString().toDouble()
+                    )
+                    machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
+                        parent.reference.collection("Products").document(productID)
+                            .update(productUpdatedData).addOnSuccessListener {
+                                onButtonClicked(ButtonType.PRIMARY)
+                                dialog.dismiss()
+                            }
+                    }
+                }
+            } else {
+                Utilities.showRequiredTextField(
+                    txtPriceInPoints to txtLayoutPriceInPoints,
+                    txtRewardPoints to txtLayoutRewardPoints
+                )
+            }
         }
 
         btnDlgProductRewardSecondary.setOnClickListener {

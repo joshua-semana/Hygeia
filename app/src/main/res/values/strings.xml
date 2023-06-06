@@ -157,6 +157,10 @@
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
     <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
+    <string name="dlg_body_no_funds">It seems that you have no funds in your account.</string>
+    <string name="dlg_body_no_points">It seems that you have no Hygeia stars left n your account.
+        \n\nTo earn points, simply make a purchase from our product line and your points will be automatically credited to your account.</string>
+    <string name="dlg_body_insufficient_points">It seems that you have insufficient Hygeia stars in your account to complete this transaction.</string>
     <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
     <string name="dlg_body_send_money">You have successfully sent money to your recipient\'s account.</string>
     <string name="dlg_body_purchase">Thank you for choosing our service! We appreciate your support and trust in our platform.</string>

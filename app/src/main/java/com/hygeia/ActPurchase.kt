@@ -50,12 +50,11 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     private var totalCount = 0
 
     private val machineID = MachineManager.machineId
-    private var machineName = ""
+    private var machineName = MachineManager.name
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
     private val usedNumbers = mutableSetOf<Int>()
 
-    private var qrCode = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActPurchaseBinding.inflate(layoutInflater)
@@ -96,14 +95,14 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     }
     private fun onBackBtnPressed() {
         if (grandTotal == 0.00) {
-            machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+            machinesRef.document(machineID.toString()).update("User Connected", 0)
                 .addOnSuccessListener {
                     finish()
                 }
         } else {
             dlgConfirmation(this@ActPurchase, "going back") {
                 if (it == ButtonType.PRIMARY) {
-                    machinesRef.document(machineID.toString()).update("User Connected", FieldValue.increment(-1))
+                    machinesRef.document(machineID.toString()).update("User Connected", 0)
                         .addOnSuccessListener {
                             finish()
                         }

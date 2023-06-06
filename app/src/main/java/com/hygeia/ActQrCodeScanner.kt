@@ -14,6 +14,7 @@ import com.budiyev.android.codescanner.ScanMode
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.isInternetConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -43,7 +44,11 @@ class ActQrCodeScanner : AppCompatActivity() {
         // Callbacks
         codeScanner.decodeCallback = DecodeCallback {qrCodeResult ->
             runOnUiThread{
-                toPurchase(qrCodeResult.text)
+                if (isInternetConnected(applicationContext)){
+                    toPurchase(qrCodeResult.text)
+                } else {
+                    dlgStatus(this,"no internet").show()
+                }
             }
         }
 
@@ -75,10 +80,12 @@ class ActQrCodeScanner : AppCompatActivity() {
                 val document = query.documents[0]
                 val machineID = document.getString("MachineID")
                 val status = document.getString("Status")
+                val name = document.getString("Name")
                 val userConnected = document.getLong("User Connected")
                 if (status == "Online"){
                     if (userConnected!! < 1){
                         MachineManager.machineId = machineID
+                        MachineManager.name = name
                         machineRef.document(machineID.toString()).update("User Connected", 1)
                             .addOnSuccessListener {
                                 when (intent.getStringExtra("From ActQrCodeScanner")) {

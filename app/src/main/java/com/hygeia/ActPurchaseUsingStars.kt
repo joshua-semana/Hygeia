@@ -4,16 +4,23 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.adapters.ArrAdpProductsUsingPoints
+import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseUsingStarsBinding
+import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
+import java.util.Random
 
 class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnProductItemClickListener {
     private lateinit var bind : ActPurchaseUsingStarsBinding
@@ -26,9 +33,10 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
     private var userRef = db.collection("User")
 
     private var grandTotal = 0.00
+    private var totalCount = 0
 
-    private val machineID = "GP1wZD9P9NVZfGjS1gJp"
-    private var machineName = ""
+    private val machineID = MachineManager.machineId
+    private var machineName = MachineManager.name
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
     private val usedNumbers = mutableSetOf<Int>()
@@ -41,6 +49,128 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
 
         bind.lblHygeiaStarsBalanceNumber.text = Utilities.formatPoints(UserManager.points)
         getListOfProducts()
+        updatePurchaseBreakdown()
+        with(bind){
+            btnPurchase.setOnClickListener {
+                if (Utilities.isInternetConnected(applicationContext)){
+                    if (grandTotal == 0.00) {
+                        Utilities.dlgStatus(this@ActPurchaseUsingStars, "empty cart").show()
+                    } else if (grandTotal > UserManager.balance.toString().toDouble()) {
+                        Utilities.dlgStatus(this@ActPurchaseUsingStars, "insufficient points").show()
+                    } else {
+                        Utilities.dlgConfirmation(this@ActPurchaseUsingStars, "purchase") {
+                            if (it == ButtonType.PRIMARY) {
+                                loading.show()
+                                saveTransaction()
+                            }
+                        }.show()
+                    }
+                }else {
+                    Utilities.dlgStatus(this@ActPurchaseUsingStars, "no internet").show()
+                }
+            }
+            btnBack.setOnClickListener{
+                onBackBtnPressed()
+            }
+            onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    onBackBtnPressed()
+                }
+            })
+        }
+    }
+    private fun onBackBtnPressed() {
+        if (grandTotal == 0.00) {
+            machinesRef.document(machineID.toString()).update("User Connected", 0)
+                .addOnSuccessListener {
+                    finish()
+                }
+        } else {
+            Utilities.dlgConfirmation(this@ActPurchaseUsingStars, "going back") {
+                if (it == ButtonType.PRIMARY) {
+                    machinesRef.document(machineID.toString()).update("User Connected", 0)
+                        .addOnSuccessListener {
+                            finish()
+                        }
+                }
+            }.show()
+        }
+    }
+    private fun saveTransaction() {
+        val data = hashMapOf(
+            "Amount" to grandTotal,
+            "Date Created" to Timestamp(Date()),
+            "Reference Number" to createReferenceNumber(),
+            "Number" to 0,
+            "Type" to "Purchase",
+            "User Reference" to UserManager.uid,
+            "Vendo" to machineName
+        )
+
+        val docRef = transactionRef.document()
+        docRef.set(data).addOnSuccessListener {
+            val adapter = ArrAdpProductsUsingPoints(listOfProducts, this@ActPurchaseUsingStars)
+            for (i in 0 until adapter.itemCount) {
+                val viewHolder: RecyclerView.ViewHolder = adapter.createViewHolder(bind.listViewProducts, adapter.getItemViewType(i))
+                adapter.bindViewHolder(viewHolder as ArrAdpProductsUsingPoints.ViewHolder, i)
+
+                val product: DataProducts? = adapter.getNonZeroQuantityProduct(i)
+                if (product != null) {
+                    if (product.Count != 0) {
+                        totalCount += product.Count
+
+                        val subData = hashMapOf(
+                            "Name" to product.Name,
+                            "Price" to product.Price,
+                            "Quantity" to product.Count
+                        )
+
+                        docRef.collection("Items").document().set(subData)
+
+                        //UPDATE Product Quantity
+                        val productsRef = machinesRef.document(machineID.toString()).collection("Products")
+                        productsRef.document(product.ID!!).update("Quantity", product.Quantity!!.toInt() - product.Count)
+                    }
+                }
+            }
+            docRef.update("Number", totalCount)
+            updateUserPointBalance()
+        }
+    }
+    private fun createReferenceNumber(): String {
+        val currentDate = dateFormat.format(Date())
+        val randomFourDigits = getRandomFourDigits()
+
+        return "$currentDate${String.format("%04d", randomFourDigits)}"
+    }
+    private fun getRandomFourDigits(): Int {
+        val random = Random()
+        var randomNum = random.nextInt(10000)
+        while (usedNumbers.contains(randomNum)) {
+            randomNum = random.nextInt(10000)
+        }
+        usedNumbers.add(randomNum)
+        return randomNum
+    }
+
+    private fun updateUserPointBalance() {
+        userRef.document(UserManager.uid!!.trim()).update("points", UserManager.points.toString().toDouble() - grandTotal)
+        userRef.document(UserManager.uid!!).get().addOnSuccessListener { data ->
+            UserManager.updateUserBalance(data)
+        }
+        finishTransaction()
+    }
+    private fun finishTransaction() {
+        loading.dismiss()
+        Utilities.dlgStatus(this@ActPurchaseUsingStars, "success purchase").apply {
+            setOnDismissListener {
+                machinesRef.document(machineID.toString()).update("User Connected", 0)
+                    .addOnSuccessListener {
+                        finish()
+                    }
+            }
+            show()
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -49,7 +179,7 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
         bind.listViewProducts.layoutManager = LinearLayoutManager(this@ActPurchaseUsingStars)
         listOfProducts = arrayListOf()
 
-        machinesRef.document(machineID).get().apply {
+        machinesRef.document(machineID.toString()).get().apply {
             addOnSuccessListener { parent ->
 
                 machineName = parent.get("Name").toString()
@@ -76,7 +206,7 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
                                 productQuantity.toString(),
                                 productSlot.toString().toInt(),
                                 productStatus.toString().toInt(),
-                                productPoints.toString().toInt()
+                                productPoints.toString().toDouble()
                             )
 
                             listOfProducts.add(product)
