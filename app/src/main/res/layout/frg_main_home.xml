@@ -91,7 +91,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/img_wallet_card">
+                android:background="@drawable/img_wallet_card_1">
 
                 <ImageView
                     android:layout_width="@dimen/ic_md"

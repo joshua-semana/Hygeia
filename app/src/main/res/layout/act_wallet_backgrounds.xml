@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActWalletBackgrounds">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblHeadingRegular"
+        style="@style/Text_H1_Regular"
+        android:text="@string/h1_change_wallet_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblHeadingColored"
+        style="@style/Text_H1_Colored"
+        android:text="@string/h1_change_wallet_background_colored"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/Text_Description"
+        android:text="@string/desc_wallet_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingColored"
+        tools:ignore="VisualLintLongText" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardWallet"
+        style="@style/Card_Wallet"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/cardImageBackground"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/img_wallet_card_1">
+
+                <ImageView
+                    android:layout_width="@dimen/ic_md"
+                    android:layout_height="@dimen/ic_md"
+                    android:layout_marginTop="@dimen/mx"
+                    android:layout_marginEnd="@dimen/mx"
+                    android:src="@drawable/logo_hygeia"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:id="@+id/lblAmountBalance"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:text="@string/preview"
+                    android:textColor="@color/white"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toTopOf="@+id/lblWalletBalance"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <TextView
+                    android:id="@+id/lblWalletBalance"
+                    style="@style/Text_Regular"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="@string/desc_wallet_balance"
+                    android:textColor="@color/neutral_200"
+                    android:textSize="@dimen/text_sm"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/lblWallpapers"
+        style="@style/Text_H6_Title"
+        android:layout_marginTop="@dimen/mx"
+        android:text="@string/h6_wallpapers"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardWallet" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage1"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="24dp"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_1"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/cardImage2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblWallpapers">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_1" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage2"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_2"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardImage1"
+        app:layout_constraintEnd_toStartOf="@+id/cardImage3"
+        app:layout_constraintStart_toEndOf="@+id/cardImage1"
+        app:layout_constraintTop_toTopOf="@+id/cardImage1">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_2" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage3"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_3"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardImage2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardImage2"
+        app:layout_constraintTop_toTopOf="@+id/cardImage2">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_3"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage4"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="@dimen/mx"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_4"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintEnd_toStartOf="@+id/cardImage5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardImage1"
+        tools:ignore="DuplicateSpeakableTextCheck">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_4"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage5"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_5"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardImage4"
+        app:layout_constraintEnd_toStartOf="@+id/cardImage6"
+        app:layout_constraintStart_toEndOf="@+id/cardImage4"
+        app:layout_constraintTop_toTopOf="@+id/cardImage4">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_5"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardImage6"
+        android:layout_width="100dp"
+        android:layout_height="60dp"
+        android:checkable="true"
+        android:clickable="true"
+        android:contentDescription="img_wallet_card_6"
+        android:focusable="true"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:checkedIcon="@drawable/ic_check"
+        app:checkedIconTint="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/cardImage5"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cardImage5"
+        app:layout_constraintTop_toTopOf="@+id/cardImage5">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/img_wallet_card_6"
+            android:scaleType="centerCrop"
+            tools:ignore="ContentDescription" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <Button
+        android:id="@+id/btnChange"
+        style="@style/Btn_Primary"
+        android:layout_width="match_parent"
+        android:text="@string/btn_change"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="VisualLintButtonSize" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

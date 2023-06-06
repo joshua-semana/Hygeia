@@ -26,6 +26,7 @@ import com.hygeia.databinding.FrgMainHomeBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
+import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.formatPoints
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +56,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             //MAIN FUNCTIONS
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
+            }
+
+            cardPoints.setOnClickListener {
+                dlgInformation(requireContext(), "introduce stars").show()
             }
 
             if (Utilities.isInternetConnected(requireContext())) {

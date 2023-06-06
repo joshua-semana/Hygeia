@@ -236,6 +236,20 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
         }
 
+        if (info1 == "introduce stars") {
+            lblDlgInfoEmoji.text = Emoji.Star
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_stars)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_stars)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_wow)
+        }
+
+        if (info1 == "about us") {
+            lblDlgInfoEmoji.text = Emoji.Heart
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_about_us)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_about_us)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
