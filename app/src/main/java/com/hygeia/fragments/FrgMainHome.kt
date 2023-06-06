@@ -26,6 +26,7 @@ import com.hygeia.databinding.FrgMainHomeBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
+import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.formatPoints
@@ -42,6 +43,8 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     private var userRef = db.collection("User")
     private var transactionRef = db.collection("Transactions")
 
+    private var balance = 0.0
+    private var points = 0.0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -50,6 +53,11 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         loading = Utilities.dlgLoading(requireContext())
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
+        lifecycleScope.launch(Dispatchers.Main) {
+            val query = userRef.document(UserManager.uid!!).get().await()
+            balance = query.get("balance").toString().toDouble()
+            balance = query.get("points").toString().toDouble()
+        }
         with(bind) {
             populateMainHome()
             lblGreetings.text = greeting
@@ -87,15 +95,23 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 }
 
                 btnPurchase.setOnClickListener {
-                    val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
-                    intent.putExtra("From ActQrCodeScanner", "ActPurchase")
-                    requireActivity().startActivity(intent)
+                    if (balance == 0.0){
+                        dlgStatus(requireContext(),"0 funds").show()
+                    }else {
+                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                        intent.putExtra("From ActQrCodeScanner", "ActPurchase")
+                        requireActivity().startActivity(intent)
+                    }
                 }
 
                 btnPurchaseUsingPoints.setOnClickListener {
-                    val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
-                    intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
-                    requireActivity().startActivity(intent)
+                    if (points == 0.0){
+                        dlgStatus(requireContext(),"0 points").show()
+                    }else {
+                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                        intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
+                        requireActivity().startActivity(intent)
+                    }
                 }
 
                 requireActivity().onBackPressedDispatcher.addCallback(
