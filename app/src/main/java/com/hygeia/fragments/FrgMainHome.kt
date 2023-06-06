@@ -66,6 +66,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 dlgInformation(requireContext(), language).show()
             }
 
+            cardPoints.setOnClickListener {
+                dlgInformation(requireContext(), "introduce stars").show()
+            }
+
             if (Utilities.isInternetConnected(requireContext())) {
                 populateMainHome()
                 lblGreetings.text = greeting
