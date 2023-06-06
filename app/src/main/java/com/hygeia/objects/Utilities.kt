@@ -3,6 +3,7 @@ package com.hygeia.objects
 import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
@@ -16,10 +17,17 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.zxing.BarcodeFormat
+import com.google.zxing.EncodeHintType
+import com.google.zxing.MultiFormatWriter
+import com.google.zxing.WriterException
+import com.google.zxing.common.BitMatrix
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
+import java.util.EnumMap
 import java.util.Locale
 
 object Utilities {
@@ -179,6 +187,25 @@ object Utilities {
             lblDlgInfoEmoji.text = Emoji.Error
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_insufficient_funds)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+        if (content == "insufficient points") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_insufficient_points)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "0 funds") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_funds)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+        if (content == "0 points") {
+            lblDlgInfoEmoji.text = Emoji.Error
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_points)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
@@ -392,5 +419,31 @@ object Utilities {
         }
 
         return dialog
+    }
+
+    fun generateQRCode(data: String): Bitmap? {
+        val hints: MutableMap<EncodeHintType, Any> = EnumMap(EncodeHintType::class.java)
+        hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
+        hints[EncodeHintType.MARGIN] = 1 // Adjust the margin as needed
+
+        try {
+            val bitMatrix: BitMatrix =
+                MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 512, 512, hints)
+            val width: Int = bitMatrix.width
+            val height: Int = bitMatrix.height
+            val pixels = IntArray(width * height)
+            for (y in 0 until height) {
+                val offset = y * width
+                for (x in 0 until width) {
+                    pixels[offset + x] = if (bitMatrix[x, y]) Color.BLACK else Color.WHITE
+                }
+            }
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            bitmap.setPixels(pixels, 0, width, 0, 0, width, height)
+            return bitmap
+        } catch (e: WriterException) {
+            e.printStackTrace()
+        }
+        return null
     }
 }

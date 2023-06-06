@@ -14,7 +14,7 @@ import com.hygeia.objects.Utilities.formatNumber
 
 class ArrAdpProducts(
     private val listProducts: ArrayList<DataProducts>,
-    private val clickListener: ActPurchase
+    private val clickListener: ActPurchase // either ActPurchase or ActPurchaseUsingPoints
     ) : RecyclerView.Adapter<ArrAdpProducts.ViewHolder>() {
 
     private var totalPrice: Double = 0.00

@@ -70,7 +70,7 @@ class ArrAdpProductsUsingPoints(
         }
     }
 
-    private fun getNonZeroQuantityProduct(position: Int): DataProducts? {
+    fun getNonZeroQuantityProduct(position: Int): DataProducts? {
         var count = 0
         for (product in listProducts) {
             if (product.Quantity!!.toDouble() > 0 && product.Status != 0) {
