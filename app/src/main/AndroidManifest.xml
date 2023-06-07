@@ -32,6 +32,9 @@
             android:name=".ActQrCodeScanner"
             android:exported="false" />
         <activity
+            android:name=".ActQrCodeScannerPhoneNumber"
+            android:exported="false" />
+        <activity
             android:name=".ActPurchase"
             android:exported="false" />
         <activity

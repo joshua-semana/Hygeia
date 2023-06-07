@@ -26,6 +26,7 @@ import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -160,6 +161,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         }
         finishTransaction()
     }
+
 
     private fun finishTransaction() {
         loading.dismiss()

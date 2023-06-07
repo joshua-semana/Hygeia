@@ -1,6 +1,9 @@
 package com.hygeia
 
+import android.app.Activity
 import android.app.Dialog
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -9,6 +12,8 @@ import com.hygeia.objects.UserManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,6 +25,7 @@ import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
@@ -50,7 +56,14 @@ class ActSendMoney : AppCompatActivity() {
         setContentView(bind.root)
 
         bind.txtLayoutPhoneNumber.setEndIconOnClickListener {
-
+            if (isInternetConnected(this)){
+                val intent = Intent(applicationContext, ActQrCodeScannerPhoneNumber :: class.java)
+                intent.putExtra("From ActQrCodeScannerPhoneNumber", "ActSendMoney")
+                startActivity(intent)
+                finish()
+            } else {
+                dlgStatus(this@ActSendMoney, "no internet").show()
+            }
         }
 
         with(bind) {
@@ -265,5 +278,11 @@ class ActSendMoney : AppCompatActivity() {
 
             override fun afterTextChanged(s: Editable?) {}
         })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val getResult = intent.getStringExtra("qrCodeResult")
+        getResult?.let { bind.txtPhoneNumber.setText(it) }
     }
 }

@@ -4,25 +4,23 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import androidx.lifecycle.lifecycleScope
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
-import com.google.firebase.firestore.FirebaseFirestore
-import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
+import androidx.lifecycle.lifecycleScope
+import com.google.firebase.firestore.FirebaseFirestore
+import com.hygeia.objects.MachineManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
-
 class ActQrCodeScanner : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
-
     private var db = FirebaseFirestore.getInstance()
     private var machineRef = db.collection("Machines")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -72,18 +70,17 @@ class ActQrCodeScanner : AppCompatActivity() {
         codeScanner.releaseResources()
         super.onPause()
     }
-
     private fun toPurchase(qrCodeText : String){
-        lifecycleScope.launch(Dispatchers.Main){
+        lifecycleScope.launch(Dispatchers.Main) {
             val query = machineRef.whereEqualTo("MachineID", qrCodeText).get().await()
-            if (!query.isEmpty){
+            if (!query.isEmpty) {
                 val document = query.documents[0]
                 val machineID = document.getString("MachineID")
                 val status = document.getString("Status")
                 val name = document.getString("Name")
                 val userConnected = document.getLong("User Connected")
-                if (status == "Online"){
-                    if (userConnected!! < 1){
+                if (status == "Online") {
+                    if (userConnected!! < 1) {
                         MachineManager.machineId = machineID
                         MachineManager.name = name
                         machineRef.document(machineID.toString()).update("User Connected", 1)
@@ -95,23 +92,23 @@ class ActQrCodeScanner : AppCompatActivity() {
                                 }
                                 finish()
                             }
-                    }else{
-                        dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                    } else {
+                        dlgStatus(this@ActQrCodeScanner, "machine offline or in use").apply {
                             setOnDismissListener {
                                 finish()
                             }
                         }.show()
                     }
-                }else{
-                    dlgStatus(this@ActQrCodeScanner,"machine offline or in use").apply {
+                } else {
+                    dlgStatus(this@ActQrCodeScanner, "machine offline or in use").apply {
                         setOnDismissListener {
                             finish()
                         }
                     }.show()
                 }
-            }else{
-                dlgStatus(this@ActQrCodeScanner,"QR code is not registered").apply {
-                    setOnDismissListener{
+            } else {
+                dlgStatus(this@ActQrCodeScanner, "QR code is not registered").apply {
+                    setOnDismissListener {
                         finish()
                     }
                 }.show()

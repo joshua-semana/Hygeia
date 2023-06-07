@@ -71,8 +71,8 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("09087788795")
-                txtPassword.setText("Admin1!?")
+                txtEmailOrPhoneNumber.setText("roenleonardo03@gmail.com")
+                txtPassword.setText("Admin@123")
                 btnLogin.performClick()
             }
 
@@ -165,11 +165,8 @@ class ActLogin : AppCompatActivity() {
                 userRef.document(uid).get().addOnSuccessListener { data ->
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    userRef.document(uid).update("status", "active")
-                        .addOnSuccessListener {
-                            loading.dismiss()
-                            startActivity(Intent(applicationContext, ActMain::class.java))
-                        }
+                    loading.dismiss()
+                    startActivity(Intent(applicationContext, ActMain::class.java))
 //                    when (UserManager.status) {
 //                        "inactive" -> {
 //                            userRef.document(uid).update("status", "active")
