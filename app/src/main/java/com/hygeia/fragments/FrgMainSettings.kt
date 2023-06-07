@@ -59,7 +59,7 @@ class FrgMainSettings : Fragment() {
                 if (isInternetConnected(requireContext())) {
                     Utilities.dlgConfirmation(requireContext(), "log out") {
                         if (it == ButtonType.PRIMARY) {
-                            userRef.document(UserManager.uid!!).update("status", "inactive")
+                            userRef.document(UserManager.uid!!).update("isOnline", false)
                                 .addOnSuccessListener {
                                     requireActivity().finish()
                                 }

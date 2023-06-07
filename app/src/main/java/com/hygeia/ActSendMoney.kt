@@ -18,7 +18,7 @@ import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.clearTextError
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.showRequiredTextField
@@ -38,7 +38,7 @@ class ActSendMoney : AppCompatActivity() {
     private var userRef = db.collection("User")
     private var transactionRef = db.collection("Transactions")
 
-    private val balance = formatNumber(UserManager.balance)
+    private val balance = formatCredits(UserManager.balance)
     private var phoneNumber = ""
 
     private val dateFormat = SimpleDateFormat("yyyyMMdd", Locale.getDefault())

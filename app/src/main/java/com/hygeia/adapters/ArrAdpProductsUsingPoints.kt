@@ -7,11 +7,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.hygeia.ActPurchase
 import com.hygeia.ActPurchaseUsingStars
 import com.hygeia.R
 import com.hygeia.classes.DataProducts
-import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.formatPoints
 
 class ArrAdpProductsUsingPoints(

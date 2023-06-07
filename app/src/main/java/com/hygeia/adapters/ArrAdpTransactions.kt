@@ -7,18 +7,20 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.google.type.Date
 import com.hygeia.R
-import com.hygeia.classes.DataMachines
 import com.hygeia.classes.DataTransactions
 import com.hygeia.objects.Utilities
 import java.text.SimpleDateFormat
+import java.util.Calendar
 import java.util.Locale
 
 class ArrAdpTransactions(
     private val listTransactions: ArrayList<DataTransactions>,
     private val clickListener: OnTransactionItemClickListener
 ) : RecyclerView.Adapter<ArrAdpTransactions.ViewHolder>() {
+
+    private val dateFormat =  SimpleDateFormat("MMMM d, y", Locale.getDefault())
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val image: ImageView = itemView.findViewById(R.id.imgListTransaction)
         val type: TextView = itemView.findViewById(R.id.lblListTransactionType)
@@ -45,18 +47,18 @@ class ArrAdpTransactions(
                     "Send Money" -> {
                         image.setImageResource(R.drawable.ic_money_send)
                         type.text = "Send money to"
-                        amount.text = "- ${Utilities.formatNumber(Amount)}"
+                        amount.text = "- ${Utilities.formatCredits(Amount)}"
                         number.text = Number
                     }
                     "Receive Money" -> {
                         image.setImageResource(R.drawable.ic_money_receive)
                         type.text = "Receive money from"
-                        amount.text = "+ ${Utilities.formatNumber(Amount)}"
+                        amount.text = "+ ${Utilities.formatCredits(Amount)}"
                         number.text = Number
                     }
                     "Purchase" -> {
                         image.setImageResource(R.drawable.ic_buy)
-                        amount.text = "- ${Utilities.formatNumber(Amount)}"
+                        amount.text = "- ${Utilities.formatCredits(Amount)}"
                         if (Number == "1") {
                             number.text = "$Number product"
                             type.text = "Purchase item"
@@ -76,12 +78,31 @@ class ArrAdpTransactions(
                             type.text = "Purchase items using stars"
                         }
                     }
+                    "Request" -> {
+                        image.setImageResource(R.drawable.ic_money_request)
+                        amount.text = "+ ${Utilities.formatCredits(Amount)}"
+                        number.text = "Requested money"
+                        type.visibility = View.GONE
+                    }
                 }
 
-                val dateTime: java.util.Date = DateCreated!!.toDate()
-                val format = SimpleDateFormat("MMMM d, y", Locale.getDefault())
-                val dateString = format.format(dateTime)
-                date.text = dateString
+                val dataDate = dateFormat.format(DateCreated!!.toDate())
+                val todayDate = dateFormat.format(Calendar.getInstance().time)
+                val yesterdayDate = Calendar.getInstance()
+                yesterdayDate.add(Calendar.DAY_OF_YEAR, -1)
+                val yesterdayDateFormat = dateFormat.format(yesterdayDate.time)
+
+                when (dataDate) {
+                    todayDate -> {
+                        date.text = "Today"
+                    }
+                    yesterdayDateFormat -> {
+                        date.text = "Yesterday"
+                    }
+                    else -> {
+                        date.text = dataDate
+                    }
+                }
             }
 
             itemView.setOnClickListener {

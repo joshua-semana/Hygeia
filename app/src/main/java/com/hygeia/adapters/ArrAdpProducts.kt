@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.hygeia.ActPurchase
 import com.hygeia.R
 import com.hygeia.classes.DataProducts
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 
 class ArrAdpProducts(
     private val listProducts: ArrayList<DataProducts>,
@@ -42,7 +42,7 @@ class ArrAdpProducts(
         if (product != null) {
             with(holder) {
                 with(product) {
-                    nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
+                    nameAndPrice.text = "$Name (${formatCredits(Price?.toDouble())})"
                     quantity.text = "$Quantity items available"
                     count.text = "$Count"
 

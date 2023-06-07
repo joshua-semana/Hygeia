@@ -7,6 +7,10 @@ import androidx.navigation.ui.setupWithNavController
 import com.hygeia.databinding.ActMainBinding
 import com.hygeia.objects.UserManager
 import android.view.KeyEvent
+import android.view.View
+import android.widget.ImageButton
+import android.widget.TextView
+import com.hygeia.fragments.FrgMainHome
 
 class ActMain : AppCompatActivity() {
     private lateinit var bind : ActMainBinding
@@ -21,18 +25,22 @@ class ActMain : AppCompatActivity() {
             )
 
             val navAdmin = actMainBotNavigation.menu.findItem(R.id.frgMainAdminTools)
-            if (UserManager.role == "admin") {
-                navAdmin.isVisible = true
-            } else if (UserManager.role == "standard") {
-                navAdmin.isVisible = false
+            val navUsers = actMainBotNavigation.menu.findItem(R.id.frgMainUserAccounts)
+
+            when (UserManager.role) {
+                "super admin" -> {
+                    navAdmin.isVisible = false
+                    navUsers.isVisible = true
+                }
+                "admin" -> {
+                    navAdmin.isVisible = true
+                    navUsers.isVisible = false
+                }
+                "standard" -> {
+                    navAdmin.isVisible = false
+                    navUsers.isVisible = false
+                }
             }
         }
     }
-//    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
-//        if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
-//            moveTaskToBack(true)
-//            return true
-//        }
-//        return super.onKeyDown(keyCode, event)
-//    }
 }

@@ -98,7 +98,7 @@
                     android:layout_height="@dimen/ic_md"
                     android:layout_marginTop="@dimen/mx"
                     android:layout_marginEnd="@dimen/mx"
-                    android:src="@drawable/logo_hygeia"
+                    android:src="@drawable/logo_hygeia_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription" />
@@ -143,21 +143,21 @@
     <ImageButton
         android:id="@+id/btnMyQr"
         style="@style/Circle_Lg_50"
-        android:layout_marginTop="@dimen/elmnt_gap_xl"
         android:src="@drawable/ic_qr"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
         app:layout_constraintEnd_toStartOf="@+id/btnSendMoney"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblActions"
+        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/btnSendMoney"
         style="@style/Circle_Lg_50"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
         android:src="@drawable/ic_money_send"
-        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
         app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
         app:layout_constraintStart_toEndOf="@+id/btnMyQr"
-        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
+        app:layout_constraintTop_toBottomOf="@+id/lblActions"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
@@ -176,17 +176,28 @@
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_use_points"
         app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btnRequestMoney"
         app:layout_constraintStart_toEndOf="@+id/btnPurchase"
         app:layout_constraintTop_toTopOf="@+id/btnMyQr"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/btnRequestMoney"
+        style="@style/Circle_Lg_50"
+        android:src="@drawable/ic_money_request"
+        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/btnPurchaseUsingPoints"
+        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/lblMyQr"
         style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
         android:text="@string/btn_my_qr"
         app:layout_constraintEnd_toEndOf="@+id/btnMyQr"
         app:layout_constraintStart_toStartOf="@+id/btnMyQr"
@@ -198,7 +209,7 @@
         style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
         android:text="@string/btn_send_money"
         app:layout_constraintEnd_toEndOf="@+id/btnSendMoney"
         app:layout_constraintStart_toStartOf="@+id/btnSendMoney"
@@ -210,7 +221,7 @@
         style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
         android:text="@string/btn_purchase"
         app:layout_constraintEnd_toEndOf="@+id/btnPurchase"
         app:layout_constraintStart_toStartOf="@+id/btnPurchase"
@@ -222,12 +233,25 @@
         style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
         android:text="@string/btn_purchase_using_points"
         app:layout_constraintEnd_toEndOf="@+id/btnPurchaseUsingPoints"
         app:layout_constraintStart_toStartOf="@+id/btnPurchaseUsingPoints"
         app:layout_constraintTop_toBottomOf="@+id/btnPurchase"
         tools:ignore="TextContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblRequestMoney"
+        style="@style/Text_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
+        android:text="@string/btn_request_money"
+        app:layout_constraintEnd_toEndOf="@+id/btnRequestMoney"
+        app:layout_constraintStart_toStartOf="@+id/btnRequestMoney"
+        app:layout_constraintTop_toBottomOf="@+id/btnRequestMoney"
+        tools:ignore="TextContrastCheck"
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/lblLatestTransactions"
