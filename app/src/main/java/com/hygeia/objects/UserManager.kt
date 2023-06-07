@@ -19,6 +19,7 @@ object UserManager {
     var points: Any? = null
     var isEnabled: Boolean? = null
     var isOnline: Boolean? = null
+    var walletBackground: String? = null
 
     fun setUserInformation(userInfo: DocumentSnapshot) {
         with(userInfo) {
@@ -35,9 +36,16 @@ object UserManager {
             points = get("points")
             isEnabled = get("isEnabled") as Boolean
             isOnline = get("isOnline") as Boolean
+            walletBackground = get("walletBackground") as String
         }
     }
-    fun updateUserBalance(number : DocumentSnapshot){
+
+    fun updateUserBalance(number: DocumentSnapshot) {
         balance = number.get("balance")
+        points = number.get("points")
+    }
+
+    fun updateUserBackground(image: String) {
+        walletBackground = image
     }
 }

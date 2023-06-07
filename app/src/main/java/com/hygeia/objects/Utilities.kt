@@ -309,6 +309,30 @@ object Utilities {
         return dialog
     }
 
+    fun dlgReward(context: Context, number: Double): Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_message)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val lblDlgInfoEmoji = dialog.findViewById<TextView>(R.id.lblDlgInfoEmoji)
+        val lblDlgInfoTitle = dialog.findViewById<TextView>(R.id.lblDlgInfoTitle)
+        val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
+        val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
+
+        val message = "You have been rewarded with ${number.toInt()} Hygeia Stars! Earn more by using our service.\n\nYour vendo buddy, hygeia, is always at your service!"
+        lblDlgInfoEmoji.text = Emoji.Star
+        lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
+        lblDlgInfoBody.text = message
+        btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+
+        btnDlgInfoPrimary.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        return dialog
+    }
+
     fun dlgError(context: Context, message: String): Dialog {
         val dialog = Dialog(context)
         dialog.setContentView(R.layout.dlg_message)
@@ -386,6 +410,11 @@ object Utilities {
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, disable"
                 btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
             }
+            "change wallpaper" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_change_wallpaper)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, change"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
             "log out" -> {
                 lblDlgConfirmBody.text = context.getString(R.string.dlg_body_log_out)
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, log out"
@@ -444,10 +473,10 @@ object Utilities {
 
             if (data.getString("Type") == "Send Money") {
                 lblDlgTransactionTotalAmount.text = "- ${formatCredits(data.get("Amount"))}"
-                lblDescTransactionIdentifier.text = "Receiver No.: ${data.get("Number")}"
+                lblDescTransactionIdentifier.text = "Receiver: ${data.get("Number")}"
             } else if (data.getString("Type") == "Receive Money") {
                 lblDlgTransactionTotalAmount.text = "+ ${formatCredits(data.get("Amount"))}"
-                lblDescTransactionIdentifier.text = "Sender No.: ${data.get("Number")}"
+                lblDescTransactionIdentifier.text = "Sender: ${data.get("Number")}"
             } else if (data.getString("Type") == "Purchase") {
                 divider2.visibility = View.VISIBLE
                 lblDescTransactionItemsTitle.visibility = View.VISIBLE
@@ -492,7 +521,7 @@ object Utilities {
                 }
             } else if (data.getString("Type") == "Request") {
                 val layoutParams = lblDescTransactionDate.layoutParams as ViewGroup.MarginLayoutParams
-                layoutParams.topMargin = 0 // Set the desired top margin in pixels
+                layoutParams.topMargin = 0
                 lblDescTransactionDate.layoutParams = layoutParams
                 lblDlgTransactionTotalAmount.text = "+ ${formatCredits(data.get("Amount"))}"
                 lblDescTransactionIdentifier.visibility = View.GONE

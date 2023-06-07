@@ -18,6 +18,7 @@ import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
+import com.hygeia.objects.Utilities.dlgReward
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.isInternetConnected
@@ -44,6 +45,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     private var vat = 0.00
     private var grandTotal = 0.00
     private var totalCount = 0
+    private var totalRewardStars = 0.00
 
     private val machineID = MachineManager.machineId
     private var machineName = MachineManager.name
@@ -151,21 +153,28 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     private fun updateUserBalance() {
         userRef.document(UserManager.uid!!.trim()).update("balance", UserManager.balance.toString().toDouble() - grandTotal)
+        userRef.document(UserManager.uid!!.trim()).update("points", UserManager.points.toString().toDouble() + totalRewardStars)
         userRef.document(UserManager.uid!!).get().addOnSuccessListener { data ->
             UserManager.updateUserBalance(data)
         }
+
         finishTransaction()
     }
-
 
     private fun finishTransaction() {
         loading.dismiss()
         dlgStatus(this@ActPurchase, "success purchase").apply {
             setOnDismissListener {
-                machinesRef.document(machineID.toString()).update("User Connected", 0)
-                    .addOnSuccessListener {
-                        finish()
+                dlgReward(this@ActPurchase, totalRewardStars).apply {
+                    setOnDismissListener {
+                        machinesRef.document(machineID.toString()).update("User Connected", 0)
+                            .addOnSuccessListener {
+                                finish()
+                            }
                     }
+                    show()
+                }
+
             }
             show()
         }
@@ -223,6 +232,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                             val productQuantity = item.get("Quantity")
                             val productSlot = item.get("Slot")
                             val productStatus = item.get("Status")
+                            val productReward = item.get("Reward Points")
 
                             val product = DataProducts(
                                 productId,
@@ -230,7 +240,9 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                                 productPrice.toString(),
                                 productQuantity.toString(),
                                 productSlot.toString().toInt(),
-                                productStatus.toString().toInt()
+                                productStatus.toString().toInt(),
+                                null,
+                                productReward.toString().toDouble()
                             )
 
                             listOfProducts.add(product)
@@ -246,10 +258,11 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
             }
         }
     }
-    override fun onAddOrMinusClick(productPrice: Double) {
+    override fun onAddOrMinusClick(productPrice: Double, totalReward: Double) {
         grandTotal = productPrice
         vat = productPrice * 0.12
         subTotal = grandTotal - vat
+        totalRewardStars = totalReward
         updatePurchaseBreakdown()
     }
 }

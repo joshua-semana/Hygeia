@@ -193,7 +193,8 @@ class ActCreateAccount : AppCompatActivity() {
             "balance" to 0,
             "dateCreated" to Timestamp(Date()),
             "points" to 1,
-            "isEnabled" to true
+            "isEnabled" to true,
+            "walletBackground" to "img_wallet_card_1"
         )
 
         auth.createUserWithEmailAndPassword(emailAddress, password)

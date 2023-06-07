@@ -14,10 +14,11 @@ import com.hygeia.objects.Utilities.formatCredits
 
 class ArrAdpProducts(
     private val listProducts: ArrayList<DataProducts>,
-    private val clickListener: ActPurchase // either ActPurchase or ActPurchaseUsingPoints
+    private val clickListener: ActPurchase
     ) : RecyclerView.Adapter<ArrAdpProducts.ViewHolder>() {
 
     private var totalPrice: Double = 0.00
+    private var totalReward: Double = 0.00
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val nameAndPrice : TextView = itemView.findViewById(R.id.lblListProductNameAndPrice)
@@ -51,8 +52,9 @@ class ArrAdpProducts(
                             Count++
                             count.text = "$Count"
                             totalPrice += Price!!.toDouble()
+                            totalReward += Reward!!
                         }
-                        clickListener.onAddOrMinusClick(totalPrice)
+                        clickListener.onAddOrMinusClick(totalPrice, totalReward)
                     }
 
                     btnMinus.setOnClickListener {
@@ -60,8 +62,9 @@ class ArrAdpProducts(
                             Count--
                             count.text = "$Count"
                             totalPrice -= Price!!.toDouble()
+                            totalReward -= Reward!!
                         }
-                        clickListener.onAddOrMinusClick(totalPrice)
+                        clickListener.onAddOrMinusClick(totalPrice, totalReward)
                     }
                 }
             }
@@ -82,7 +85,7 @@ class ArrAdpProducts(
     }
 
     interface OnProductItemClickListener {
-        fun onAddOrMinusClick(productPrice: Double)
+        fun onAddOrMinusClick(productPrice: Double, totalReward: Double)
     }
 
 }
