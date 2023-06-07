@@ -25,19 +25,84 @@
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
         tools:ignore="VisualLintLongText" />
 
+    <HorizontalScrollView
+        android:id="@+id/chipGroupScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/elmnt_gap_md"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblDescription"
+            app:selectionRequired="true"
+            app:singleLine="true"
+            app:singleSelection="true"
+            tools:ignore="VisualLintBounds">
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipAll"
+                style="@style/Chip"
+                android:layout_marginStart="@dimen/mx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chip_all" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipPurchase"
+                style="@style/Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chip_purchase" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipStars"
+                style="@style/Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chip_use_stars" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipSend"
+                style="@style/Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chip_send_money" />
+
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipReceive"
+                style="@style/Chip"
+                android:layout_marginEnd="@dimen/mx"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/chip_receive_money" />
+
+
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/listViewTransactionHistory"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/mx"
-        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginTop="@dimen/elmnt_gap_lg"
         android:layout_marginEnd="@dimen/mx"
         android:layout_marginBottom="56dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblDescription"
-        tools:listitem="@layout/list_transaction"/>
+        app:layout_constraintTop_toBottomOf="@+id/chipGroupScroll"
+        tools:listitem="@layout/list_transaction" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/coverTransaction"
@@ -61,7 +126,8 @@
             android:textSize="@dimen/text_emoji_lg"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
 
         <TextView
             android:id="@+id/lblMessage"

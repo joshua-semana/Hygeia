@@ -13,4 +13,5 @@ object Emoji {
     const val Receipt = "🧾"
     const val Star = "🌟"
     const val Heart = "🥰"
+    const val Sad = "😥"
 }

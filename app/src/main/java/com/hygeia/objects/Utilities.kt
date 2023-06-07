@@ -13,6 +13,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.widget.AppCompatImageView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.Timestamp
@@ -35,7 +36,7 @@ object Utilities {
     val phoneNumberPattern = "^\\+639\\d{9}\$|^09\\d{9}\$".toRegex()
     val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
 
-    val transactionRef = FirebaseFirestore.getInstance().collection("Transactions")
+    private val transactionRef = FirebaseFirestore.getInstance().collection("Transactions")
 
     val greetings = hashMapOf(
         "Filipino" to "Mabuhay!",
@@ -197,14 +198,14 @@ object Utilities {
         }
 
         if (content == "0 funds") {
-            lblDlgInfoEmoji.text = Emoji.Error
-            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoEmoji.text = Emoji.Sad
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_funds)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
         if (content == "0 points") {
-            lblDlgInfoEmoji.text = Emoji.Error
-            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
+            lblDlgInfoEmoji.text = Emoji.Sad
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_no_points)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
@@ -255,12 +256,14 @@ object Utilities {
         val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
         val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
-        if (greetings.containsKey(info1)) {
-            val message = "The word '${greetings[info1]}' is the $info1 term for the word 'Hello!'"
-            lblDlgInfoEmoji.text = Emoji.Trivia
-            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_trivia)
-            lblDlgInfoBody.text = message
-            btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
+        if(info1 != "Hello!") {
+            if (greetings.containsKey(info1)) {
+                val message = "The word '${greetings[info1]}' is the $info1 term for the word 'Hello!'"
+                lblDlgInfoEmoji.text = Emoji.Trivia
+                lblDlgInfoTitle.text = context.getString(R.string.dlg_title_trivia)
+                lblDlgInfoBody.text = message
+                btnDlgInfoPrimary.text = context.getString(R.string.btn_got_it)
+            }
         }
 
         if (info1 == "introduce stars") {
@@ -425,6 +428,27 @@ object Utilities {
                     val formattedText = items.joinToString("\n")
                     lblDescTransactionItemsContent.text = formattedText.dropLast(0)
                 }
+            } else if (data.getString("Type") == "Purchase Using Star") {
+                divider2.visibility = View.VISIBLE
+                lblDescTransactionItemsTitle.visibility = View.VISIBLE
+                lblDescTransactionItemsContent.visibility = View.VISIBLE
+
+                lblDlgTransactionTotalAmount.text = "- 🌟${formatPoints(data.get("Amount"))}"
+                lblDescTransactionIdentifier.text = "Vendo No.: ${data.get("Vendo")}"
+
+                data.reference.collection("Items").get().addOnSuccessListener { dataItems ->
+                    val items = mutableListOf<String>()
+
+                    for (document in dataItems) {
+                        val name = document.getString("Name")
+                        val price = document.getString("Price")
+                        val quantity = document.getLong("Quantity")
+                        val total = price!!.toDouble() * quantity!!.toDouble()
+                        items.add("${quantity}pc(s) $name - 🌟${formatPoints(total)}")
+                    }
+                    val formattedText = items.joinToString("\n")
+                    lblDescTransactionItemsContent.text = formattedText.dropLast(0)
+                }
             }
         }
 
@@ -459,5 +483,23 @@ object Utilities {
             e.printStackTrace()
         }
         return null
+    }
+
+    fun dlgMyQrCode(context: Context, userID: String) : Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_my_qr)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val imgQrCode = dialog.findViewById<AppCompatImageView>(R.id.imgQrCode)
+        val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
+
+        imgQrCode.setImageBitmap(generateQRCode(userID))
+
+        btnDlgInfoPrimary.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        return dialog
     }
 }

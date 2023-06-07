@@ -2,22 +2,21 @@ package com.hygeia.fragments
 
 import android.app.Dialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.hygeia.R
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.DataTransactions
 import com.hygeia.databinding.FrgMainTransactionsBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
-import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.dlgTransactionDetails
-import com.hygeia.objects.Utilities.isInternetConnected
 
 class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClickListener {
 
@@ -27,6 +26,7 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
 
     private var db = FirebaseFirestore.getInstance()
     private var transactionRef = db.collection("Transactions")
+    private val query = transactionRef.whereEqualTo("User Reference", UserManager.uid)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,25 +35,50 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
     ): View {
         bind = FrgMainTransactionsBinding.inflate(inflater, container, false)
         loading = Utilities.dlgLoading(requireContext())
+
+        listOfTransactions = arrayListOf()
+
         with(bind) {
-            if (isInternetConnected(requireContext())){
-                //POPULATE
-                getListOfTransactions()
-            }else {
-                dlgStatus(requireContext(),"no internet").show()
+
+            chipAll.isChecked = true
+            if (chipAll.isChecked) getListOfTransactions(query)
+
+            chipAll.setOnClickListener {
+                getListOfTransactions(query)
+            }
+
+            @Suppress("DEPRECATION")
+            chipGroup.setOnCheckedChangeListener { _, checkedId ->
+                when(checkedId) {
+                    R.id.chipSend -> {
+                        getListOfTransactions(query.whereEqualTo("Type", "Send Money"))
+                    }
+                    R.id.chipReceive -> {
+                        getListOfTransactions(query.whereEqualTo("Type", "Receive Money"))
+                    }
+                    R.id.chipPurchase -> {
+                        getListOfTransactions(query.whereEqualTo("Type", "Purchase"))
+                    }
+                    R.id.chipStars -> {
+                        getListOfTransactions(query.whereEqualTo("Type", "Purchase Using Star"))
+                    }
+                }
             }
             return root
         }
     }
 
-    private fun getListOfTransactions() {
+    override fun onStop() {
+        super.onStop()
+        bind.chipGroup.clearCheck()
+    }
+
+    private fun getListOfTransactions(query: Query) {
+        listOfTransactions.clear()
         loading.show()
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
-        listOfTransactions = arrayListOf()
 
-        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).orderBy("Date Created", Query.Direction.DESCENDING)
-
-        query.get().apply {
+        query.orderBy("Date Created", Query.Direction.DESCENDING).get().apply {
             addOnSuccessListener { data ->
                 if (!data.isEmpty) {
                     bind.coverTransaction.visibility = View.GONE
@@ -79,6 +104,8 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
                     }
                     bind.listViewTransactionHistory.adapter =
                         ArrAdpTransactions(listOfTransactions, this@FrgMainTransactions)
+                } else {
+                    bind.coverTransaction.visibility = View.VISIBLE
                 }
                 loading.dismiss()
             }
