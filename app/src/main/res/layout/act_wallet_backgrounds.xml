@@ -61,7 +61,7 @@
                     android:layout_height="@dimen/ic_md"
                     android:layout_marginTop="@dimen/mx"
                     android:layout_marginEnd="@dimen/mx"
-                    android:src="@drawable/logo_hygeia"
+                    android:src="@drawable/logo_hygeia_white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:ignore="ContentDescription" />
@@ -117,7 +117,8 @@
         app:checkedIconTint="@color/white"
         app:layout_constraintEnd_toStartOf="@+id/cardImage2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/lblWallpapers">
+        app:layout_constraintTop_toBottomOf="@+id/lblWallpapers"
+        tools:ignore="HardcodedText">
 
         <View
             android:layout_width="match_parent"
@@ -140,7 +141,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardImage1"
         app:layout_constraintEnd_toStartOf="@+id/cardImage3"
         app:layout_constraintStart_toEndOf="@+id/cardImage1"
-        app:layout_constraintTop_toTopOf="@+id/cardImage1">
+        app:layout_constraintTop_toTopOf="@+id/cardImage1"
+        tools:ignore="HardcodedText">
 
         <View
             android:layout_width="match_parent"
@@ -163,7 +165,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardImage2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardImage2"
-        app:layout_constraintTop_toTopOf="@+id/cardImage2">
+        app:layout_constraintTop_toTopOf="@+id/cardImage2"
+        tools:ignore="HardcodedText">
 
         <ImageView
             android:layout_width="match_parent"
@@ -189,7 +192,7 @@
         app:layout_constraintEnd_toStartOf="@+id/cardImage5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cardImage1"
-        tools:ignore="DuplicateSpeakableTextCheck">
+        tools:ignore="DuplicateSpeakableTextCheck,HardcodedText">
 
         <ImageView
             android:layout_width="match_parent"
@@ -214,7 +217,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardImage4"
         app:layout_constraintEnd_toStartOf="@+id/cardImage6"
         app:layout_constraintStart_toEndOf="@+id/cardImage4"
-        app:layout_constraintTop_toTopOf="@+id/cardImage4">
+        app:layout_constraintTop_toTopOf="@+id/cardImage4"
+        tools:ignore="HardcodedText">
 
         <ImageView
             android:layout_width="match_parent"
@@ -239,7 +243,8 @@
         app:layout_constraintBottom_toBottomOf="@+id/cardImage5"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cardImage5"
-        app:layout_constraintTop_toTopOf="@+id/cardImage5">
+        app:layout_constraintTop_toTopOf="@+id/cardImage5"
+        tools:ignore="HardcodedText">
 
         <ImageView
             android:layout_width="match_parent"

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mainLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:tag=".FrgMainUserAccounts">
+
+    <TextView
+        android:id="@+id/lblHeadingRegular"
+        style="@style/Text_H1_Regular"
+        android:layout_marginTop="24dp"
+        android:text="@string/h1_user_accounts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/Text_Description"
+        android:text="@string/desc_user_accounts"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
+        tools:ignore="VisualLintLongText" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/txtLayoutSearch"
+        style="@style/Txt_Layout_Primary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_search"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:endIconDrawable="@drawable/ic_search"
+        app:endIconMode="custom"
+        app:prefixText="+63"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/txtSearch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:inputType="number"
+            tools:ignore="TextContrastCheck,VisualLintTextFieldSize" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listViewUsers"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_xl"
+        android:layout_marginEnd="@dimen/mx"
+        android:layout_marginBottom="56dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtLayoutSearch"
+        tools:listitem="@layout/list_users"/>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/coverListView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/mx"
+        app:layout_constraintBottom_toBottomOf="@+id/listViewUsers"
+        app:layout_constraintEnd_toEndOf="@+id/listViewUsers"
+        app:layout_constraintStart_toStartOf="@+id/listViewUsers"
+        app:layout_constraintTop_toTopOf="@+id/listViewUsers">
+
+        <TextView
+            android:id="@+id/lblEmoji"
+            style="@style/Text_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/emo_empty"
+            android:textSize="@dimen/text_emoji_lg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/desc_empty_user"
+            android:textAlignment="center"
+            android:textColor="@color/neutral_500"
+            android:textSize="@dimen/text_md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEmoji" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

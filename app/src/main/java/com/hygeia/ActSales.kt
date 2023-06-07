@@ -17,8 +17,7 @@ import java.util.Date
 import java.util.Locale
 import androidx.core.util.Pair
 import com.google.firebase.Timestamp
-import com.hygeia.objects.Utilities.dlgError
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 
 class ActSales : AppCompatActivity() {
     private lateinit var bind: ActSalesBinding
@@ -98,6 +97,7 @@ class ActSales : AppCompatActivity() {
     private fun getTotalEarningsForDay(selectedDate: Timestamp) {
         loading.show()
         val query = transactionsRef.whereEqualTo("Vendo", MachineManager.name)
+            .whereEqualTo("Type", "Purchase")
             .whereGreaterThanOrEqualTo("Date Created", selectedDate.startOfDay())
             .whereLessThan("Date Created", selectedDate.endOfDay())
 
@@ -108,8 +108,8 @@ class ActSales : AppCompatActivity() {
                 var totalProducts = 0.0
 
                 if (data.isEmpty) {
-                    bind.lblTotalEarningsAmount.text = formatNumber(0)
-                    bind.lblTotalItemsSoldAmount.text = "0"
+                    bind.lblTotalEarningsAmount.text = formatCredits(0)
+                    bind.lblTotalItemsSoldAmount.text = "None"
                 } else {
                     for (document in data) {
                         val amount = document.getDouble("Amount")
@@ -117,7 +117,7 @@ class ActSales : AppCompatActivity() {
                         totalAmount += amount!!
                         totalProducts += quantity!!
                     }
-                    bind.lblTotalEarningsAmount.text = formatNumber(totalAmount)
+                    bind.lblTotalEarningsAmount.text = formatCredits(totalAmount)
                     bind.lblTotalItemsSoldAmount.text = "${totalProducts.toInt()} product(s)"
                 }
             }
@@ -128,6 +128,7 @@ class ActSales : AppCompatActivity() {
     private fun getTotalEarningsForDays(firstDate: Timestamp, secondDate: Timestamp) {
         loading.show()
         val query = transactionsRef.whereEqualTo("Vendo", MachineManager.name)
+            .whereEqualTo("Type", "Purchase")
             .whereGreaterThanOrEqualTo("Date Created", firstDate.startOfDay())
             .whereLessThan("Date Created", secondDate.endOfDay())
 
@@ -138,8 +139,8 @@ class ActSales : AppCompatActivity() {
                 var totalProducts = 0.0
 
                 if (data.isEmpty) {
-                    bind.lblTotalEarningsAmount.text = formatNumber(0)
-                    bind.lblTotalItemsSoldAmount.text = "0"
+                    bind.lblTotalEarningsAmount.text = formatCredits(0)
+                    bind.lblTotalItemsSoldAmount.text = "None"
                 } else {
                     for (document in data) {
                         val amount = document.getDouble("Amount")
@@ -147,7 +148,7 @@ class ActSales : AppCompatActivity() {
                         totalAmount += amount!!
                         totalProducts += quantity!!
                     }
-                    bind.lblTotalEarningsAmount.text = formatNumber(totalAmount)
+                    bind.lblTotalEarningsAmount.text = formatCredits(totalAmount)
                     bind.lblTotalItemsSoldAmount.text = "${totalProducts.toInt()} product(s)"
                 }
             }

@@ -19,6 +19,7 @@
     <string name="h1_details_colored">details</string>
     <string name="h1_password_colored">password</string>
     <string name="h1_send_money">Send Money</string>
+    <string name="h1_request_money">Request Balance</string>
     <string name="h1_sales">Sales</string>
     <string name="h1_pin_colored">PIN</string>
     <string name="h1_all_transactions">Transaction History</string>
@@ -29,6 +30,7 @@
     <string name="h1_vendo_details">Vendo Details</string>
     <string name="h1_change_wallet_background">Change Wallet</string>
     <string name="h1_change_wallet_background_colored">Background</string>
+    <string name="h1_user_accounts">User Accounts</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
@@ -51,6 +53,7 @@
     <string name="desc_wallet_balance">Wallet Balance</string>
     <string name="desc_stars_balance">Hygeia Stars Balance</string>
     <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
+    <string name="desc_request_money">To initiate the request, please provide the amount and your password for security purposes. This transaction is recorded.</string>
     <string name="desc_transaction_history">View all your transactions in one place. Use the chips below to filter your transactions.</string>
     <string name="desc_vending_machines">Discover all the available vending machine in one place.</string>
     <string name="desc_user_info">View your profile and account details at a glance.</string>
@@ -62,11 +65,13 @@
     <string name="desc_vendo_num">Vendo #</string>
     <string name="desc_items">Item(s):</string>
     <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
+    <string name="desc_empty_user">There are no user records with your search input. Check if your input is correct.</string>
     <string name="desc_vendo_slot_status">Vendo slot status</string>
     <string name="desc_wallet_background">Enhance your wallet\'s visual appeal by customizing its background wallpaper. Choose from a wide range of stunning designs to personalize your digital experience.</string>
     <string name="desc_sales">Track your sales and gain insights into your total earnings.</string>
     <string name="desc_total_earnings">Total Earnings</string>
     <string name="desc_total_products">Total Products Sold</string>
+    <string name="desc_user_accounts">Here are all the user accounts of Hygeia.</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -91,6 +96,7 @@
     <string name="title_status_offline">Offline</string>
     <string name="title_product_price_in_points">Product Price in Hygeia Stars</string>
     <string name="title_product_reward_in_points">Product Reward in Hygeia Stars</string>
+    <string name="title_search">Search User</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -125,6 +131,7 @@
     <string name="btn_send_money">Send</string>
     <string name="btn_purchase">Purchase</string>
     <string name="btn_purchase_using_points">Use Stars</string>
+    <string name="btn_request_money">Request</string>
     <string name="btn_log_out">Log Out</string>
     <string name="btn_view_information">View my info</string>
     <string name="btn_change_password">Change password</string>
@@ -175,6 +182,7 @@
     <string name="dlg_body_insufficient_points">It seems that you have insufficient Hygeia stars in your account to complete this transaction.</string>
     <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
     <string name="dlg_body_send_money">You have successfully sent money to your recipient\'s account.</string>
+    <string name="dlg_body_request_money">You have successfully requested money. Your balance is now updated.</string>
     <string name="dlg_body_purchase">Thank you for choosing our service! We appreciate your support and trust in our platform.</string>
     <string name="dlg_title_stars">Introducing Hygeia Stars!</string>
     <string name="dlg_body_stars">The exclusive reward system of Hygeia that makes your purchases even more rewarding!\n\nWith Hygeia Stars, every time you make a purchase through our app, you earn stars that can be used as an alternative to money when purchasing products through your vendo buddy, Hygeia!\n\nPurchase now to earn more Hygeia Stars!</string>
@@ -182,15 +190,21 @@
     <string name="dlg_body_about_us">Information regarding Hygeia background</string>
     <string name="dlg_title_my_qr">My QR Code</string>
     <string name="dlg_body_my_qr">Present your personalized QR code for effortless transactions!</string>
+    <string name="dlg_body_update_user">You have successfully updated this user\'s information.</string>
+    <string name="dlg_body_user_disabled">Your account is currently disabled. If you think this is a mistake, please contact the administration about this matter.</string>
 
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
     <string name="dlg_body_log_out">Are you sure you want to log out?\nLogging out will end your current session and require you to sign in again.</string>
     <string name="dlg_send_money">Are you sure you want to send this amount to the recipient\'s account?</string>
+    <string name="dlg_request_money">Are you sure you want to add this amount to your account balance?\n\nQuick reminder, this account and this transaction will be recorded.</string>
     <string name="dlg_purchase">Are you sure you want to purchase this selection of items?</string>
     <string name="dlg_title_transaction_details">Transaction Details</string>
     <string name="dlg_receipt_total_amount">Total Amount</string>
+    <string name="dlg_body_promote">Are you sure you want to promote this standard user to administrator?</string>
+    <string name="dlg_body_demote">Are you sure you want to demote this administrator to standard user?</string>
+    <string name="dlg_body_disable">Are you sure you want to disable this account?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
@@ -205,6 +219,7 @@
     <string name="chip_all">All</string>
     <string name="chip_send_money">Money Sent</string>
     <string name="chip_receive_money">Money Received</string>
+    <string name="chip_request_money">Money Requested</string>
     <string name="chip_purchase">Purchases</string>
     <string name="chip_use_stars">Purchases Using Stars</string>
 
@@ -237,6 +252,7 @@
     <string name="nav_home">Home</string>
     <string name="nav_transactions">Transactions</string>
     <string name="nav_admin_tools">Admin Tools</string>
+    <string name="nav_user_accounts">User Accounts</string>
     <string name="nav_profile">Profile</string>
 
     <!--SPECIFIC ACTIVITIES-->
@@ -286,4 +302,5 @@
     \n
     </string>
     <string name="emo_hiding">😶‍🌫️</string>
+    <string name="emo_empty">🤔</string>
 </resources>

@@ -71,8 +71,8 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("09087788795")
-                txtPassword.setText("Admin1!?")
+                txtEmailOrPhoneNumber.setText("09999999999")
+                txtPassword.setText("@appHygeia1")
                 btnLogin.performClick()
             }
 
@@ -165,26 +165,24 @@ class ActLogin : AppCompatActivity() {
                 userRef.document(uid).get().addOnSuccessListener { data ->
                     UserManager.setUserInformation(data)
                     clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    userRef.document(uid).update("status", "active")
-                        .addOnSuccessListener {
-                            loading.dismiss()
-                            startActivity(Intent(applicationContext, ActMain::class.java))
-                        }
-//                    when (UserManager.status) {
-//                        "inactive" -> {
-//                            userRef.document(uid).update("status", "active")
-//                                .addOnSuccessListener {
-//                                    loading.dismiss()
-//                                    startActivity(Intent(applicationContext, ActMain::class.java))
-//                                }
-//                        }
-//
-//                        "active" -> {
-//                            loading.dismiss()
-//                            dlgStatus(this@ActLogin,"user already active").show()
-//                        }
-//                        else -> null
-//                    }
+                    if (UserManager.isEnabled == true && UserManager.isOnline == false) {
+                        userRef.document(uid).update("isOnline", true)
+                            .addOnSuccessListener {
+                                loading.dismiss()
+                                startActivity(Intent(applicationContext, ActMain::class.java))
+                            }
+                    } else if (UserManager.isEnabled == false) {
+                        loading.dismiss()
+                        dlgStatus(this@ActLogin,"user disabled").show()
+                    } else if (UserManager.isOnline == true) {
+                        userRef.document(uid).update("isOnline", true)
+                            .addOnSuccessListener {
+                                loading.dismiss()
+                                startActivity(Intent(applicationContext, ActMain::class.java))
+                            }
+//                        loading.dismiss()
+//                        dlgStatus(this@ActLogin, "user already active").show()
+                    }
                 }
             }
             addOnFailureListener {
@@ -200,25 +198,24 @@ class ActLogin : AppCompatActivity() {
             userRef.document(query.documents[0].id).get().addOnSuccessListener { data ->
                 UserManager.setUserInformation(data)
                 clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                userRef.document(query.documents[0].id).update("status", "active")
-                    .addOnSuccessListener {
-                        loading.dismiss()
-                        startActivity(Intent(applicationContext, ActMain::class.java))
-                    }
-//                when (UserManager.status) {
-//                    "inactive" -> {
-//                        userRef.document(query.documents[0].id).update("status", "active")
-//                            .addOnSuccessListener {
-//                                loading.dismiss()
-//                                startActivity(Intent(applicationContext, ActMain::class.java))
-//                            }
-//                    }
-//                    "active" -> {
-//                        loading.dismiss()
-//                        dlgStatus(this@ActLogin,"user already active").show()
-//                    }
-//                    else -> null
-//                }
+                if (UserManager.isEnabled == true && UserManager.isOnline == false) {
+                    userRef.document(query.documents[0].id).update("isOnline", true)
+                        .addOnSuccessListener {
+                            loading.dismiss()
+                            startActivity(Intent(applicationContext, ActMain::class.java))
+                        }
+                } else if (UserManager.isEnabled == false) {
+                    loading.dismiss()
+                    dlgStatus(this@ActLogin,"user disabled").show()
+                } else if (UserManager.isOnline == true) {
+                    userRef.document(query.documents[0].id).update("isOnline", true)
+                        .addOnSuccessListener {
+                            loading.dismiss()
+                            startActivity(Intent(applicationContext, ActMain::class.java))
+                        }
+//                    loading.dismiss()
+//                    dlgStatus(this@ActLogin, "user already active").show()
+                }
             }
         } else {
             loading.dismiss()
