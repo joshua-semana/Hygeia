@@ -201,7 +201,7 @@ object MachineManager {
             ) {
                 if (txtPriceInPoints.text.toString().toDouble() == 0.0) {
                     txtLayoutPriceInPoints.error =
-                        "The Reward points cannot be 0."
+                        "This cannot be 0."
                 } else {
                     val productUpdatedData = hashMapOf<String, Any>(
                         "Price in Points" to txtPriceInPoints.text.toString().toDouble(),

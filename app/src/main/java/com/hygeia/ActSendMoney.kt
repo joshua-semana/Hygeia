@@ -206,6 +206,8 @@ class ActSendMoney : AppCompatActivity() {
             "User Reference" to UserManager.uid,
         )
 
+
+
         transactionRef.document().set(senderData)
             .addOnSuccessListener {
                 val receiverData = hashMapOf(
@@ -216,6 +218,11 @@ class ActSendMoney : AppCompatActivity() {
                     "Type" to "Receive Money",
                     "User Reference" to "",
                 )
+
+                if (UserManager.role == "super admin") {
+                    receiverData["Number"] = "Hygeia Admin"
+                }
+
                 getReceiverId { receiverId ->
                     receiverData["User Reference"] = receiverId
                     transactionRef.document().set(receiverData)
