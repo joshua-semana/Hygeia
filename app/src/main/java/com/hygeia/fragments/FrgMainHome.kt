@@ -13,22 +13,26 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.hygeia.ActPurchaseUsingStars
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActRequestMoney
 import com.hygeia.ActSendMoney
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataTransactions
+import com.hygeia.databinding.ActPurchaseUsingStarsBinding
 import com.hygeia.objects.Utilities.dlgInformation
 import com.hygeia.objects.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
+import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgMyQrCode
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.formatPoints
+import com.hygeia.objects.Utilities.isInternetConnected
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -63,71 +67,21 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
         with(bind) {
 
-            populateMainHome()
-
-            lblGreetings.text = greeting
-
-            //MAIN FUNCTIONS
-            lblGreetings.setOnClickListener {
-                dlgInformation(requireContext(), language).show()
-            }
-
-            cardPoints.setOnClickListener {
-                dlgInformation(requireContext(), "introduce stars").show()
-            }
-
-            btnMyQr.setOnClickListener {
-                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
-            }
-
-            btnRequestMoney.setOnClickListener {
-                startActivity(Intent(requireContext(), ActRequestMoney::class.java))
-            }
-
-            if (Utilities.isInternetConnected(requireContext())) {
+            if (isInternetConnected(requireContext())){
+                //POPULATE
                 populateMainHome()
+                getListOfTransactions()
                 lblGreetings.text = greeting
                 //MAIN FUNCTIONS
                 lblGreetings.setOnClickListener {
                     dlgInformation(requireContext(), language).show()
                 }
-
-                cardWallet.setOnClickListener {
-                    loading.show()
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        getWalletBalance()
-                    }
-                    getListOfTransactions()
+                lblGreetings.text = greeting
+                //MAIN FUNCTIONS
+                lblGreetings.setOnClickListener {
+                    dlgInformation(requireContext(), language).show()
                 }
-
-                //POPULATE
-                getListOfTransactions()
-
-                //NAVIGATION
-                btnSendMoney.setOnClickListener {
-                    startActivity(Intent(requireContext(), ActSendMoney::class.java))
-                }
-
-                btnPurchase.setOnClickListener {
-                    if (balance == 0.0) {
-                        dlgStatus(requireContext(), "0 funds").show()
-                    } else {
-                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
-                        intent.putExtra("From ActQrCodeScanner", "ActPurchase")
-                        requireActivity().startActivity(intent)
-                    }
-                }
-
-                btnPurchaseUsingPoints.setOnClickListener {
-                    if (points == 0.0) {
-                        dlgStatus(requireContext(), "0 points").show()
-                    } else {
-                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
-                        intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
-                        requireActivity().startActivity(intent)
-                    }
-                }
-
+                //BTN LOGOUT
                 requireActivity().onBackPressedDispatcher.addCallback(
                     viewLifecycleOwner,
                     object : OnBackPressedCallback(true) {
@@ -136,9 +90,77 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                         }
                     })
             } else {
-                dlgStatus(requireContext(), "no internet").show()
+                dlgStatus(requireContext(),"no internet").show()
             }
 
+            cardPoints.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    dlgInformation(requireContext(), "introduce stars").show()
+                }else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+
+            btnMyQr.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
+                }else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            cardWallet.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    loading.show()
+                    lifecycleScope.launch(Dispatchers.Main) {
+                        getWalletBalance()
+                    }
+                    getListOfTransactions()
+                } else {
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            //NAVIGATION
+            btnSendMoney.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    startActivity(Intent(requireContext(), ActSendMoney::class.java))
+                }else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            
+            btnRequestMoney.setOnClickListener {
+              if (isInternetConnected(requireContext())){
+                    startActivity(Intent(requireContext(), ActRequestMoney::class.java))
+                }else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            btnPurchase.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    if (balance == 0.0){
+                        dlgStatus(requireContext(),"0 funds").show()
+                    }else {
+                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                        intent.putExtra("From ActQrCodeScanner", "ActPurchase")
+                        requireActivity().startActivity(intent)
+                    }
+                } else {
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            btnPurchaseUsingPoints.setOnClickListener {
+                if (isInternetConnected(requireContext())){
+                    if (points == 0.0){
+                        dlgStatus(requireContext(),"0 points").show()
+                    }else {
+                        val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
+                        intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
+                        requireActivity().startActivity(intent)
+                    }
+                } else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
             return root
         }
     }
@@ -148,8 +170,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
         listOfTransactions = arrayListOf()
 
-        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3)
-            .orderBy("Date Created", Query.Direction.DESCENDING)
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3).orderBy("Date Created", Query.Direction.DESCENDING)
 
         query.get().apply {
             addOnSuccessListener { data ->
@@ -215,7 +236,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             }
         }.show()
     }
-
+    
     private fun constraintViews() {
         with(bind) {
             when (UserManager.role) {
