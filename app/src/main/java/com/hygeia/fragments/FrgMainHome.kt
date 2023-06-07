@@ -15,6 +15,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.hygeia.ActPurchaseUsingStars
 import com.hygeia.ActQrCodeScanner
+import com.hygeia.ActRequestMoney
 import com.hygeia.ActSendMoney
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
@@ -29,7 +30,7 @@ import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgMyQrCode
 import com.hygeia.objects.Utilities.dlgStatus
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.formatPoints
 import com.hygeia.objects.Utilities.isInternetConnected
 import kotlinx.coroutines.Dispatchers
@@ -55,12 +56,17 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         loading = Utilities.dlgLoading(requireContext())
         bind = FrgMainHomeBinding.inflate(inflater, container, false)
         val (language, greeting) = greetings.entries.random()
+
         lifecycleScope.launch(Dispatchers.Main) {
             val query = userRef.document(UserManager.uid!!).get().await()
             balance = query.get("balance").toString().toDouble()
             points = query.get("points").toString().toDouble()
         }
+
+        constraintViews()
+
         with(bind) {
+
             if (isInternetConnected(requireContext())){
                 //POPULATE
                 populateMainHome()
@@ -117,6 +123,14 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             btnSendMoney.setOnClickListener {
                 if (isInternetConnected(requireContext())){
                     startActivity(Intent(requireContext(), ActSendMoney::class.java))
+                }else{
+                    dlgStatus(requireContext(),"no internet").show()
+                }
+            }
+            
+            btnRequestMoney.setOnClickListener {
+              if (isInternetConnected(requireContext())){
+                    startActivity(Intent(requireContext(), ActRequestMoney::class.java))
                 }else{
                     dlgStatus(requireContext(),"no internet").show()
                 }
@@ -192,7 +206,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
     private suspend fun getWalletBalance() {
         val query = userRef.document(UserManager.uid!!).get().await()
-        val balance = formatNumber(query.get("balance"))
+        val balance = formatCredits(query.get("balance"))
         bind.lblAmountBalance.text = balance
         loading.dismiss()
     }
@@ -202,7 +216,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         userRef.document(UserManager.uid!!).get().addOnSuccessListener {
             UserManager.setUserInformation(it)
             val fullname = "${UserManager.firstname} ${UserManager.lastname}"
-            val balance = formatNumber(UserManager.balance)
+            val balance = formatCredits(UserManager.balance)
             val points = formatPoints(UserManager.points.toString().toDouble())
 
             bind.lblUserFullName.text = fullname
@@ -215,15 +229,43 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     private fun onBackPressed() {
         dlgConfirmation(requireContext(), "log out") {
             if (it == ButtonType.PRIMARY) {
-                userRef.document(UserManager.uid!!).update("status", "inactive")
+                userRef.document(UserManager.uid!!).update("isOnline", false)
                     .addOnSuccessListener {
                         requireActivity().finish()
                     }
             }
         }.show()
     }
+    
+    private fun constraintViews() {
+        with(bind) {
+            when (UserManager.role) {
+                "super admin" -> {
+                    btnPurchaseUsingPoints.visibility = View.GONE
+                    lblPurchaseUsingPoints.visibility = View.GONE
+                    btnPurchase.visibility = View.GONE
+                    lblPurchase.visibility = View.GONE
+                    btnMyQr.visibility = View.GONE
+                    lblMyQr.visibility = View.GONE
+                    btnRequestMoney.visibility = View.VISIBLE
+                    lblRequestMoney.visibility = View.VISIBLE
+                    cardPoints.visibility = View.GONE
+                }
+                "standard" -> {
+                    btnRequestMoney.visibility = View.GONE
+                    lblRequestMoney.visibility = View.GONE
+                }
+                "admin" -> {
+                    btnRequestMoney.visibility = View.GONE
+                    lblRequestMoney.visibility = View.GONE
+                }
+            }
+        }
+    }
+
     override fun onResume() {
         super.onResume()
+        constraintViews()
         populateMainHome()
         getListOfTransactions()
     }

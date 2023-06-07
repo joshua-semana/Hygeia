@@ -8,6 +8,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.*
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AutoCompleteTextView
 import android.widget.Button
 import android.widget.EditText
@@ -51,7 +52,7 @@ object Utilities {
         "Hindi" to "Namaste!",
         "Vietnamese" to "Xin Chào!",
     )
-    fun formatNumber(balance: Any?): String {
+    fun formatCredits(balance: Any?): String {
         return when (balance) {
             0 -> "₱0.00"
             else -> DecimalFormat("₱#,##0.00").format(balance)
@@ -157,6 +158,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
         }
 
+        if (content == "success update user") {
+            lblDlgInfoEmoji.text = Emoji.Success
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_update_user)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
         if (content == "no internet") {
             lblDlgInfoEmoji.text = Emoji.NoInternet
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
@@ -224,6 +232,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
         }
 
+        if (content == "success request money") {
+            lblDlgInfoEmoji.text = Emoji.Success
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_2)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_request_money)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+        }
+
         if (content == "success purchase") {
             lblDlgInfoEmoji.text = Emoji.Purchase
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_purchase_complete)
@@ -235,6 +250,13 @@ object Utilities {
             lblDlgInfoEmoji.text = Emoji.NoInternet
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_1)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_user_in_use)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "user disabled") {
+            lblDlgInfoEmoji.text = Emoji.NoInternet
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_user_disabled)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
@@ -328,28 +350,47 @@ object Utilities {
         lblDlgConfirmTitle.text = context.getString(R.string.dlg_title_confirmation)
         btnDlgConfirmSecondary.text = context.getString(R.string.btn_no)
 
-        if (content == "going back") {
-            lblDlgConfirmBody.text = context.getString(R.string.dlg_body_going_back)
-            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, go back"
-            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
-        }
-
-        if (content == "send money") {
-            lblDlgConfirmBody.text = context.getString(R.string.dlg_send_money)
-            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
-            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
-        }
-
-        if (content == "purchase") {
-            lblDlgConfirmBody.text = context.getString(R.string.dlg_purchase)
-            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
-            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
-        }
-
-        if (content == "log out") {
-            lblDlgConfirmBody.text = context.getString(R.string.dlg_body_log_out)
-            btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, log out"
-            btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+        when(content) {
+            "going back" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_going_back)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, go back"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "send money" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_send_money)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "request money" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_request_money)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "purchase" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_purchase)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "promote" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_promote)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, promote"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "demote" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_demote)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, demote"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "disable account" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_disable)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, disable"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "log out" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_log_out)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, log out"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
         }
 
         btnDlgConfirmPrimary.setOnClickListener {
@@ -402,17 +443,17 @@ object Utilities {
             lblDescTransactionReference.text = "Reference No.: ${data.get("Reference Number")}"
 
             if (data.getString("Type") == "Send Money") {
-                lblDlgTransactionTotalAmount.text = "- ${formatNumber(data.get("Amount"))}"
+                lblDlgTransactionTotalAmount.text = "- ${formatCredits(data.get("Amount"))}"
                 lblDescTransactionIdentifier.text = "Receiver No.: ${data.get("Number")}"
             } else if (data.getString("Type") == "Receive Money") {
-                lblDlgTransactionTotalAmount.text = "+ ${formatNumber(data.get("Amount"))}"
+                lblDlgTransactionTotalAmount.text = "+ ${formatCredits(data.get("Amount"))}"
                 lblDescTransactionIdentifier.text = "Sender No.: ${data.get("Number")}"
             } else if (data.getString("Type") == "Purchase") {
                 divider2.visibility = View.VISIBLE
                 lblDescTransactionItemsTitle.visibility = View.VISIBLE
                 lblDescTransactionItemsContent.visibility = View.VISIBLE
 
-                lblDlgTransactionTotalAmount.text = "- ${formatNumber(data.get("Amount"))}"
+                lblDlgTransactionTotalAmount.text = "- ${formatCredits(data.get("Amount"))}"
                 lblDescTransactionIdentifier.text = "Vendo No.: ${data.get("Vendo")}"
 
                 data.reference.collection("Items").get().addOnSuccessListener { dataItems ->
@@ -423,7 +464,7 @@ object Utilities {
                         val price = document.getString("Price")
                         val quantity = document.getLong("Quantity")
                         val total = price!!.toDouble() * quantity!!.toDouble()
-                        items.add("${quantity}pc(s) $name - ${formatNumber(total)}")
+                        items.add("${quantity}pc(s) $name - ${formatCredits(total)}")
                     }
                     val formattedText = items.joinToString("\n")
                     lblDescTransactionItemsContent.text = formattedText.dropLast(0)
@@ -449,6 +490,12 @@ object Utilities {
                     val formattedText = items.joinToString("\n")
                     lblDescTransactionItemsContent.text = formattedText.dropLast(0)
                 }
+            } else if (data.getString("Type") == "Request") {
+                val layoutParams = lblDescTransactionDate.layoutParams as ViewGroup.MarginLayoutParams
+                layoutParams.topMargin = 0 // Set the desired top margin in pixels
+                lblDescTransactionDate.layoutParams = layoutParams
+                lblDlgTransactionTotalAmount.text = "+ ${formatCredits(data.get("Amount"))}"
+                lblDescTransactionIdentifier.visibility = View.GONE
             }
         }
 

@@ -25,4 +25,8 @@
         android:name="com.hygeia.fragments.FrgAdminTools"
         android:label="frg_admin_tools"
         tools:layout="@layout/frg_admin_tools" />
+    <fragment
+        android:id="@+id/frgMainUserAccounts"
+        android:name="com.hygeia.fragments.FrgMainUserAccounts"
+        android:label="FrgMainUserAccounts" />
 </navigation>

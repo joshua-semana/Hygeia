@@ -188,11 +188,12 @@ class ActCreateAccount : AppCompatActivity() {
             "email" to emailAddress,
             "phoneNumber" to phoneNumber,
             "password" to password,
-            "status" to "inactive",
+            "isOnline" to false,
             "role" to "standard",
             "balance" to 0,
             "dateCreated" to Timestamp(Date()),
-            "points" to 1
+            "points" to 1,
+            "isEnabled" to true
         )
 
         auth.createUserWithEmailAndPassword(emailAddress, password)

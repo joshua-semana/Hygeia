@@ -77,15 +77,20 @@
                 android:text="@string/chip_send_money" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipReceive"
+                android:id="@+id/chipRequest"
                 style="@style/Chip"
-                android:layout_marginEnd="@dimen/mx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chip_receive_money" />
+                android:text="@string/chip_request_money"
+                tools:visibility="gone"/>
 
-
-
+            <com.google.android.material.chip.Chip
+                android:id="@+id/chipReceive"
+                style="@style/Chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/mx"
+                android:text="@string/chip_receive_money"/>
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 

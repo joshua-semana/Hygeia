@@ -2,29 +2,24 @@ package com.hygeia
 
 import android.annotation.SuppressLint
 import android.app.Dialog
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.zxing.Result
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
 import com.hygeia.databinding.ActPurchaseBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
-import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.objects.Utilities.msg
 import kotlinx.coroutines.Dispatchers
@@ -197,10 +192,10 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     private fun updatePurchaseBreakdown() {
         with(bind) {
-            lblWalletBalanceNumber.text = formatNumber(UserManager.balance)
-            lblSubTotalNumber.text = formatNumber(subTotal)
-            lblTaxNumber.text = formatNumber(vat)
-            lblGrandTotalNumber.text = formatNumber(grandTotal)
+            lblWalletBalanceNumber.text = formatCredits(UserManager.balance)
+            lblSubTotalNumber.text = formatCredits(subTotal)
+            lblTaxNumber.text = formatCredits(vat)
+            lblGrandTotalNumber.text = formatCredits(grandTotal)
         }
     }
 

@@ -10,7 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.hygeia.R
 import com.hygeia.classes.DataProductAdmin
-import com.hygeia.objects.Utilities.formatNumber
+import com.hygeia.objects.Utilities.formatCredits
 
 class ArrAdpProductAdmin(
     private val listProducts: ArrayList<DataProductAdmin>,
@@ -39,7 +39,7 @@ class ArrAdpProductAdmin(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         with(holder) {
             with(listProducts[position]) {
-                nameAndPrice.text = "$Name (${formatNumber(Price?.toDouble())})"
+                nameAndPrice.text = "$Name (${formatCredits(Price?.toDouble())})"
                 quantity.text = "$Quantity item(s) available"
                 slot.text = "Vendo Slot: $Slot"
 

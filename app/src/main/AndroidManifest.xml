@@ -20,6 +20,9 @@
         android:theme="@style/Theme.Hygeia"
         tools:targetApi="31">
         <activity
+            android:name=".ActRequestMoney"
+            android:exported="false" />
+        <activity
             android:name=".ActSales"
             android:exported="false" />
         <activity

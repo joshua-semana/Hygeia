@@ -38,6 +38,8 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
 
         listOfTransactions = arrayListOf()
 
+        constraintViews()
+
         with(bind) {
 
             chipAll.isChecked = true
@@ -62,6 +64,9 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
                     R.id.chipStars -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Purchase Using Star"))
                     }
+                    R.id.chipRequest -> {
+                        getListOfTransactions(query.whereEqualTo("Type", "Request"))
+                    }
                 }
             }
             return root
@@ -71,6 +76,26 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
     override fun onStop() {
         super.onStop()
         bind.chipGroup.clearCheck()
+    }
+
+    private fun constraintViews() {
+        with(bind) {
+            when (UserManager.role) {
+                "super admin" -> {
+                    chipPurchase.visibility = View.GONE
+                    chipStars.visibility = View.GONE
+                    chipReceive.visibility = View.GONE
+                    chipPurchase.visibility = View.GONE
+                    chipRequest.visibility = View.VISIBLE
+                }
+                "admin" -> {
+                    chipRequest.visibility = View.GONE
+                }
+                "standard" -> {
+                    chipRequest.visibility = View.GONE
+                }
+            }
+        }
     }
 
     private fun getListOfTransactions(query: Query) {

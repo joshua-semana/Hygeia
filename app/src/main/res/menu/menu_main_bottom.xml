@@ -1,19 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/frgMainHome"
-        android:title="@string/nav_home"
-        android:icon="@drawable/ic_nav_home"/>
+        android:icon="@drawable/ic_nav_home"
+        android:title="@string/nav_home" />
     <item
         android:id="@+id/frgMainQR"
-        android:title="@string/nav_transactions"
-        android:icon="@drawable/ic_nav_transactions"/>
+        android:icon="@drawable/ic_nav_transactions"
+        android:title="@string/nav_transactions" />
     <item
         android:id="@+id/frgMainAdminTools"
         android:icon="@drawable/ic_nav_admin"
         android:title="@string/nav_admin_tools" />
+    <item
+        android:id="@+id/frgMainUserAccounts"
+        android:icon="@drawable/ic_nav_admin"
+        android:title="@string/nav_user_accounts" />
     <item
         android:id="@+id/frgMainSettings"
         android:icon="@drawable/ic_nav_profile"
