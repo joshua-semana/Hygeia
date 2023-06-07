@@ -1,5 +1,6 @@
 package com.hygeia.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -48,6 +49,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
     private var balance = 0.0
     private var points = 0.0
+    @SuppressLint("DiscouragedApi")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -71,6 +73,9 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 //POPULATE
                 populateMainHome()
                 getListOfTransactions()
+                val resourceId =
+                    resources.getIdentifier(UserManager.walletBackground, "drawable", requireContext().packageName)
+                cardWalletBackground.setBackgroundResource(resourceId)
                 lblGreetings.text = greeting
                 //MAIN FUNCTIONS
                 lblGreetings.setOnClickListener {
