@@ -71,8 +71,8 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("09999999999")
-                txtPassword.setText("@appHygeia1")
+                txtEmailOrPhoneNumber.setText("09293866080")
+                txtPassword.setText("Admin@123")
                 btnLogin.performClick()
             }
 

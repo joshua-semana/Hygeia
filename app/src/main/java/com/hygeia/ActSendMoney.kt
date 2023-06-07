@@ -79,7 +79,7 @@ class ActSendMoney : AppCompatActivity() {
                         lifecycleScope.launch(Dispatchers.Main) {
                             val amountText = txtAmount.text.toString()
                             val amount = amountText.toDoubleOrNull()
-                            if (amount != null) {
+                            if (amount != null && amount != 0.0) {
                                 if (inputsAreCorrect(amount)) {
                                     dlgConfirmation(this@ActSendMoney, "send money") {
                                         if (it == ButtonType.PRIMARY) {
@@ -91,6 +91,8 @@ class ActSendMoney : AppCompatActivity() {
                                         }
                                     }.show()
                                 }
+                            } else {
+                                msg("please input amount")
                             }
                         }
                     } else {

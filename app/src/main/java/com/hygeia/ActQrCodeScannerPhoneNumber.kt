@@ -3,6 +3,7 @@ package com.hygeia
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import com.budiyev.android.codescanner.AutoFocusMode
 import com.budiyev.android.codescanner.CodeScanner
@@ -13,6 +14,7 @@ import com.budiyev.android.codescanner.ScanMode
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.phoneNumberPattern
+
 
 class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
@@ -38,15 +40,23 @@ class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
                         "ActSendMoney" -> {
                             val intent = Intent(this, ActSendMoney :: class.java)
                             if (phoneNumberPattern.matches(qrCodeResult.text.toString())){
-                                val phoneNumber = qrCodeResult.text.substring(3)
-                                intent.putExtra("qrCodeResult", phoneNumber)
-                                startActivity(intent)
+                                val phoneNumber = qrCodeResult.text
+                                if (qrCodeResult.text.matches("^09\\d{9}\$".toRegex())){
+                                    intent.putExtra("qrCodeResult", phoneNumber.substring(1))
+                                    startActivity(intent)
+                                    finish()
+                                } else {
+                                    intent.putExtra("qrCodeResult", phoneNumber.substring(3))
+                                    startActivity(intent)
+                                    finish()
+                                }
                             }else {
+                                startActivity(intent)
                                 msg("not phone number")
+                                finish()
                             }
                         }
                     }
-                    finish()
                 } else {
                     Utilities.dlgStatus(this, "no internet").show()
                 }
@@ -63,6 +73,13 @@ class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
+        val intent = Intent(this, ActSendMoney :: class.java)
+        onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                startActivity(intent)
+                finish()
+            }
+        })
     }
 
     override fun onResume() {

@@ -252,6 +252,12 @@ object Utilities {
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_user_in_use)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
+        if (content == "success adding vending machine") {
+            lblDlgInfoEmoji.text = Emoji.Success
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_add_vending_machine_status)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+        }
 
         if (content == "user disabled") {
             lblDlgInfoEmoji.text = Emoji.NoInternet
@@ -379,6 +385,11 @@ object Utilities {
             "demote" -> {
                 lblDlgConfirmBody.text = context.getString(R.string.dlg_body_demote)
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, demote"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "add vending machine" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_add_vending_machine)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}"
                 btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
             }
             "disable account" -> {
