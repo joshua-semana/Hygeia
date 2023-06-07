@@ -8,21 +8,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.ActMachine
 import com.hygeia.ActPurchase
+import com.hygeia.ActSales
 import com.hygeia.adapters.ArrAdpMachines
 import com.hygeia.classes.DataMachines
+import com.hygeia.classes.DataTransactions
 import com.hygeia.databinding.FrgAdminToolsBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
 
 class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
-    private lateinit var bind : FrgAdminToolsBinding
+    private lateinit var bind: FrgAdminToolsBinding
     private lateinit var listOfMachines: ArrayList<DataMachines>
     private lateinit var loading: Dialog
 
@@ -59,10 +63,18 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
                 listOfMachines.clear()
                 if (!data.isEmpty) {
                     for (item in data.documents) {
-                        val machine : DataMachines? = item.toObject(DataMachines::class.java)
+                        val machine: DataMachines? = item.toObject(DataMachines::class.java)
                         listOfMachines.add(machine!!)
                     }
-                    bind.listViewMachines.adapter = ArrAdpMachines(listOfMachines, this@FrgAdminTools)
+
+                    val newMachine = DataMachines(
+                        "New Machine"
+                    )
+
+                    listOfMachines.add(newMachine)
+
+                    bind.listViewMachines.adapter =
+                        ArrAdpMachines(listOfMachines, this@FrgAdminTools)
                 }
                 loading.dismiss()
             }
@@ -77,12 +89,25 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         super.onResume()
         getListOfMachines()
     }
-    override fun onMachineItemClick(machineID: String) {
+
+    override fun onMachineInventoryItemClick(machineID: String) {
         loading.show()
         machinesRef.document(machineID.trim()).get().addOnSuccessListener { data ->
             MachineManager.setMachineInformation(data)
             startActivity(Intent(requireContext(), ActMachine::class.java))
             loading.dismiss()
         }
+    }
+
+    override fun onMachineSalesItemClick(machineID: String) {
+        loading.show()
+        machinesRef.document(machineID.trim()).get().addOnSuccessListener { data ->
+            MachineManager.setMachineInformation(data)
+            startActivity(Intent(requireContext(), ActSales::class.java))
+            loading.dismiss()
+        }
+    }
+
+    override fun onMachineAddItemClick() {
     }
 }

@@ -49,6 +49,10 @@ class ActSendMoney : AppCompatActivity() {
         loading = Utilities.dlgLoading(this@ActSendMoney)
         setContentView(bind.root)
 
+        bind.txtLayoutPhoneNumber.setEndIconOnClickListener {
+
+        }
+
         with(bind) {
             textWatcher(txtAmount)
             bind.txtLayoutAmount.helperText = "You have $balance in your wallet."

@@ -59,15 +59,39 @@
 
         </LinearLayout>
 
-        <ImageView
+        <ImageButton
+            android:id="@+id/btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="@dimen/elmnt_gap_md"
-            android:padding="@dimen/elmnt_gap_md"
-            android:src="@drawable/ic_arrow"
-            app:tint="@color/neutral_400"
-            tools:ignore="ContentDescription,ImageContrastCheck" />
+            android:background="@drawable/bg_squircle_300"
+            android:padding="8dp"
+            android:src="@drawable/ic_add"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck"
+            tools:visibility="gone" />
+
+        <ImageButton
+            android:id="@+id/btnEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/elmnt_gap_md"
+            android:background="@drawable/bg_squircle_300"
+            android:padding="8dp"
+            android:src="@drawable/ic_inventory"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+        <ImageButton
+            android:id="@+id/btnSales"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="@dimen/elmnt_gap_md"
+            android:background="@drawable/bg_squircle_300"
+            android:padding="8dp"
+            android:src="@drawable/ic_sales"
+            tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     </LinearLayout>
 

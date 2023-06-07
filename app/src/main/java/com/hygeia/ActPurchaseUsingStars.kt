@@ -55,7 +55,7 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
                 if (Utilities.isInternetConnected(applicationContext)){
                     if (grandTotal == 0.00) {
                         Utilities.dlgStatus(this@ActPurchaseUsingStars, "empty cart").show()
-                    } else if (grandTotal > UserManager.balance.toString().toDouble()) {
+                    } else if (grandTotal > UserManager.points.toString().toDouble()) {
                         Utilities.dlgStatus(this@ActPurchaseUsingStars, "insufficient points").show()
                     } else {
                         Utilities.dlgConfirmation(this@ActPurchaseUsingStars, "purchase") {
@@ -102,7 +102,7 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
             "Date Created" to Timestamp(Date()),
             "Reference Number" to createReferenceNumber(),
             "Number" to 0,
-            "Type" to "Purchase",
+            "Type" to "Purchase Using Star",
             "User Reference" to UserManager.uid,
             "Vendo" to machineName
         )
@@ -121,7 +121,7 @@ class ActPurchaseUsingStars : AppCompatActivity(), ArrAdpProductsUsingPoints.OnP
 
                         val subData = hashMapOf(
                             "Name" to product.Name,
-                            "Price" to product.Price,
+                            "Price" to product.Points.toString(),
                             "Quantity" to product.Count
                         )
 

@@ -91,7 +91,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
-                android:background="@drawable/img_wallet_card_1">
+                android:background="@drawable/img_wallet_card_5">
 
                 <ImageView
                     android:layout_width="@dimen/ic_md"
@@ -141,34 +141,57 @@
         app:layout_constraintTop_toBottomOf="@+id/cardWallet" />
 
     <ImageButton
-        android:id="@+id/btnSendMoney"
+        android:id="@+id/btnMyQr"
         style="@style/Circle_Lg_50"
         android:layout_marginTop="@dimen/elmnt_gap_xl"
-        android:src="@drawable/ic_money_send"
-        app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
+        android:src="@drawable/ic_qr"
+        app:layout_constraintEnd_toStartOf="@+id/btnSendMoney"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblActions"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <ImageButton
+        android:id="@+id/btnSendMoney"
+        style="@style/Circle_Lg_50"
+        android:src="@drawable/ic_money_send"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
+        app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
+        app:layout_constraintStart_toEndOf="@+id/btnMyQr"
+        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
         android:id="@+id/btnPurchase"
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_buy"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
         app:layout_constraintEnd_toStartOf="@+id/btnPurchaseUsingPoints"
         app:layout_constraintStart_toEndOf="@+id/btnSendMoney"
-        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
 
     <ImageButton
         android:id="@+id/btnPurchaseUsingPoints"
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_use_points"
-        app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/btnPurchase"
-        app:layout_constraintTop_toTopOf="@+id/btnSendMoney"
+        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/lblMyQr"
+        style="@style/Text_Regular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/btn_my_qr"
+        app:layout_constraintEnd_toEndOf="@+id/btnMyQr"
+        app:layout_constraintStart_toStartOf="@+id/btnMyQr"
+        app:layout_constraintTop_toBottomOf="@+id/btnSendMoney"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/lblSendMoney"

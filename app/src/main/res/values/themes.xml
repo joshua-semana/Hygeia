@@ -283,10 +283,22 @@
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>
     </style>
-    <!-- Base application theme. -->
-    <style name="Base.Theme.Hygeia" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
+    <!--CHIPS-->
+    <style name="Chip" parent="Base.Widget.MaterialComponents.Chip">
+        <item name="android:checkable">true</item>
+        <item name="chipIconVisible">false</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="closeIconVisible">false</item>
+        <item name="android:textColor">@color/chips_text_selector</item>
+        <item name="chipBackgroundColor">@color/white</item>
+        <item name="chipStrokeWidth">1dp</item>
+        <item name="chipStrokeColor">@color/chips_selector</item>
+        <item name="rippleColor" tools:ignore="PrivateResource">
+            @color/mtrl_choice_chip_ripple_color
+        </item>
     </style>
+
 
 </resources>

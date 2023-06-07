@@ -19,6 +19,7 @@
     <string name="h1_details_colored">details</string>
     <string name="h1_password_colored">password</string>
     <string name="h1_send_money">Send Money</string>
+    <string name="h1_sales">Sales</string>
     <string name="h1_pin_colored">PIN</string>
     <string name="h1_all_transactions">Transaction History</string>
     <string name="h1_user_info">My information</string>
@@ -50,7 +51,7 @@
     <string name="desc_wallet_balance">Wallet Balance</string>
     <string name="desc_stars_balance">Hygeia Stars Balance</string>
     <string name="desc_send_money">Send money to your desired recipient. To initiate the transaction, please provide the recipient\'s phone number and the amount you wish to send.</string>
-    <string name="desc_transaction_history">View all your transactions in one place.</string>
+    <string name="desc_transaction_history">View all your transactions in one place. Use the chips below to filter your transactions.</string>
     <string name="desc_vending_machines">Discover all the available vending machine in one place.</string>
     <string name="desc_user_info">View your profile and account details at a glance.</string>
     <string name="desc_vending_location">Located at: </string>
@@ -63,6 +64,9 @@
     <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
     <string name="desc_vendo_slot_status">Vendo slot status</string>
     <string name="desc_wallet_background">Enhance your wallet\'s visual appeal by customizing its background wallpaper. Choose from a wide range of stunning designs to personalize your digital experience.</string>
+    <string name="desc_sales">Track your sales and gain insights into your total earnings.</string>
+    <string name="desc_total_earnings">Total Earnings</string>
+    <string name="desc_total_products">Total Products Sold</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -127,6 +131,7 @@
     <string name="btn_change_wallet_background">Change wallet background</string>
     <string name="btn_about_us">About Hygeia</string>
     <string name="btn_change">Change</string>
+    <string name="btn_my_qr">My QR</string>
 
     <string name="btn_text_terms_and_conditions">By continuing, you accept our <a href="">terms and conditions</a>\nand <a href="">privacy policy</a>.</string>
 
@@ -166,8 +171,7 @@
     <string name="dlg_body_update_password">You have successfully updated your account\'s password.</string>
     <string name="dlg_body_insufficient_funds">It seems that you have insufficient funds in your account to complete this transaction.</string>
     <string name="dlg_body_no_funds">It seems that you have no funds in your account.</string>
-    <string name="dlg_body_no_points">It seems that you have no Hygeia stars left n your account.
-        \n\nTo earn points, simply make a purchase from our product line and your points will be automatically credited to your account.</string>
+    <string name="dlg_body_no_points">It seems that you have no Hygeia stars left in your account.\n\nTo earn more stars, simply make a purchase from your vendo buddy, hygeia, and you can get rewarded with more Hygeia Stars!</string>
     <string name="dlg_body_insufficient_points">It seems that you have insufficient Hygeia stars in your account to complete this transaction.</string>
     <string name="dlg_body_empty_cart">You have no items selected to purchase.</string>
     <string name="dlg_body_send_money">You have successfully sent money to your recipient\'s account.</string>
@@ -176,6 +180,8 @@
     <string name="dlg_body_stars">The exclusive reward system of Hygeia that makes your purchases even more rewarding!\n\nWith Hygeia Stars, every time you make a purchase through our app, you earn stars that can be used as an alternative to money when purchasing products through your vendo buddy, Hygeia!\n\nPurchase now to earn more Hygeia Stars!</string>
     <string name="dlg_title_about_us">About Hygeia</string>
     <string name="dlg_body_about_us">Information regarding Hygeia background</string>
+    <string name="dlg_title_my_qr">My QR Code</string>
+    <string name="dlg_body_my_qr">Present your personalized QR code for effortless transactions!</string>
 
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
@@ -194,6 +200,13 @@
     <string name="dlg_title_product_detail">Edit Product Details</string>
     <string name="dlg_body_product_detail">Here are all the information you can update for this product.</string>
     <string name="dlg_title_product_points">Edit Product Reward Points</string>
+
+    <!--CHIP-->
+    <string name="chip_all">All</string>
+    <string name="chip_send_money">Money Sent</string>
+    <string name="chip_receive_money">Money Received</string>
+    <string name="chip_purchase">Purchases</string>
+    <string name="chip_use_stars">Purchases Using Stars</string>
 
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>

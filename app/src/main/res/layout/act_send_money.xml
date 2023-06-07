@@ -41,6 +41,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblDescription"
         android:layout_marginTop="@dimen/elmnt_gap_xl"
+        app:endIconDrawable="@drawable/ic_scan"
+        app:endIconMode="custom"
         app:prefixText="+63">
 
         <com.google.android.material.textfield.TextInputEditText

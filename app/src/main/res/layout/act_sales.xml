@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ActSales">
+
+    <ImageButton
+        android:id="@+id/btnBack"
+        style="@style/Btn_Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,SpeakableTextPresentCheck,TouchTargetSizeCheck" />
+
+    <TextView
+        android:id="@+id/lblHeadingRegular"
+        style="@style/Text_H1_Regular"
+        android:text="@string/h1_sales"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/lblDescription"
+        style="@style/Text_Description"
+        android:text="@string/desc_sales"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
+        tools:ignore="VisualLintLongText" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/vendoDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_lg"
+        android:layout_marginEnd="@dimen/mx"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/lblDescription"
+        app:strokeColor="@color/neutral_300"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/elmnt_gap_xl">
+
+            <TextView
+                android:id="@+id/lblDescVendoID"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/elmnt_gap_md"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="VisualLintLongText,VisualLintOverlap" />
+
+            <TextView
+                android:id="@+id/lblDescVendoLocation"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="@dimen/elmnt_gap_md"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblDescVendoID"
+                tools:ignore="VisualLintLongText" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/lblDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="@dimen/elmnt_gap_md"
+        android:text="@string/placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMultiDate"
+        app:layout_constraintEnd_toStartOf="@+id/btnDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btnMultiDate"
+        tools:ignore="VisualLintLongText" />
+
+    <ImageButton
+        android:id="@+id/btnDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/elmnt_gap_md"
+        android:background="@drawable/bg_squircle_300"
+        android:padding="8dp"
+        android:src="@drawable/ic_date"
+        app:layout_constraintBottom_toBottomOf="@+id/btnMultiDate"
+        app:layout_constraintEnd_toStartOf="@+id/btnMultiDate"
+        app:layout_constraintTop_toTopOf="@+id/btnMultiDate"
+        tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <ImageButton
+        android:id="@+id/btnMultiDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/elmnt_gap_lg"
+        android:layout_marginEnd="40dp"
+        android:background="@drawable/bg_squircle_300"
+        android:padding="8dp"
+        android:src="@drawable/ic_date_range"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/vendoDetails"
+        tools:ignore="ContentDescription,TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/totalEarnings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_lg"
+        android:layout_marginEnd="@dimen/mx"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnMultiDate"
+        app:strokeColor="@color/neutral_300"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/elmnt_gap_xl">
+
+            <TextView
+                android:id="@+id/lblTotalEarnings"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/elmnt_gap_md"
+                android:text="@string/desc_total_earnings"
+                android:textColor="@color/neutral_500"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="VisualLintLongText,VisualLintOverlap" />
+
+            <TextView
+                android:id="@+id/lblTotalEarningsAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblTotalEarnings" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/totalProductsSold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/mx"
+        android:layout_marginTop="@dimen/elmnt_gap_lg"
+        android:layout_marginEnd="@dimen/mx"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="@dimen/radius_md"
+        app:cardElevation="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/totalEarnings"
+        app:strokeColor="@color/neutral_300"
+        app:strokeWidth="1dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/elmnt_gap_xl">
+
+            <TextView
+                android:id="@+id/lblTotalItemsSold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/elmnt_gap_md"
+                android:text="@string/desc_total_products"
+                android:textColor="@color/neutral_500"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="VisualLintLongText,VisualLintOverlap" />
+
+            <TextView
+                android:id="@+id/lblTotalItemsSoldAmount"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/placeholder"
+                android:textColor="@color/neutral_900"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lblTotalItemsSold" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,20 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
-import com.hygeia.ActPurchaseUsingStars
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActSendMoney
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataTransactions
-import com.hygeia.databinding.ActPurchaseUsingStarsBinding
 import com.hygeia.objects.Utilities.dlgInformation
 import com.hygeia.objects.Utilities.greetings
 import com.hygeia.databinding.FrgMainHomeBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
-import com.hygeia.objects.Utilities.dlgError
+import com.hygeia.objects.Utilities.dlgMyQrCode
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatNumber
 import com.hygeia.objects.Utilities.formatPoints
@@ -56,7 +54,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         lifecycleScope.launch(Dispatchers.Main) {
             val query = userRef.document(UserManager.uid!!).get().await()
             balance = query.get("balance").toString().toDouble()
-            balance = query.get("points").toString().toDouble()
+            points = query.get("points").toString().toDouble()
         }
         with(bind) {
             populateMainHome()
@@ -68,6 +66,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
             cardPoints.setOnClickListener {
                 dlgInformation(requireContext(), "introduce stars").show()
+            }
+
+            btnMyQr.setOnClickListener {
+                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
             }
 
             if (Utilities.isInternetConnected(requireContext())) {
@@ -95,9 +97,9 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 }
 
                 btnPurchase.setOnClickListener {
-                    if (balance == 0.0){
-                        dlgStatus(requireContext(),"0 funds").show()
-                    }else {
+                    if (balance == 0.0) {
+                        dlgStatus(requireContext(), "0 funds").show()
+                    } else {
                         val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
                         intent.putExtra("From ActQrCodeScanner", "ActPurchase")
                         requireActivity().startActivity(intent)
@@ -105,9 +107,9 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 }
 
                 btnPurchaseUsingPoints.setOnClickListener {
-                    if (points == 0.0){
-                        dlgStatus(requireContext(),"0 points").show()
-                    }else {
+                    if (points == 0.0) {
+                        dlgStatus(requireContext(), "0 points").show()
+                    } else {
                         val intent = Intent(requireActivity(), ActQrCodeScanner::class.java)
                         intent.putExtra("From ActQrCodeScanner", "ActPurchaseUsingStars")
                         requireActivity().startActivity(intent)
@@ -122,7 +124,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                         }
                     })
             } else {
-                Utilities.dlgStatus(requireContext(), "no internet").show()
+                dlgStatus(requireContext(), "no internet").show()
             }
 
             return root
@@ -134,7 +136,8 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
         listOfTransactions = arrayListOf()
 
-        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3).orderBy("Date Created", Query.Direction.DESCENDING)
+        val query = transactionRef.whereEqualTo("User Reference", UserManager.uid).limit(3)
+            .orderBy("Date Created", Query.Direction.DESCENDING)
 
         query.get().apply {
             addOnSuccessListener { data ->
@@ -200,6 +203,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             }
         }.show()
     }
+
     override fun onResume() {
         super.onResume()
         populateMainHome()

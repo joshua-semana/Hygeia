@@ -55,8 +55,7 @@ class ArrAdpTransactions(
                         number.text = Number
                     }
                     "Purchase" -> {
-                        image.setImageResource(R.drawable.ic_product)
-
+                        image.setImageResource(R.drawable.ic_buy)
                         amount.text = "- ${Utilities.formatNumber(Amount)}"
                         if (Number == "1") {
                             number.text = "$Number product"
@@ -65,7 +64,17 @@ class ArrAdpTransactions(
                             number.text = "$Number products"
                             type.text = "Purchase items"
                         }
-
+                    }
+                    "Purchase Using Star" -> {
+                        image.setImageResource(R.drawable.ic_use_points)
+                        amount.text = "- 🌟${Utilities.formatPoints(Amount)}"
+                        if (Number == "1") {
+                            number.text = "$Number product"
+                            type.text = "Purchase item using stars"
+                        } else {
+                            number.text = "$Number products"
+                            type.text = "Purchase items using stars"
+                        }
                     }
                 }
 
