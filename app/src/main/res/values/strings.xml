@@ -172,6 +172,7 @@
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
     <string name="dlg_body_user_in_use">This account is already logged in on another device. Please try again later.</string>
+    <string name="dlg_body_add_vending_machine_status">Congratulations! You have successfully added a vending machine</string>
     <string name="dlg_body_machine_offline_or_in_use">This machine is either offline or in use for now. Please try again later</string>
     <string name="dlg_body_qr_code_not_registered">The QR code you scanned is not registered in our system.</string>
     <string name="dlg_body_create_account">You have successfully created your personal account and can now officially access your vendo buddy, Hygeia!</string>
@@ -204,6 +205,7 @@
     <string name="dlg_receipt_total_amount">Total Amount</string>
     <string name="dlg_body_promote">Are you sure you want to promote this standard user to administrator?</string>
     <string name="dlg_body_demote">Are you sure you want to demote this administrator to standard user?</string>
+    <string name="dlg_body_add_vending_machine">Are you sure you want to add vending machine?</string>
     <string name="dlg_body_disable">Are you sure you want to disable this account?</string>
     <string name="dlg_body_change_wallpaper">Are you sure you want to change your wallet\s background image?</string>
 
