@@ -95,6 +95,9 @@ class ActSales : AppCompatActivity() {
                 dateRangePicker.addOnNegativeButtonClickListener { loading.dismiss() }
                 dateRangePicker.addOnCancelListener { loading.dismiss() }
             }
+            btnBack.setOnClickListener {
+                onBackPressed()
+            }
         }
     }
 

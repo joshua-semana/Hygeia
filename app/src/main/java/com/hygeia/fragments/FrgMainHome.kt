@@ -132,9 +132,9 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                     dlgStatus(requireContext(),"no internet").show()
                 }
             }
-            
+
             btnRequestMoney.setOnClickListener {
-              if (isInternetConnected(requireContext())){
+                if (isInternetConnected(requireContext())){
                     startActivity(Intent(requireContext(), ActRequestMoney::class.java))
                 }else{
                     dlgStatus(requireContext(),"no internet").show()
@@ -241,7 +241,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             }
         }.show()
     }
-    
+
     private fun constraintViews() {
         with(bind) {
             when (UserManager.role) {
@@ -267,6 +267,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                     lblPurchase.visibility = View.GONE
                     btnRequestMoney.visibility = View.GONE
                     lblRequestMoney.visibility = View.GONE
+                    cardPoints.visibility = View.GONE
                 }
             }
         }

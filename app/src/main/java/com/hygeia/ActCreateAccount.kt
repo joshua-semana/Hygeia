@@ -60,8 +60,6 @@ class ActCreateAccount : AppCompatActivity() {
         setContentView(bind.root)
 
         with(bind) {
-            //cmbGender Adapter
-            onResume()
             //MAIN FUNCTION
             btnContinue.setOnClickListener {
                 clearTextError(

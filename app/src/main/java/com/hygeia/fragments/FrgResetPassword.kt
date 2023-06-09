@@ -119,8 +119,7 @@ class FrgResetPassword : Fragment() {
                         }
                         show()
                     }
-            }
+                }
         }
     }
 }
-
