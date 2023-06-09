@@ -33,7 +33,6 @@ object MachineManager {
             name = get("Name") as String?
             status = get("Status") as String?
             machineId = get("MachineID") as String?
-
         }
     }
 

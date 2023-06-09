@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_main"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_for_standard"
     app:startDestination="@id/frgMainHome">
 
     <fragment
@@ -11,22 +11,18 @@
         android:label="FrgMainHome"
         tools:layout="@layout/frg_main_home"/>
     <fragment
-        android:id="@+id/frgMainQR"
+        android:id="@+id/frgMainTransactions"
         android:name="com.hygeia.fragments.FrgMainTransactions"
-        android:label="FrgMainQR"
+        android:label="FrgMainTransactions"
         tools:layout="@layout/frg_main_transactions"/>
+    <fragment
+        android:id="@+id/frgMainBlog"
+        android:name="com.hygeia.fragments.FrgMainBlog"
+        android:label="FrgMainBlog"
+        tools:layout="@layout/frg_main_blog"/>
     <fragment
         android:id="@+id/frgMainSettings"
         android:name="com.hygeia.fragments.FrgMainSettings"
         android:label="FrgMainSettings"
         tools:layout="@layout/frg_main_settings"/>
-    <fragment
-        android:id="@+id/frgMainAdminTools"
-        android:name="com.hygeia.fragments.FrgAdminTools"
-        android:label="frg_admin_tools"
-        tools:layout="@layout/frg_admin_tools" />
-    <fragment
-        android:id="@+id/frgMainUserAccounts"
-        android:name="com.hygeia.fragments.FrgMainUserAccounts"
-        android:label="FrgMainUserAccounts" />
 </navigation>

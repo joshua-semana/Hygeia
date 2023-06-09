@@ -2,15 +2,12 @@ package com.hygeia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.ui.setupWithNavController
 import com.hygeia.databinding.ActMainBinding
 import com.hygeia.objects.UserManager
-import android.view.KeyEvent
-import android.view.View
-import android.widget.ImageButton
-import android.widget.TextView
-import com.hygeia.fragments.FrgMainHome
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 
 class ActMain : AppCompatActivity() {
     private lateinit var bind : ActMainBinding
@@ -20,27 +17,27 @@ class ActMain : AppCompatActivity() {
         setContentView(bind.root)
 
         with(bind) {
-            actMainBotNavigation.setupWithNavController(
-                containerMain.getFragment<NavHostFragment>().navController
-            )
 
-            val navAdmin = actMainBotNavigation.menu.findItem(R.id.frgMainAdminTools)
-            val navUsers = actMainBotNavigation.menu.findItem(R.id.frgMainUserAccounts)
+            val navHostFragment = supportFragmentManager.findFragmentById(R.id.containerMain) as NavHostFragment
+            val navController = navHostFragment.navController
 
             when (UserManager.role) {
                 "super admin" -> {
-                    navAdmin.isVisible = false
-                    navUsers.isVisible = true
+                    actMainBotNavigation.inflateMenu(R.menu.menu_for_super)
+                    navHostFragment.navController.graph = navController.navInflater.inflate(R.navigation.nav_for_super)
                 }
                 "admin" -> {
-                    navAdmin.isVisible = true
-                    navUsers.isVisible = false
+                    actMainBotNavigation.inflateMenu(R.menu.menu_for_admin)
+                    navHostFragment.navController.graph = navController.navInflater.inflate(R.navigation.nav_for_admin)
                 }
                 "standard" -> {
-                    navAdmin.isVisible = false
-                    navUsers.isVisible = false
+                    actMainBotNavigation.inflateMenu(R.menu.menu_for_standard)
+                    navHostFragment.navController.graph = navController.navInflater.inflate(R.navigation.nav_for_standard)
                 }
             }
+            actMainBotNavigation.setupWithNavController(
+                containerMain.getFragment<NavHostFragment>().navController
+            )
         }
     }
 }

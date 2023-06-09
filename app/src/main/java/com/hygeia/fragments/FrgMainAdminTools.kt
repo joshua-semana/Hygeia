@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.hygeia.ActMachine
@@ -15,29 +16,32 @@ import com.hygeia.ActSales
 import com.hygeia.adapters.ArrAdpMachines
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataMachines
-import com.hygeia.databinding.FrgAdminToolsBinding
+import com.hygeia.databinding.FrgMainAdminToolsBinding
 import com.hygeia.objects.MachineManager
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
 import java.util.Calendar
+import java.util.Date
 import java.util.Random
 
-class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
-    private lateinit var bind: FrgAdminToolsBinding
+class FrgMainAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
+    private lateinit var bind: FrgMainAdminToolsBinding
     private lateinit var listOfMachines: ArrayList<DataMachines>
     private lateinit var loading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
+    private var historyRef = db.collection("History")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bind = FrgAdminToolsBinding.inflate(layoutInflater, container, false)
+        bind = FrgMainAdminToolsBinding.inflate(layoutInflater, container, false)
         loading = dlgLoading(requireContext())
 
         with(bind) {
@@ -56,7 +60,7 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
         bind.listViewMachines.layoutManager = LinearLayoutManager(requireContext())
         listOfMachines = arrayListOf()
 
-        val query = machinesRef.orderBy("Name")
+        val query = machinesRef.whereEqualTo("isEnabled", true).orderBy("Name")
 
         query.get().apply {
             addOnSuccessListener { data ->
@@ -66,16 +70,15 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
                         val machine: DataMachines? = item.toObject(DataMachines::class.java)
                         listOfMachines.add(machine!!)
                     }
-
-                    val newMachine = DataMachines(
-                        "New Machine"
-                    )
-
+                    val newMachine = DataMachines("New Machine")
                     listOfMachines.add(newMachine)
-
-                    bind.listViewMachines.adapter =
-                        ArrAdpMachines(listOfMachines, this@FrgAdminTools)
+                } else {
+                    val newMachine = DataMachines("New Machine")
+                    listOfMachines.add(newMachine)
                 }
+                bind.listViewMachines.adapter =
+                    ArrAdpMachines(listOfMachines, this@FrgMainAdminTools)
+
                 loading.dismiss()
             }
             addOnFailureListener {
@@ -117,15 +120,25 @@ class FrgAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener {
             "Location" to "Please indicate a location",
             "MachineID" to machineId,
             "Status" to "Offline",
-            "User Connected" to 0
+            "User Connected" to 0,
+            "isEnabled" to true
         )
         getCurrentVendingMachineCount { count ->
             if (count != -1) {
                 val vendingMachineName = generateVendingMachineName(count)
                 vendingMachineData["Name"] = vendingMachineName
-
                 machinesRef.document(vendingMachineData["MachineID"].toString()).set(vendingMachineData)
                     .addOnSuccessListener {
+                        val historyData = hashMapOf(
+                            "Content" to "Added new vending machine, Vendo No. $vendingMachineName.",
+                            "Date Created" to Timestamp(Date()),
+                            "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                            "Machine ID" to machineId,
+                            "Machine Name" to vendingMachineName,
+                            "Type" to "Created",
+                            "User Reference" to UserManager.uid
+                        )
+                        historyRef.document().set(historyData)
                         val dialog : Dialog = dlgStatus(requireContext(),"success adding vending machine")
                         dialog.setOnDismissListener{
                             createProductDocuments(vendingMachineData["MachineID"].toString())
