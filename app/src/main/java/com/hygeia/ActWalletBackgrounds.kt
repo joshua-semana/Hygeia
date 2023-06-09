@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.classes.ButtonType
@@ -82,6 +83,9 @@ class ActWalletBackgrounds : AppCompatActivity() {
                 } else {
                     dlgStatus(this@ActWalletBackgrounds, "no internet").show()
                 }
+            }
+            btnBack.setOnClickListener {
+                onBackPressedDispatcher.onBackPressed()
             }
         }
     }

@@ -306,4 +306,6 @@
     </string>
     <string name="emo_hiding">😶‍🌫️</string>
     <string name="emo_empty">🤔</string>
+    <string name="notification_title">Title</string>
+    <string name="notification_content">Add content here</string>
 </resources>

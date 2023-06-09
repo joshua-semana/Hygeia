@@ -35,30 +35,26 @@ class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
 
         codeScanner.decodeCallback = DecodeCallback {qrCodeResult ->
             runOnUiThread{
-                if (Utilities.isInternetConnected(applicationContext)){
-                    when (intent.getStringExtra("From ActQrCodeScannerPhoneNumber")){
-                        "ActSendMoney" -> {
-                            val intent = Intent(this, ActSendMoney :: class.java)
-                            if (phoneNumberPattern.matches(qrCodeResult.text.toString())){
-                                val phoneNumber = qrCodeResult.text
-                                if (qrCodeResult.text.matches("^09\\d{9}\$".toRegex())){
-                                    intent.putExtra("qrCodeResult", phoneNumber.substring(1))
-                                    startActivity(intent)
-                                    finish()
-                                } else {
-                                    intent.putExtra("qrCodeResult", phoneNumber.substring(3))
-                                    startActivity(intent)
-                                    finish()
-                                }
-                            }else {
+                when (intent.getStringExtra("From ActQrCodeScannerPhoneNumber")){
+                    "ActSendMoney" -> {
+                        val intent = Intent(this, ActSendMoney :: class.java)
+                        if (phoneNumberPattern.matches(qrCodeResult.text.toString())){
+                            val phoneNumber = qrCodeResult.text
+                            if (qrCodeResult.text.matches("^09\\d{9}\$".toRegex())){
+                                intent.putExtra("qrCodeResult", phoneNumber.substring(1))
                                 startActivity(intent)
-                                msg("not phone number")
+                                finish()
+                            } else {
+                                intent.putExtra("qrCodeResult", phoneNumber.substring(3))
+                                startActivity(intent)
                                 finish()
                             }
+                        }else {
+                            startActivity(intent)
+                            msg("The phone number you scanned is invalid.")
+                            finish()
                         }
                     }
-                } else {
-                    Utilities.dlgStatus(this, "no internet").show()
                 }
             }
         }

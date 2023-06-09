@@ -50,7 +50,6 @@ class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
                 mainLayout.requestFocus()
                 requireView().findFocus()?.clearFocus()
             }
-
             return root
         }
     }

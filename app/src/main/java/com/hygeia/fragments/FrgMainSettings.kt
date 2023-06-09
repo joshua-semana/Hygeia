@@ -69,7 +69,6 @@ class FrgMainSettings : Fragment() {
                     dlgStatus(requireContext(), "no internet").show()
                 }
             }
-
             return root
         }
     }

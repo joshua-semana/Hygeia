@@ -83,6 +83,9 @@ class ActSales : AppCompatActivity() {
                     getTotalEarningsForDays(Timestamp(Date(startDate)), Timestamp(Date(endDate)))
                 }
             }
+            btnBack.setOnClickListener {
+                onBackPressed()
+            }
         }
     }
 
