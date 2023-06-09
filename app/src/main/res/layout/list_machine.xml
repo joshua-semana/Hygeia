@@ -53,6 +53,8 @@
                 android:layout_marginTop="1dp"
                 android:fontFamily="@font/lato"
                 android:text="@string/placeholder"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textColor="@color/neutral_500"
                 android:textSize="@dimen/text_sm"
                 tools:ignore="TextContrastCheck" />

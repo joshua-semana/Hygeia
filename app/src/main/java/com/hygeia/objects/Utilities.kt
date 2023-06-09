@@ -159,8 +159,8 @@ object Utilities {
         }
 
         if (content == "success update user") {
-            lblDlgInfoEmoji.text = Emoji.Success
-            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
+            lblDlgInfoEmoji.text = Emoji.Edit
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_update)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_update_user)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
@@ -263,6 +263,27 @@ object Utilities {
             lblDlgInfoEmoji.text = Emoji.NoInternet
             lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_2)
             lblDlgInfoBody.text = context.getString(R.string.dlg_body_user_disabled)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "delete blog") {
+            lblDlgInfoEmoji.text = Emoji.Edit
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_blog_delete)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_blog_delete)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "update blog") {
+            lblDlgInfoEmoji.text = Emoji.Edit
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_blog_update)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_blog_update)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
+        if (content == "delete machine") {
+            lblDlgInfoEmoji.text = Emoji.Edit
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_machine_delete)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_machine_delete)
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
@@ -424,6 +445,26 @@ object Utilities {
             "change wallpaper" -> {
                 lblDlgConfirmBody.text = context.getString(R.string.dlg_body_change_wallpaper)
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, change"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "add blog" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_add_blog)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, post"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "delete blog" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_delete_blog)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, delete"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "update blog" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_update_blog)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, update"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "delete machine" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_delete_machine)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, delete"
                 btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
             }
             "log out" -> {

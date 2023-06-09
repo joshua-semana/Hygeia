@@ -2,10 +2,12 @@ package com.hygeia
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.ButtonType
@@ -17,9 +19,13 @@ import com.hygeia.objects.MachineManager.dlgEditProductPoints
 import com.hygeia.objects.MachineManager.dlgEditVendoLocation
 import com.hygeia.objects.MachineManager.machineId
 import com.hygeia.objects.MachineManager.machineRef
+import com.hygeia.objects.MachineManager.name
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
+import java.util.Date
 
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind: ActMachineBinding
@@ -28,6 +34,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
+    private var historyRef = db.collection("History")
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,6 +55,16 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                     if (isInternetConnected(applicationContext)) {
                         if (it == ButtonType.PRIMARY) {
                             loading.show()
+                            val historyData = hashMapOf(
+                                "Content" to "Updated machine location information.",
+                                "Date Created" to Timestamp(Date()),
+                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                "Machine ID" to machineId,
+                                "Machine Name" to name,
+                                "Type" to "Update",
+                                "User Reference" to UserManager.uid
+                            )
+                            historyRef.document().set(historyData)
                             machineRef.document(machineId!!).get().addOnSuccessListener { data ->
                                 lblDescVendoLocation.text =
                                     "Located at ${data.getString("Location")}"
@@ -65,19 +82,55 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                 if (isChecked) {
                     machinesRef.document(machineId!!.trim()).update("Status", "Online")
                         .addOnSuccessListener {
-                            MachineManager.status = "Online"
-                            populateView()
-                            loading.dismiss()
+                            val historyData = hashMapOf(
+                                "Content" to "Updated machine status information, from Offline to Online.",
+                                "Date Created" to Timestamp(Date()),
+                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                "Machine ID" to machineId,
+                                "Machine Name" to name,
+                                "Type" to "Update",
+                                "User Reference" to UserManager.uid
+                            )
+                            historyRef.document().set(historyData).addOnSuccessListener {
+                                MachineManager.status = "Online"
+                                populateView()
+                                loading.dismiss()
+                            }
                         }
                 } else {
                     machinesRef.document(machineId!!.trim()).update("Status", "Offline")
                         .addOnSuccessListener {
-                            MachineManager.status = "Offline"
-                            populateView()
-                            loading.dismiss()
+                            val historyData = hashMapOf(
+                                "Content" to "Updated machine status information, from Online to Offline.",
+                                "Date Created" to Timestamp(Date()),
+                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                "Machine ID" to machineId,
+                                "Machine Name" to name,
+                                "Type" to "Update",
+                                "User Reference" to UserManager.uid
+                            )
+                            historyRef.document().set(historyData).addOnSuccessListener {
+                                MachineManager.status = "Offline"
+                                populateView()
+                                loading.dismiss()
+                            }
                         }
                 }
             }
+
+            btnHistory.setOnClickListener {
+                startActivity(Intent(this@ActMachine, ActHistory::class.java))
+            }
+
+            btnDelete.setOnClickListener {
+                dlgConfirmation(this@ActMachine, "delete machine") {
+                    if (it == ButtonType.PRIMARY) {
+                        loading.show()
+                        deleteMachine()
+                    }
+                }.show()
+            }
+
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -86,9 +139,32 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
     @SuppressLint("SetTextI18n")
     private fun populateView() {
-        bind.lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
+        bind.lblDescVendoID.text = "Vendo No. $name"
         bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
         bind.lblVendoStatus.text = "Vendo status is currently: \"${MachineManager.status}\""
+    }
+
+    private fun deleteMachine() {
+        machinesRef.document(machineId!!).update("isEnabled", false).addOnSuccessListener {
+            val historyData = hashMapOf(
+                "Content" to "Deleted this vending machine.",
+                "Date Created" to Timestamp(Date()),
+                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                "Machine ID" to machineId,
+                "Machine Name" to name,
+                "Type" to "Delete",
+                "User Reference" to UserManager.uid
+            )
+            historyRef.document().set(historyData).addOnSuccessListener {
+                dlgStatus(this@ActMachine, "delete machine").apply {
+                    setOnDismissListener {
+                        loading.dismiss()
+                        finish()
+                    }
+                    show()
+                }
+            }
+        }
     }
 
     private fun getListOfProducts() {
@@ -139,7 +215,39 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         if (isInternetConnected(applicationContext)) {
             dlgEditProduct(this@ActMachine, productID) {
                 if (it == ButtonType.PRIMARY) {
-                    getListOfProducts()
+                    loading.show()
+                    machinesRef.document(machineId!!).get().addOnSuccessListener { parent ->
+                        parent.reference.collection("Products").document(productID).get()
+                            .addOnSuccessListener { child ->
+                                val historyData = hashMapOf(
+                                    "Content" to "Updated information of vendo slot ${
+                                        child.get("Slot").toString()
+                                    }, set to:\nName: ${
+                                        child.get(
+                                            "Name"
+                                        ).toString()
+                                    }\nProduct Price: ${
+                                        child.get(
+                                            "Price"
+                                        ).toString()
+                                    }\nProduct Quantity: ${
+                                        child.get("Quantity").toString()
+                                    }\nVendo slot status: ${
+                                        child.get("Status").toString()
+                                    }",
+                                    "Date Created" to Timestamp(Date()),
+                                    "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                    "Machine ID" to machineId,
+                                    "Machine Name" to name,
+                                    "Type" to "Update",
+                                    "User Reference" to UserManager.uid
+                                )
+                                historyRef.document().set(historyData).addOnSuccessListener {
+                                    getListOfProducts()
+                                }
+                            }
+                    }
+
                 }
             }.show()
         } else {
@@ -151,7 +259,34 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         if (isInternetConnected(applicationContext)) {
             dlgEditProductPoints(this@ActMachine, productID) {
                 if (it == ButtonType.PRIMARY) {
-                    getListOfProducts()
+                    loading.show()
+                    machinesRef.document(machineId!!).get().addOnSuccessListener { parent ->
+                        parent.reference.collection("Products").document(productID).get()
+                            .addOnSuccessListener { child ->
+                                val historyData = hashMapOf(
+                                    "Content" to "Updated stars information of vendo slot ${
+                                        child.get("Slot").toString()
+                                    }, set to:\nPrice in stars: ${
+                                        child.get(
+                                            "Price in Points"
+                                        ).toString()
+                                    }\nReward in stars: ${
+                                        child.get(
+                                            "Reward Points"
+                                        ).toString()
+                                    }",
+                                    "Date Created" to Timestamp(Date()),
+                                    "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                    "Machine ID" to machineId,
+                                    "Machine Name" to name,
+                                    "Type" to "Update",
+                                    "User Reference" to UserManager.uid
+                                )
+                                historyRef.document().set(historyData).addOnSuccessListener {
+                                    getListOfProducts()
+                                }
+                            }
+                    }
                 }
             }.show()
         } else {

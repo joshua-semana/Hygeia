@@ -26,7 +26,7 @@ class ActSales : AppCompatActivity() {
     private var db = FirebaseFirestore.getInstance()
     private var transactionsRef = db.collection("Transactions")
 
-    private val dateFormat =  SimpleDateFormat("MMMM d, y", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("MMMM d, y", Locale.getDefault())
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,8 +63,10 @@ class ActSales : AppCompatActivity() {
 
         with(bind) {
             btnDate.setOnClickListener {
+                loading.show()
                 datePicker.show(supportFragmentManager, "Date")
                 datePicker.addOnPositiveButtonClickListener { selectedDate ->
+                    loading.dismiss()
                     if (dateFormat.format(Date(selectedDate)) == dateFormat.format(Calendar.getInstance().time)) {
                         lblDate.text = "Date: Today"
                     } else {
@@ -72,16 +74,26 @@ class ActSales : AppCompatActivity() {
                     }
                     getTotalEarningsForDay(Timestamp(Date(selectedDate)))
                 }
+                datePicker.addOnNegativeButtonClickListener { loading.dismiss() }
+                datePicker.addOnCancelListener { loading.dismiss() }
             }
 
             btnMultiDate.setOnClickListener {
+                loading.show()
                 dateRangePicker.show(supportFragmentManager, "Date Range")
                 dateRangePicker.addOnPositiveButtonClickListener { selection ->
+                    loading.dismiss()
                     val startDate = selection.first ?: 0L
                     val endDate = selection.second ?: 0L
-                    lblDate.text = "Date: ${dateFormat.format(Date(startDate))} - ${dateFormat.format(Date(endDate))}"
+                    lblDate.text = "Date: ${dateFormat.format(Date(startDate))} - ${
+                        dateFormat.format(
+                            Date(endDate)
+                        )
+                    }"
                     getTotalEarningsForDays(Timestamp(Date(startDate)), Timestamp(Date(endDate)))
                 }
+                dateRangePicker.addOnNegativeButtonClickListener { loading.dismiss() }
+                dateRangePicker.addOnCancelListener { loading.dismiss() }
             }
         }
     }
@@ -113,7 +125,7 @@ class ActSales : AppCompatActivity() {
                 } else {
                     for (document in data) {
                         val amount = document.getDouble("Amount")
-                        val quantity =  document.getDouble("Number")
+                        val quantity = document.getDouble("Number")
                         totalAmount += amount!!
                         totalProducts += quantity!!
                     }
@@ -144,7 +156,7 @@ class ActSales : AppCompatActivity() {
                 } else {
                     for (document in data) {
                         val amount = document.getDouble("Amount")
-                        val quantity =  document.getDouble("Number")
+                        val quantity = document.getDouble("Number")
                         totalAmount += amount!!
                         totalProducts += quantity!!
                     }
