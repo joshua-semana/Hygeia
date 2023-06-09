@@ -6,19 +6,20 @@
         android:icon="@drawable/ic_nav_home"
         android:title="@string/nav_home" />
     <item
-        android:id="@+id/frgMainQR"
+        android:id="@+id/frgMainTransactions"
         android:icon="@drawable/ic_nav_transactions"
         android:title="@string/nav_transactions" />
+    <item
+        android:id="@+id/frgMainBlog"
+        android:icon="@drawable/ic_nav_blog"
+        android:title="@string/nav_blog" />
     <item
         android:id="@+id/frgMainAdminTools"
         android:icon="@drawable/ic_nav_admin"
         android:title="@string/nav_admin_tools" />
     <item
-        android:id="@+id/frgMainUserAccounts"
-        android:icon="@drawable/ic_nav_admin"
-        android:title="@string/nav_user_accounts" />
-    <item
         android:id="@+id/frgMainSettings"
         android:icon="@drawable/ic_nav_profile"
         android:title="@string/nav_profile" />
+
 </menu>

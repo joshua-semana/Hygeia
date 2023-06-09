@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_for_admin"
+    app:startDestination="@id/frgMainHome">
+
+    <fragment
+        android:id="@+id/frgMainHome"
+        android:name="com.hygeia.fragments.FrgMainHome"
+        android:label="FrgMainHome"
+        tools:layout="@layout/frg_main_home" />
+    <fragment
+        android:id="@+id/frgMainTransactions"
+        android:name="com.hygeia.fragments.FrgMainTransactions"
+        android:label="FrgMainTransactions"
+        tools:layout="@layout/frg_main_transactions" />
+    <fragment
+        android:id="@+id/frgMainBlog"
+        android:name="com.hygeia.fragments.FrgMainBlog"
+        android:label="FrgMainBlog"
+        tools:layout="@layout/frg_main_blog" />
+    <fragment
+        android:id="@+id/frgMainAdminTools"
+        android:name="com.hygeia.fragments.FrgMainAdminTools"
+        android:label="FrgAdminTools"
+        tools:layout="@layout/frg_main_admin_tools" />
+    <fragment
+        android:id="@+id/frgMainSettings"
+        android:name="com.hygeia.fragments.FrgMainSettings"
+        android:label="FrgMainSettings"
+        tools:layout="@layout/frg_main_settings" />
+</navigation>

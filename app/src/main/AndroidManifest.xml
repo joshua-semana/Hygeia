@@ -20,6 +20,18 @@
         android:theme="@style/Theme.Hygeia"
         tools:targetApi="31">
         <activity
+            android:name=".ActHistory"
+            android:exported="false" />
+        <activity
+            android:name=".ActBlogEdit"
+            android:exported="false" />
+        <activity
+            android:name=".ActBlogView"
+            android:exported="false" />
+        <activity
+            android:name=".ActBlogAdd"
+            android:exported="false" />
+        <activity
             android:name=".ActRequestMoney"
             android:exported="false" />
         <activity

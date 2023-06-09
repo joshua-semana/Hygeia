@@ -91,10 +91,12 @@ class ArrAdpTransactions(
                 val yesterdayDate = Calendar.getInstance()
                 yesterdayDate.add(Calendar.DAY_OF_YEAR, -1)
                 val yesterdayDateFormat = dateFormat.format(yesterdayDate.time)
+                val formatTime = SimpleDateFormat("h:mm a", Locale.getDefault())
+                val timeString = formatTime.format(DateCreated.toDate())
 
                 when (dataDate) {
                     todayDate -> {
-                        date.text = "Today"
+                        date.text = "Today at $timeString"
                     }
                     yesterdayDateFormat -> {
                         date.text = "Yesterday"

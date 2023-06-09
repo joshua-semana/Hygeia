@@ -73,7 +73,6 @@ class ActSendMoney : AppCompatActivity() {
                 clearTextError(txtLayoutPhoneNumber, txtLayoutAmount)
                 if (isInternetConnected(this@ActSendMoney)) {
                     if (!inputsAreEmpty()) {
-                        loading.show()
                         phoneNumber =
                             (bind.txtLayoutPhoneNumber.prefixText.toString() + bind.txtPhoneNumber.text.toString()).trim()
                         lifecycleScope.launch(Dispatchers.Main) {
@@ -84,6 +83,7 @@ class ActSendMoney : AppCompatActivity() {
                                     dlgConfirmation(this@ActSendMoney, "send money") {
                                         if (it == ButtonType.PRIMARY) {
                                             lifecycleScope.launch(Dispatchers.Main) {
+                                                loading.show()
                                                 sendMoney(amount)
                                             }
                                         } else {
@@ -92,7 +92,8 @@ class ActSendMoney : AppCompatActivity() {
                                     }.show()
                                 }
                             } else {
-                                msg("please input amount")
+                                loading.dismiss()
+                                txtLayoutAmount.error = "Required*"
                             }
                         }
                     } else {

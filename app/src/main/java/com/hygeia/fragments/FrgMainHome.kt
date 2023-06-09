@@ -261,6 +261,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                     lblRequestMoney.visibility = View.GONE
                 }
                 "admin" -> {
+                    btnPurchaseUsingPoints.visibility = View.GONE
+                    lblPurchaseUsingPoints.visibility = View.GONE
+                    btnPurchase.visibility = View.GONE
+                    lblPurchase.visibility = View.GONE
                     btnRequestMoney.visibility = View.GONE
                     lblRequestMoney.visibility = View.GONE
                     cardPoints.visibility = View.GONE

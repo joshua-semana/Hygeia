@@ -4,26 +4,27 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mainLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:tag=".FrgMainBlog">
 
     <TextView
         android:id="@+id/lblHeadingRegular"
         style="@style/Text_H1_Regular"
         android:layout_marginTop="@dimen/mx"
-        android:text="@string/h1_all_transactions"
+        android:text="@string/h1_blog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="VisualLintOverlap" />
 
     <TextView
         android:id="@+id/lblDescription"
         style="@style/Text_Description"
-        android:text="@string/desc_transaction_history"
+        android:text="@string/desc_blog"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblHeadingRegular"
-        tools:ignore="VisualLintLongText" />
+        tools:ignore="VisualLintLongText,VisualLintOverlap" />
 
     <HorizontalScrollView
         android:id="@+id/chipGroupScroll"
@@ -47,52 +48,70 @@
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipAll"
                 style="@style/Chip"
-                android:layout_marginStart="@dimen/mx"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/mx"
                 android:text="@string/chip_all" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipPurchase"
+                android:id="@+id/chipHidden"
                 style="@style/Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chip_purchase" />
+                android:text="@string/chip_hidden"
+                app:chipIcon="@drawable/ic_circle"
+                app:chipIconSize="10dp"
+                app:chipIconTint="@color/neutral_500"
+                app:chipIconVisible="true"
+                app:iconEndPadding="-4dp"
+                app:iconStartPadding="4dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipStars"
+                android:id="@+id/chipAnnouncement"
                 style="@style/Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chip_use_stars" />
+                android:text="@string/chip_announcement"
+                app:chipIcon="@drawable/ic_circle"
+                app:chipIconSize="10dp"
+                app:chipIconTint="@color/warning_500"
+                app:chipIconVisible="true"
+                app:iconEndPadding="-4dp"
+                app:iconStartPadding="4dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipSend"
+                android:id="@+id/chipInformation"
                 style="@style/Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/chip_send_money" />
+                android:text="@string/chip_information"
+                app:chipIcon="@drawable/ic_circle"
+                app:chipIconSize="10dp"
+                app:chipIconTint="@color/accent_500"
+                app:chipIconVisible="true"
+                app:iconEndPadding="-4dp"
+                app:iconStartPadding="4dp" />
 
             <com.google.android.material.chip.Chip
-                android:id="@+id/chipRequest"
-                style="@style/Chip"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/chip_request_money"
-                tools:visibility="gone"/>
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/chipReceive"
+                android:id="@+id/chipUpdate"
                 style="@style/Chip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/mx"
-                android:text="@string/chip_receive_money"/>
+                android:text="@string/chip_update"
+                app:chipIcon="@drawable/ic_circle"
+                app:chipIconSize="10dp"
+                app:chipIconTint="@color/blue"
+                app:chipIconVisible="true"
+                app:iconEndPadding="-4dp"
+                app:iconStartPadding="4dp" />
+
         </com.google.android.material.chip.ChipGroup>
+
     </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/listViewTransactionHistory"
+        android:id="@+id/listViewBlogs"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="@dimen/mx"
@@ -103,19 +122,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/chipGroupScroll"
-        tools:listitem="@layout/list_transaction" />
+        tools:listitem="@layout/list_blog" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/coverTransaction"
+        android:id="@+id/coverListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
         android:orientation="vertical"
         android:padding="@dimen/mx"
-        app:layout_constraintBottom_toBottomOf="@+id/listViewTransactionHistory"
-        app:layout_constraintEnd_toEndOf="@+id/listViewTransactionHistory"
-        app:layout_constraintStart_toStartOf="@+id/listViewTransactionHistory"
-        app:layout_constraintTop_toTopOf="@+id/listViewTransactionHistory">
+        app:layout_constraintBottom_toBottomOf="@+id/listViewBlogs"
+        app:layout_constraintEnd_toEndOf="@+id/listViewBlogs"
+        app:layout_constraintStart_toStartOf="@+id/listViewBlogs"
+        app:layout_constraintTop_toTopOf="@+id/listViewBlogs">
 
         <TextView
             android:id="@+id/lblEmoji"
@@ -135,7 +154,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/desc_empty_transaction"
+            android:text="@string/desc_empty_blog"
             android:textAlignment="center"
             android:textColor="@color/neutral_500"
             android:textSize="@dimen/text_md"
@@ -144,5 +163,23 @@
             app:layout_constraintTop_toBottomOf="@+id/lblEmoji" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabAddBlog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:layout_marginRight="@dimen/mx"
+            android:layout_marginBottom="80dp"
+            app:backgroundTint="@color/accent_50"
+            app:srcCompat="@drawable/ic_add_blog"
+            app:tint="@color/accent_500"
+            tools:ignore="ContentDescription,RtlHardcoded,SpeakableTextPresentCheck,ImageContrastCheck" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

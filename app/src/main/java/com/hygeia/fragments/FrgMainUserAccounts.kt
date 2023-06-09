@@ -108,7 +108,7 @@ class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
 
     private fun updateUserStatus(userID: String, status: Boolean) {
         loading.show()
-        userRef.document(userID).update("enable", status).addOnSuccessListener {
+        userRef.document(userID).update("isEnabled", status).addOnSuccessListener {
             loading.dismiss()
             dlgStatus(requireContext(), "success update user").apply {
                 setOnDismissListener {

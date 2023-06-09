@@ -28,9 +28,13 @@
     <string name="h1_vending_machines">Vending Machines</string>
     <string name="h1_vending_name">Hygeia Vendo</string>
     <string name="h1_vendo_details">Vendo Details</string>
+    <string name="h1_vendo_history">Vendo Logs</string>
     <string name="h1_change_wallet_background">Change Wallet</string>
     <string name="h1_change_wallet_background_colored">Background</string>
     <string name="h1_user_accounts">User Accounts</string>
+    <string name="h1_blog">Hygeia Blog</string>
+    <string name="h1_blog_add">New Blog Post</string>
+    <string name="h1_blog_edit">Edit Blog Post</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
@@ -65,6 +69,8 @@
     <string name="desc_vendo_num">Vendo #</string>
     <string name="desc_items">Item(s):</string>
     <string name="desc_empty_transaction">Your transaction history is feeling a little lonely at the moment.</string>
+    <string name="desc_empty_blog">There are no new posts or updates as of now.</string>
+    <string name="desc_empty_history">History of this machine is currently empty.</string>
     <string name="desc_empty_user">There are no user records with your search input. Check if your input is correct.</string>
     <string name="desc_vendo_slot_status">Vendo slot status</string>
     <string name="desc_wallet_background">Enhance your wallet\'s visual appeal by customizing its background wallpaper. Choose from a wide range of stunning designs to personalize your digital experience.</string>
@@ -72,6 +78,11 @@
     <string name="desc_total_earnings">Total Earnings</string>
     <string name="desc_total_products">Total Products Sold</string>
     <string name="desc_user_accounts">Here are all the user accounts of Hygeia.</string>
+    <string name="desc_blog">Keep an eye out for the most recent updates!</string>
+    <string name="desc_blog_add">You can select what type of blog you will post by choosing from one of the options below:</string>
+    <string name="desc_blog_edit">You can change the type of the blog by choosing from one of the options below:</string>
+    <string name="desc_blog_visible">Blog post visibility</string>
+    <string name="desc_vendo_history">Here are all the updates and changes made by the administrators for this vendo machine.</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -97,6 +108,8 @@
     <string name="title_product_price_in_points">Product Price in Hygeia Stars</string>
     <string name="title_product_reward_in_points">Product Reward in Hygeia Stars</string>
     <string name="title_search">Search User</string>
+    <string name="title_blog_title">Title</string>
+    <string name="title_blog_content">Content</string>
 
     <!--ERROR MESSAGE-->
     <string name="error_email_registered">The email you entered is not registered in our system.</string>
@@ -139,6 +152,10 @@
     <string name="btn_about_us">About Hygeia</string>
     <string name="btn_change">Change</string>
     <string name="btn_my_qr">My QR</string>
+    <string name="btn_post">Post</string>
+    <string name="btn_update_post">Update Post</string>
+    <string name="btn_delete_post">Delete Post</string>
+    <string name="btn_delete_machine">Delete Machine</string>
 
     <string name="btn_text_terms_and_conditions">By continuing, you accept our <a href="">terms and conditions</a>\nand <a href="">privacy policy</a>.</string>
 
@@ -165,10 +182,14 @@
     <string name="dlg_title_positive_1">Hooray!</string>
     <string name="dlg_title_positive_2">Yippee!</string>
     <string name="dlg_title_purchase_complete">Purchase Complete</string>
+    <string name="dlg_title_blog_delete">Post Deleted</string>
+    <string name="dlg_title_blog_update">Post Updated</string>
+    <string name="dlg_title_machine_delete">Machine Deleted</string>
     <string name="dlg_title_negative_1">Uh-oh!</string>
     <string name="dlg_title_negative_2">Oh no!</string>
     <string name="dlg_title_negative_3">Hmm…</string>
     <string name="dlg_title_trivia">Trivia!</string>
+    <string name="dlg_title_update">Update Complete</string>
     <string name="dlg_body_no_internet">Please check your internet connection and try again.</string>
     <string name="dlg_body_empty_field">Please make sure to fill out all required fields in this form.</string>
     <string name="dlg_body_user_in_use">This account is already logged in on another device. Please try again later.</string>
@@ -193,6 +214,9 @@
     <string name="dlg_body_my_qr">Present your personalized QR code for effortless transactions!</string>
     <string name="dlg_body_update_user">You have successfully updated this user\'s information.</string>
     <string name="dlg_body_user_disabled">Your account is currently disabled. If you think this is a mistake, please contact the administration about this matter.</string>
+    <string name="dlg_body_blog_delete">You have successfully deleted this post.</string>
+    <string name="dlg_body_blog_update">You have successfully updated this post.</string>
+    <string name="dlg_body_machine_delete">You have successfully deleted this machine.</string>
 
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
@@ -208,6 +232,10 @@
     <string name="dlg_body_add_vending_machine">Are you sure you want to add vending machine?</string>
     <string name="dlg_body_disable">Are you sure you want to disable this account?</string>
     <string name="dlg_body_change_wallpaper">Are you sure you want to change your wallet\s background image?</string>
+    <string name="dlg_body_add_blog">Are you sure you want to post this blog? All standard users will be able to see this post.</string>
+    <string name="dlg_body_delete_blog">Are you sure you want to delete this post?</string>
+    <string name="dlg_body_update_blog">Are you sure you want to update this post?</string>
+    <string name="dlg_body_delete_machine">Are you sure you want to delete this vendo machine?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
@@ -225,6 +253,10 @@
     <string name="chip_request_money">Money Requested</string>
     <string name="chip_purchase">Purchases</string>
     <string name="chip_use_stars">Purchases Using Stars</string>
+    <string name="chip_announcement">Announcement</string>
+    <string name="chip_information">Information</string>
+    <string name="chip_update">Update</string>
+    <string name="chip_hidden">Hidden</string>
 
     <!--NEW-->
     <string name="hint_email_or_number">Enter email or phone number</string>
@@ -254,6 +286,7 @@
     <!--BOTTOM MENU NAVIGATION-->
     <string name="nav_home">Home</string>
     <string name="nav_transactions">Transactions</string>
+    <string name="nav_blog">Blog</string>
     <string name="nav_admin_tools">Admin Tools</string>
     <string name="nav_user_accounts">User Accounts</string>
     <string name="nav_profile">Profile</string>
@@ -306,6 +339,4 @@
     </string>
     <string name="emo_hiding">😶‍🌫️</string>
     <string name="emo_empty">🤔</string>
-    <string name="notification_title">Title</string>
-    <string name="notification_content">Add content here</string>
 </resources>
