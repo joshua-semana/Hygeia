@@ -39,5 +39,54 @@
         app:layout_constraintTop_toBottomOf="@+id/lblDescription"
         tools:listitem="@layout/list_transaction"/>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cover"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="@dimen/mx"
+        app:layout_constraintBottom_toBottomOf="@+id/listViewMachines"
+        app:layout_constraintEnd_toEndOf="@+id/listViewMachines"
+        app:layout_constraintStart_toStartOf="@+id/listViewMachines"
+        app:layout_constraintTop_toTopOf="@+id/listViewMachines">
+
+        <TextView
+            android:id="@+id/lblEmoji"
+            style="@style/Text_Regular"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/emo_hiding"
+            android:textSize="@dimen/text_emoji_lg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="TextContrastCheck" />
+
+        <TextView
+            android:id="@+id/lblMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="@string/desc_empty_transaction"
+            android:textAlignment="center"
+            android:textColor="@color/neutral_500"
+            android:textSize="@dimen/text_md"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblEmoji" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="@+id/lblMessage"
+            app:layout_constraintStart_toStartOf="@+id/lblMessage"
+            app:layout_constraintTop_toBottomOf="@+id/lblMessage" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,7 +70,7 @@
                 android:layout_weight="1"
                 android:ellipsize="end"
                 android:fontFamily="@font/lato"
-                android:maxLines="1"
+                android:maxLines="3"
                 android:text="@string/placeholder"
                 android:textColor="@color/neutral_500"
                 android:textSize="@dimen/text_md" />

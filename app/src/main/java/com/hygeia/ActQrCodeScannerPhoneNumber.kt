@@ -11,6 +11,7 @@ import com.budiyev.android.codescanner.CodeScannerView
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.phoneNumberPattern
@@ -23,6 +24,9 @@ class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_qr_code_scanner)
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
+
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
         codeScanner = CodeScanner(this, scannerView)
 
@@ -80,10 +84,20 @@ class ActQrCodeScannerPhoneNumber: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        UserManager.setUserOnline()
         codeScanner.startPreview()
     }
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        }
     }
 }

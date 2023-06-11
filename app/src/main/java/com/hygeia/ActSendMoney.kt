@@ -1,8 +1,6 @@
 package com.hygeia
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -12,8 +10,6 @@ import com.hygeia.objects.UserManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import androidx.activity.OnBackPressedCallback
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -25,7 +21,6 @@ import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.isInternetConnected
-import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
@@ -55,6 +50,9 @@ class ActSendMoney : AppCompatActivity() {
         loading = Utilities.dlgLoading(this@ActSendMoney)
         setContentView(bind.root)
 
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
+
         bind.txtLayoutPhoneNumber.setEndIconOnClickListener {
             if (isInternetConnected(this)){
                 val intent = Intent(applicationContext, ActQrCodeScannerPhoneNumber :: class.java)
@@ -78,7 +76,7 @@ class ActSendMoney : AppCompatActivity() {
                         lifecycleScope.launch(Dispatchers.Main) {
                             val amountText = txtAmount.text.toString()
                             val amount = amountText.toDoubleOrNull()
-                            if (amount != null && amount != 0.0) {
+                            if (amount != null && amount != 0.0 && amount > 0.99) {
                                 if (inputsAreCorrect(amount)) {
                                     dlgConfirmation(this@ActSendMoney, "send money") {
                                         if (it == ButtonType.PRIMARY) {
@@ -93,7 +91,7 @@ class ActSendMoney : AppCompatActivity() {
                                 }
                             } else {
                                 loading.dismiss()
-                                txtLayoutAmount.error = "Required*"
+                                txtLayoutAmount.error = "Amount must be greater than or equal to 1."
                             }
                         }
                     } else {
@@ -206,9 +204,6 @@ class ActSendMoney : AppCompatActivity() {
             "Type" to "Send Money",
             "User Reference" to UserManager.uid,
         )
-
-
-
         transactionRef.document().set(senderData)
             .addOnSuccessListener {
                 val receiverData = hashMapOf(
@@ -294,5 +289,15 @@ class ActSendMoney : AppCompatActivity() {
         super.onResume()
         val getResult = intent.getStringExtra("qrCodeResult")
         getResult?.let { bind.txtPhoneNumber.setText(it) }
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        }
     }
 }

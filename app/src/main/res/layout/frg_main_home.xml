@@ -77,8 +77,6 @@
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardWallet"
         style="@style/Card_Wallet"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/lblUserFullName">
@@ -276,7 +274,7 @@
         tools:listitem="@layout/list_transaction" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/coverTransaction"
+        android:id="@+id/cover"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/white"
@@ -312,6 +310,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblEmoji" />
+
+        <ProgressBar
+            android:id="@+id/loading"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="32dp"
+            app:layout_constraintEnd_toEndOf="@+id/lblMessage"
+            app:layout_constraintStart_toStartOf="@+id/lblMessage"
+            app:layout_constraintTop_toBottomOf="@+id/lblMessage" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

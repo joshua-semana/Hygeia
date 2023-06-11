@@ -217,7 +217,8 @@
     <string name="dlg_body_blog_delete">You have successfully deleted this post.</string>
     <string name="dlg_body_blog_update">You have successfully updated this post.</string>
     <string name="dlg_body_machine_delete">You have successfully deleted this machine.</string>
-
+    <string name="dlg_title_purchase_loading">Please wait</string>
+    <string name="dlg_body_purchase_loading">We are currently processing your order…</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>

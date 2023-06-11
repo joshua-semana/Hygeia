@@ -15,6 +15,7 @@ import com.hygeia.objects.Utilities.isInternetConnected
 import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.objects.MachineManager
+import com.hygeia.objects.UserManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
@@ -27,6 +28,9 @@ class ActQrCodeScanner : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.act_qr_code_scanner)
         val scannerView = findViewById<CodeScannerView>(R.id.scanner_view)
+
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
         codeScanner = CodeScanner(this, scannerView)
 
@@ -64,6 +68,7 @@ class ActQrCodeScanner : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        UserManager.setUserOnline()
         codeScanner.startPreview()
     }
     override fun onPause() {
@@ -113,6 +118,15 @@ class ActQrCodeScanner : AppCompatActivity() {
                     }
                 }.show()
             }
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }

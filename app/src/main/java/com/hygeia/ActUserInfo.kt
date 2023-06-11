@@ -12,6 +12,9 @@ class ActUserInfo : AppCompatActivity() {
         bind = ActUserInfoBinding.inflate(layoutInflater)
         setContentView(bind.root)
 
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
+
         with(bind){
             val fullname = "${UserManager.firstname.toString()} ${UserManager.lastname.toString()}"
             txtFullName.setText(fullname)
@@ -24,6 +27,20 @@ class ActUserInfo : AppCompatActivity() {
             btnBack.setOnClickListener {
                 onBackPressedDispatcher.onBackPressed()
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }
