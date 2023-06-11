@@ -2,19 +2,20 @@ package com.hygeia
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.FragmentContainerView
 import androidx.navigation.ui.setupWithNavController
 import com.hygeia.databinding.ActMainBinding
 import com.hygeia.objects.UserManager
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.fragment.findNavController
 
 class ActMain : AppCompatActivity() {
     private lateinit var bind : ActMainBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActMainBinding.inflate(layoutInflater)
         setContentView(bind.root)
+
 
         with(bind) {
 
@@ -38,6 +39,21 @@ class ActMain : AppCompatActivity() {
             actMainBotNavigation.setupWithNavController(
                 containerMain.getFragment<NavHostFragment>().navController
             )
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.isOnAnotherActivity = false
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (!UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (!UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }

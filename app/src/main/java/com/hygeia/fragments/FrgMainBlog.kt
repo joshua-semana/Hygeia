@@ -22,6 +22,7 @@ import com.hygeia.databinding.FrgMainBlogBinding
 import com.hygeia.objects.BlogManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
+import com.hygeia.objects.Utilities.msg
 
 class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
 
@@ -41,7 +42,7 @@ class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
 
         constraintViews()
 
-        with (bind) {
+        with(bind) {
             chipAll.isChecked = true
             if (chipAll.isChecked) getListOfBlogs(query)
 
@@ -51,16 +52,19 @@ class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
 
             @Suppress("DEPRECATION")
             chipGroup.setOnCheckedChangeListener { _, checkedId ->
-                when(checkedId) {
+                when (checkedId) {
                     R.id.chipAnnouncement -> {
                         getListOfBlogs(query.whereEqualTo("Type", "Announcement"))
                     }
+
                     R.id.chipInformation -> {
                         getListOfBlogs(query.whereEqualTo("Type", "Information"))
                     }
+
                     R.id.chipUpdate -> {
                         getListOfBlogs(query.whereEqualTo("Type", "Update"))
                     }
+
                     R.id.chipHidden -> {
                         getListOfBlogs(blogsRef.whereEqualTo("isVisible", false))
                     }
@@ -70,22 +74,44 @@ class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
             fabAddBlog.setOnClickListener {
                 startActivity(Intent(requireContext(), ActBlogAdd::class.java))
             }
-            return root
+        }
+        return bind.root
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun constraintViews() {
+        with(bind) {
+            when (UserManager.role) {
+                "admin" -> {
+                    lblDescription.text = "You can press and hold a post to be able to edit it."
+                    fabAddBlog.visibility = View.VISIBLE
+                    chipHidden.visibility = View.VISIBLE
+                }
+
+                "standard" -> {
+                    fabAddBlog.visibility = View.GONE
+                    chipHidden.visibility = View.GONE
+                }
+            }
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getListOfBlogs(query: Query) {
-        listOfBlogs = arrayListOf()
-        loading.show()
+        bind.cover.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching latest blog posts, please wait..."
+        bind.loading.visibility = View.VISIBLE
         bind.listViewBlogs.layoutManager = LinearLayoutManager(requireContext())
+        listOfBlogs = arrayListOf()
 
         query.orderBy("Date Created", Query.Direction.DESCENDING).get().apply {
             addOnSuccessListener { data ->
-                bind.coverListView.visibility = View.GONE
                 listOfBlogs.clear()
                 if (!data.isEmpty) {
+                    bind.cover.visibility = View.GONE
                     for (item in data.documents) {
-                        val blog = DataBlog(
+                        val items = DataBlog(
                             item.id,
                             item.get("Content").toString(),
                             item.get("Date Created") as Timestamp,
@@ -94,14 +120,16 @@ class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
                             item.get("Type").toString(),
                             item.get("isVisible") as Boolean
                         )
-
-                        listOfBlogs.add(blog)
+                        listOfBlogs.add(items)
                     }
                     bind.listViewBlogs.adapter = ArrAdpBlog(listOfBlogs, this@FrgMainBlog)
                 } else {
-                    bind.coverListView.visibility = View.VISIBLE
+                    bind.lblMessage.text = "There are currently no blog posts."
+                    bind.loading.visibility = View.GONE
                 }
-                loading.dismiss()
+            }
+            addOnFailureListener {
+                requireContext().msg("Please try again.")
             }
         }
     }
@@ -117,35 +145,22 @@ class FrgMainBlog : Fragment(), ArrAdpBlog.OnBlogItemClickListener {
         bind.chipGroup.clearCheck()
     }
 
-    @SuppressLint("SetTextI18n")
-    private fun constraintViews() {
-        with(bind) {
-            when (UserManager.role) {
-                "admin" -> {
-                    lblDescription.text = "You can press and hold a post to be able to edit it."
-                    fabAddBlog.visibility = View.VISIBLE
-                    chipHidden.visibility = View.VISIBLE
-                }
-                "standard" -> {
-                    fabAddBlog.visibility = View.GONE
-                    chipHidden.visibility = View.GONE
-                }
-            }
-        }
-    }
-
     override fun onBlogItemClick(ID: String) {
+        loading.show()
         blogsRef.document(ID).get().addOnSuccessListener { data ->
             BlogManager.setData(data)
             startActivity(Intent(requireContext(), ActBlogView::class.java))
+            loading.dismiss()
         }
     }
 
     override fun onBlogItemLongClick(ID: String) {
         if (UserManager.role == "admin") {
+            loading.show()
             blogsRef.document(ID).get().addOnSuccessListener { data ->
                 BlogManager.setData(data)
                 startActivity(Intent(requireContext(), ActBlogEdit::class.java))
+                loading.dismiss()
             }
         }
     }

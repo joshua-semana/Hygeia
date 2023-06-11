@@ -7,14 +7,21 @@ import android.content.Context
 import android.graphics.drawable.ColorDrawable
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.R
 import com.hygeia.classes.ButtonType
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 
 object MachineManager {
 
@@ -60,15 +67,25 @@ object MachineManager {
         txtDlgVendoDetail.setText(location)
 
         btnDlgVendoDetailPrimary.setOnClickListener {
-            if (txtDlgVendoDetail.text!!.isEmpty()) {
-                txtLayoutDlgVendoDetail.error = "Required*"
+            if (isInternetConnected(context)) {
+                if (txtDlgVendoDetail.text!!.isEmpty()) {
+                    txtLayoutDlgVendoDetail.error = "Required*"
+                } else {
+                    machineRef.document(uid!!)
+                        .update("Location", txtDlgVendoDetail.text.toString())
+                        .addOnSuccessListener {
+                            onButtonClicked(ButtonType.PRIMARY)
+                            location = txtDlgVendoDetail.text.toString()
+                            dialog.dismiss()
+                        }
+                }
             } else {
-                machineRef.document(uid!!)
-                    .update("Location", txtDlgVendoDetail.text.toString()).addOnSuccessListener {
-                        onButtonClicked(ButtonType.PRIMARY)
-                        location = txtDlgVendoDetail.text.toString()
-                        dialog.dismiss()
-                    }
+                Toast.makeText(
+                    context,
+                    "No internet connection. Changes are not saved.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
             }
         }
         btnDlgVendoDetailSecondary.setOnClickListener {
@@ -118,39 +135,48 @@ object MachineManager {
         }
 
         btnDlgProductDetailPrimary.setOnClickListener {
-            clearTextError(
-                txtLayoutDlgProductName,
-                txtLayoutDlgProductPrice,
-                txtLayoutDlgProductQuantity
-            )
-            if (txtDlgProductName.text!!.isNotEmpty() &&
-                txtDlgProductPrice.text!!.isNotEmpty() &&
-                txtDlgProductQuantity.text!!.isNotEmpty()
-            ) {
-                if (txtDlgProductQuantity.text.toString().toLong() > 10) {
-                    txtLayoutDlgProductQuantity.error =
-                        "The maximum items per product is less than or equal to 10."
-                } else {
-                    val productUpdatedData = hashMapOf<String, Any>(
-                        "Name" to txtDlgProductName.text.toString(),
-                        "Price" to txtDlgProductPrice.text.toString().toDouble(),
-                        "Quantity" to txtDlgProductQuantity.text.toString().toLong(),
-                        "Status" to if (switchVendoSlotStatus.isChecked) 1 else 0
-                    )
-                    machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
-                        parent.reference.collection("Products").document(productID)
-                            .update(productUpdatedData).addOnSuccessListener {
-                                onButtonClicked(ButtonType.PRIMARY)
-                                dialog.dismiss()
-                            }
+            if (isInternetConnected(context)) {
+                clearTextError(
+                    txtLayoutDlgProductName,
+                    txtLayoutDlgProductPrice,
+                    txtLayoutDlgProductQuantity
+                )
+                if (txtDlgProductName.text!!.isNotEmpty() &&
+                    txtDlgProductPrice.text!!.isNotEmpty() &&
+                    txtDlgProductQuantity.text!!.isNotEmpty()
+                ) {
+                    if (txtDlgProductQuantity.text.toString().toLong() > 10) {
+                        txtLayoutDlgProductQuantity.error =
+                            "The maximum items per product is less than or equal to 10."
+                    } else {
+                        val productUpdatedData = hashMapOf<String, Any>(
+                            "Name" to txtDlgProductName.text.toString(),
+                            "Price" to txtDlgProductPrice.text.toString().toDouble(),
+                            "Quantity" to txtDlgProductQuantity.text.toString().toLong(),
+                            "Status" to if (switchVendoSlotStatus.isChecked) 1 else 0
+                        )
+                        machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
+                            parent.reference.collection("Products").document(productID)
+                                .update(productUpdatedData).addOnSuccessListener {
+                                    onButtonClicked(ButtonType.PRIMARY)
+                                    dialog.dismiss()
+                                }
+                        }
                     }
+                } else {
+                    Utilities.showRequiredTextField(
+                        txtDlgProductName to txtLayoutDlgProductName,
+                        txtDlgProductPrice to txtLayoutDlgProductPrice,
+                        txtDlgProductQuantity to txtLayoutDlgProductQuantity
+                    )
                 }
             } else {
-                Utilities.showRequiredTextField(
-                    txtDlgProductName to txtLayoutDlgProductName,
-                    txtDlgProductPrice to txtLayoutDlgProductPrice,
-                    txtDlgProductQuantity to txtLayoutDlgProductQuantity
-                )
+                Toast.makeText(
+                    context,
+                    "No internet connection. Changes are not saved.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
             }
         }
         btnDlgProductDetailSecondary.setOnClickListener {
@@ -172,59 +198,109 @@ object MachineManager {
 
         val lblDlgProductRewardEmoji = dialog.findViewById<TextView>(R.id.lblDlgProductRewardEmoji)
         val descDlgProductReward = dialog.findViewById<TextView>(R.id.descDlgProductReward)
-        val txtLayoutPriceInPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutPriceInPoints)
+        val txtLayoutPriceInPoints =
+            dialog.findViewById<TextInputLayout>(R.id.txtLayoutPriceInPoints)
         val txtLayoutRewardPoints = dialog.findViewById<TextInputLayout>(R.id.txtLayoutRewardPoints)
         val txtPriceInPoints = dialog.findViewById<TextInputEditText>(R.id.txtPriceInPoints)
         val txtRewardPoints = dialog.findViewById<TextInputEditText>(R.id.txtRewardPoints)
-        val btnDlgProductRewardPrimary = dialog.findViewById<Button>(R.id.btnDlgProductRewardPrimary)
-        val btnDlgProductRewardSecondary = dialog.findViewById<Button>(R.id.btnDlgProductRewardSecondary)
+        val btnDlgProductRewardPrimary =
+            dialog.findViewById<Button>(R.id.btnDlgProductRewardPrimary)
+        val btnDlgProductRewardSecondary =
+            dialog.findViewById<Button>(R.id.btnDlgProductRewardSecondary)
 
         lblDlgProductRewardEmoji.text = Emoji.Star
 
         machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
             parent.reference.collection("Products").document(productID).get()
                 .addOnSuccessListener { child ->
-                    descDlgProductReward.text = "Here are all the information you can update for ${child.getString("Name")}."
+                    descDlgProductReward.text =
+                        "Here are all the information you can update for ${child.getString("Name")}."
                     txtPriceInPoints.setText(child.get("Price in Points").toString())
                     txtRewardPoints.setText(child.get("Reward Points").toString())
                 }
         }
 
         btnDlgProductRewardPrimary.setOnClickListener {
-            clearTextError(
-                txtLayoutPriceInPoints,
-                txtLayoutRewardPoints
-            )
-            if ( txtPriceInPoints.text!!.isNotEmpty() &&
-                txtRewardPoints.text!!.isNotEmpty()
-            ) {
-                if (txtPriceInPoints.text.toString().toDouble() == 0.0) {
-                    txtLayoutPriceInPoints.error =
-                        "This cannot be 0."
-                } else {
-                    val productUpdatedData = hashMapOf<String, Any>(
-                        "Price in Points" to txtPriceInPoints.text.toString().toDouble(),
-                        "Reward Points" to txtRewardPoints.text.toString().toDouble()
-                    )
-                    machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
-                        parent.reference.collection("Products").document(productID)
-                            .update(productUpdatedData).addOnSuccessListener {
-                                onButtonClicked(ButtonType.PRIMARY)
-                                dialog.dismiss()
-                            }
+            if (isInternetConnected(context)) {
+                clearTextError(
+                    txtLayoutPriceInPoints,
+                    txtLayoutRewardPoints
+                )
+                if (txtPriceInPoints.text!!.isNotEmpty() &&
+                    txtRewardPoints.text!!.isNotEmpty()
+                ) {
+                    if (txtPriceInPoints.text.toString().toDouble() == 0.0) {
+                        txtLayoutPriceInPoints.error =
+                            "This cannot be 0."
+                    } else {
+                        val productUpdatedData = hashMapOf<String, Any>(
+                            "Price in Points" to txtPriceInPoints.text.toString().toDouble(),
+                            "Reward Points" to txtRewardPoints.text.toString().toDouble()
+                        )
+                        machineRef.document(uid!!.trim()).get().addOnSuccessListener { parent ->
+                            parent.reference.collection("Products").document(productID)
+                                .update(productUpdatedData).addOnSuccessListener {
+                                    onButtonClicked(ButtonType.PRIMARY)
+                                    dialog.dismiss()
+                                }
+                        }
                     }
+                } else {
+                    Utilities.showRequiredTextField(
+                        txtPriceInPoints to txtLayoutPriceInPoints,
+                        txtRewardPoints to txtLayoutRewardPoints
+                    )
                 }
             } else {
-                Utilities.showRequiredTextField(
-                    txtPriceInPoints to txtLayoutPriceInPoints,
-                    txtRewardPoints to txtLayoutRewardPoints
-                )
+                Toast.makeText(
+                    context,
+                    "No internet connection. Changes are not saved.",
+                    Toast.LENGTH_SHORT
+                ).show()
+                dialog.dismiss()
             }
         }
 
         btnDlgProductRewardSecondary.setOnClickListener {
             dialog.dismiss()
         }
+
+        return dialog
+    }
+
+    fun dlgLoadingPurchase(context: Context): Dialog {
+        val dialog = Dialog(context)
+        dialog.setContentView(R.layout.dlg_purchase_loading)
+        dialog.setCancelable(false)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        val count = dialog.findViewById<TextView>(R.id.count)
+
+        val database = FirebaseDatabase.getInstance()
+        val reference = database.getReference("Orders")
+
+        val valueEventListener = object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                var sum = 0
+                for (child in dataSnapshot.children) {
+                    val slotData = child.getValue(Int::class.java)
+                    if (slotData != null) {
+                        sum += slotData
+                    }
+                }
+                count.text = "$sum items left..."
+                if (sum == 0) {
+                    dialog.dismiss()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                context.msg("Please try again.")
+            }
+        }
+
+        reference.addValueEventListener(valueEventListener)
 
         return dialog
     }

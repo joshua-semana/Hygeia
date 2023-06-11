@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.Timestamp
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
@@ -23,16 +26,13 @@ import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.formatCredits
 import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.objects.Utilities.msg
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.Random
 
 class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListener {
-    private lateinit var bind : ActPurchaseBinding
+    private lateinit var bind: ActPurchaseBinding
     private lateinit var listOfProducts: ArrayList<DataProducts>
     private lateinit var loading: Dialog
 
@@ -59,12 +59,15 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         loading = dlgLoading(this@ActPurchase)
         setContentView(bind.root)
 
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
+
         //POPULATE
         getListOfProducts()
         updatePurchaseBreakdown()
-        with(bind){
+        with(bind) {
             btnPurchase.setOnClickListener {
-                if (isInternetConnected(applicationContext)){
+                if (isInternetConnected(applicationContext)) {
                     if (grandTotal == 0.00) {
                         dlgStatus(this@ActPurchase, "empty cart").show()
                     } else if (grandTotal > UserManager.balance.toString().toDouble()) {
@@ -72,16 +75,15 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                     } else {
                         dlgConfirmation(this@ActPurchase, "purchase") {
                             if (it == ButtonType.PRIMARY) {
-                                loading.show()
                                 saveTransaction()
                             }
                         }.show()
                     }
-                }else {
+                } else {
                     dlgStatus(this@ActPurchase, "no internet").show()
                 }
             }
-            btnBack.setOnClickListener{
+            btnBack.setOnClickListener {
                 onBackBtnPressed()
             }
             onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true) {
@@ -91,6 +93,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
             })
         }
     }
+
     private fun onBackBtnPressed() {
         if (grandTotal == 0.00) {
             machinesRef.document(machineID.toString()).update("User Connected", 0)
@@ -124,7 +127,8 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         docRef.set(data).addOnSuccessListener {
             val adapter = ArrAdpProducts(listOfProducts, this@ActPurchase)
             for (i in 0 until adapter.itemCount) {
-                val viewHolder: RecyclerView.ViewHolder = adapter.createViewHolder(bind.listViewProducts, adapter.getItemViewType(i))
+                val viewHolder: RecyclerView.ViewHolder =
+                    adapter.createViewHolder(bind.listViewProducts, adapter.getItemViewType(i))
                 adapter.bindViewHolder(viewHolder as ArrAdpProducts.ViewHolder, i)
 
                 val product: DataProducts? = adapter.getNonZeroQuantityProduct(i)
@@ -138,31 +142,44 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                             "Quantity" to product.Count
                         )
 
+                        val database = FirebaseDatabase.getInstance()
+                        val reference = database.getReference("Orders")
+                        val order =
+                            mapOf<String, Any>("Slot_" + product.Slot.toString() to product.Count)
+                        reference.updateChildren(order)
+
                         docRef.collection("Items").document().set(subData)
 
                         //UPDATE Product Quantity
-                        val productsRef = machinesRef.document(machineID.toString()).collection("Products")
-                        productsRef.document(product.ID!!).update("Quantity", product.Quantity!!.toInt() - product.Count)
+                        val productsRef =
+                            machinesRef.document(machineID.toString()).collection("Products")
+                        productsRef.document(product.ID!!)
+                            .update("Quantity", product.Quantity!!.toInt() - product.Count)
                     }
                 }
             }
             docRef.update("Number", totalCount)
             updateUserBalance()
+            MachineManager.dlgLoadingPurchase(this@ActPurchase).apply {
+                setOnDismissListener {
+                    finishTransaction()
+                }
+                show()
+            }
         }
     }
 
     private fun updateUserBalance() {
-        userRef.document(UserManager.uid!!.trim()).update("balance", UserManager.balance.toString().toDouble() - grandTotal)
-        userRef.document(UserManager.uid!!.trim()).update("points", UserManager.points.toString().toDouble() + totalRewardStars)
+        userRef.document(UserManager.uid!!.trim())
+            .update("balance", UserManager.balance.toString().toDouble() - grandTotal)
+        userRef.document(UserManager.uid!!.trim())
+            .update("points", UserManager.points.toString().toDouble() + totalRewardStars)
         userRef.document(UserManager.uid!!).get().addOnSuccessListener { data ->
             UserManager.updateUserBalance(data)
         }
-
-        finishTransaction()
     }
 
     private fun finishTransaction() {
-        loading.dismiss()
         dlgStatus(this@ActPurchase, "success purchase").apply {
             setOnDismissListener {
                 dlgReward(this@ActPurchase, totalRewardStars).apply {
@@ -197,8 +214,6 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         return randomNum
     }
 
-
-
     private fun updatePurchaseBreakdown() {
         with(bind) {
             lblWalletBalanceNumber.text = formatCredits(UserManager.balance)
@@ -210,7 +225,10 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     @SuppressLint("SetTextI18n")
     private fun getListOfProducts() {
-        loading.show()
+        bind.cover.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching products available in this machine, please wait..."
+        bind.loading.visibility = View.VISIBLE
         bind.listViewProducts.layoutManager = LinearLayoutManager(this@ActPurchase)
         listOfProducts = arrayListOf()
 
@@ -222,42 +240,48 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                 bind.lblDescVendoLocation.text = "Located at ${parent.get("Location").toString()}"
 
                 val productsRef = parent.reference.collection("Products")
+                    .orderBy("Slot", Query.Direction.ASCENDING)
 
                 productsRef.get().apply {
                     addOnSuccessListener { child ->
-                        for (item in child.documents) {
-                            val productId = item.id
-                            val productName = item.get("Name")
-                            val productPrice = item.get("Price")
-                            val productQuantity = item.get("Quantity")
-                            val productSlot = item.get("Slot")
-                            val productStatus = item.get("Status")
-                            val productReward = item.get("Reward Points")
-
-                            val product = DataProducts(
-                                productId,
-                                productName.toString(),
-                                productPrice.toString(),
-                                productQuantity.toString(),
-                                productSlot.toString().toInt(),
-                                productStatus.toString().toInt(),
-                                null,
-                                productReward.toString().toDouble()
+                        listOfProducts.clear()
+                        if (!child.isEmpty) {
+                            bind.cover.visibility = View.GONE
+                            for (item in child.documents) {
+                                val product = DataProducts(
+                                    item.id,
+                                    item.get("Name").toString(),
+                                    item.get("Price").toString(),
+                                    item.get("Quantity").toString(),
+                                    item.get("Slot").toString().toInt(),
+                                    item.get("Status").toString().toInt(),
+                                    null,
+                                    item.get("Reward Points").toString().toDouble()
+                                )
+                                listOfProducts.add(product)
+                            }
+                            bind.listViewProducts.adapter = ArrAdpProducts(
+                                listOfProducts, this@ActPurchase
                             )
-
-                            listOfProducts.add(product)
+                            if (bind.listViewProducts.adapter?.itemCount == 0) {
+                                bind.cover.visibility = View.VISIBLE
+                                bind.lblMessage.text =
+                                    "Sorry for the inconvenience. There are no available items for this vending machine."
+                                bind.loading.visibility = View.GONE
+                            }
                         }
-                        bind.listViewProducts.adapter = ArrAdpProducts(listOfProducts, this@ActPurchase)
-                        loading.dismiss()
+                    }
+                    addOnFailureListener {
+                        this@ActPurchase.msg("Please try again.")
                     }
                 }
             }
             addOnFailureListener {
-                dlgError(this@ActPurchase, it.toString()).show()
-                loading.dismiss()
+                this@ActPurchase.msg("Please try again.")
             }
         }
     }
+
     override fun onAddOrMinusClick(productPrice: Double, totalReward: Double) {
         grandTotal = productPrice
         vat = productPrice * 0.12
@@ -265,4 +289,24 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         totalRewardStars = totalReward
         updatePurchaseBreakdown()
     }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            machinesRef.document(MachineManager.machineId!!).update("User Connected", 0)
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            machinesRef.document(MachineManager.machineId!!).update("User Connected", 0)
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+            finish()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        machinesRef.document(MachineManager.machineId!!).update("User Connected", 1)
+        UserManager.setUserOnline()
+    }
+
+
 }

@@ -36,6 +36,9 @@ class ActChangePassword : AppCompatActivity() {
         loading = dlgLoading(this@ActChangePassword)
         setContentView(bind.root)
 
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
+
         with(bind) {
             btnUpdatePassword.setOnClickListener {
                 clearTextError(
@@ -45,11 +48,8 @@ class ActChangePassword : AppCompatActivity() {
                 )
                 if (isInternetConnected(this@ActChangePassword)) {
                     if (inputsAreNotEmpty()) {
-
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            if (inputsAreCorrect()) {
-                                updatePassword()
-                            }
+                        if (inputsAreCorrect()) {
+                            updatePassword()
                         }
                     } else {
                         Utilities.showRequiredTextField(
@@ -111,7 +111,7 @@ class ActChangePassword : AppCompatActivity() {
         }
     }
 
-    private suspend fun inputsAreCorrect(): Boolean {
+    private fun inputsAreCorrect(): Boolean {
         var inputErrorCount = 0
         with(bind) {
             if (txtOldPassword.text.toString() != UserManager.password) {
@@ -153,4 +153,17 @@ class ActChangePassword : AppCompatActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        }
+    }
 }

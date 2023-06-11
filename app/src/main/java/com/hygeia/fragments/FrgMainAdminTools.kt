@@ -1,5 +1,6 @@
 package com.hygeia.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
@@ -20,10 +21,10 @@ import com.hygeia.databinding.FrgMainAdminToolsBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
-import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 import java.util.Calendar
 import java.util.Date
 import java.util.Random
@@ -55,8 +56,12 @@ class FrgMainAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener 
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getListOfMachines() {
-        loading.show()
+        bind.cover.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching all your vending machines, please wait..."
+        bind.loading.visibility = View.VISIBLE
         bind.listViewMachines.layoutManager = LinearLayoutManager(requireContext())
         listOfMachines = arrayListOf()
 
@@ -65,27 +70,108 @@ class FrgMainAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener 
         query.get().apply {
             addOnSuccessListener { data ->
                 listOfMachines.clear()
+                bind.cover.visibility = View.GONE
                 if (!data.isEmpty) {
                     for (item in data.documents) {
                         val machine: DataMachines? = item.toObject(DataMachines::class.java)
                         listOfMachines.add(machine!!)
                     }
-                    val newMachine = DataMachines("New Machine")
-                    listOfMachines.add(newMachine)
-                } else {
-                    val newMachine = DataMachines("New Machine")
-                    listOfMachines.add(newMachine)
                 }
-                bind.listViewMachines.adapter =
-                    ArrAdpMachines(listOfMachines, this@FrgMainAdminTools)
+                val newMachine = DataMachines("New Machine")
+                listOfMachines.add(newMachine)
 
-                loading.dismiss()
+                bind.listViewMachines.adapter = ArrAdpMachines(
+                    listOfMachines, this@FrgMainAdminTools
+                )
             }
             addOnFailureListener {
-                dlgError(requireContext(), it.toString()).show()
-                loading.dismiss()
+                requireContext().msg("Please try again.")
             }
         }
+    }
+
+    private fun addVendingMachine() {
+        val machineId = getRandomId()
+        val vendingMachineData = hashMapOf(
+            "Location" to "Location Not Set",
+            "MachineID" to machineId,
+            "Status" to "Offline",
+            "User Connected" to 0,
+            "isEnabled" to true
+        )
+        getCurrentVendingMachineCount { count ->
+            if (count != -1) {
+                val vendingMachineName = generateVendingMachineName(count)
+                vendingMachineData["Name"] = vendingMachineName
+                machinesRef.document(machineId).set(vendingMachineData).addOnSuccessListener {
+                    val historyData = hashMapOf(
+                        "Content" to "Added new vending machine, Vendo No. $vendingMachineName.",
+                        "Date Created" to Timestamp(Date()),
+                        "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                        "Machine ID" to machineId,
+                        "Machine Name" to vendingMachineName,
+                        "Type" to "Created",
+                        "User Reference" to UserManager.uid
+                    )
+                    historyRef.document().set(historyData)
+                    dlgStatus(requireContext(), "success adding vending machine").apply {
+                        loading.dismiss()
+                        setOnDismissListener {
+                            createProductDocuments(vendingMachineData["MachineID"].toString())
+                            getListOfMachines()
+                        }
+                        show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun createProductDocuments(vendingMachineId: String) {
+        val productsCollection = machinesRef.document(vendingMachineId).collection("Products")
+        for (i in 1..3) {
+            val productName = "Item $i"
+            val productData = hashMapOf(
+                "Name" to productName,
+                "Price" to 1,
+                "Price in Points" to 1,
+                "Quantity" to 0,
+                "Reward Points" to 1,
+                "Slot" to i,
+                "Status" to "0"
+            )
+            productsCollection.document().set(productData, SetOptions.merge())
+        }
+    }
+
+    private fun getRandomId(): String {
+        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
+        val random = Random()
+        val sb = StringBuilder()
+        for (i in 0 until 20) { // Generate a 20-character UUID
+            val index = random.nextInt(chars.length)
+            sb.append(chars[index])
+        }
+        return sb.toString()
+    }
+
+    private fun generateVendingMachineName(count: Int): String {
+        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
+        val vendingMachineCount = count + 1
+        return "$currentYear-${vendingMachineCount.toString().padStart(4, '0')}"
+    }
+
+    private fun getCurrentVendingMachineCount(callback: (Int) -> Unit) {
+        machinesRef.get()
+            .addOnSuccessListener {
+                val count = it.size()
+                callback(count)
+            }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getListOfMachines()
     }
 
     override fun onMachineInventoryItemClick(machineID: String) {
@@ -107,94 +193,15 @@ class FrgMainAdminTools : Fragment(), ArrAdpMachines.OnMachineItemClickListener 
     }
 
     override fun onMachineAddItemClick() {
-        dlgConfirmation(requireContext(),"add vending machine"){
-            if (it == ButtonType.PRIMARY) {
-                addVendingMachine()
-            }
-        }.show()
-    }
-
-    private fun addVendingMachine() {
-        val machineId = getRandomId()
-        val vendingMachineData = hashMapOf(
-            "Location" to "Please indicate a location",
-            "MachineID" to machineId,
-            "Status" to "Offline",
-            "User Connected" to 0,
-            "isEnabled" to true
-        )
-        getCurrentVendingMachineCount { count ->
-            if (count != -1) {
-                val vendingMachineName = generateVendingMachineName(count)
-                vendingMachineData["Name"] = vendingMachineName
-                machinesRef.document(vendingMachineData["MachineID"].toString()).set(vendingMachineData)
-                    .addOnSuccessListener {
-                        val historyData = hashMapOf(
-                            "Content" to "Added new vending machine, Vendo No. $vendingMachineName.",
-                            "Date Created" to Timestamp(Date()),
-                            "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
-                            "Machine ID" to machineId,
-                            "Machine Name" to vendingMachineName,
-                            "Type" to "Created",
-                            "User Reference" to UserManager.uid
-                        )
-                        historyRef.document().set(historyData)
-                        val dialog : Dialog = dlgStatus(requireContext(),"success adding vending machine")
-                        dialog.setOnDismissListener{
-                            createProductDocuments(vendingMachineData["MachineID"].toString())
-                            getListOfMachines()
-                        }
-                        dialog.show()
-                    }
-            }
+        if (isInternetConnected(requireContext())) {
+            dlgConfirmation(requireContext(), "add vending machine") {
+                if (it == ButtonType.PRIMARY) {
+                    loading.show()
+                    addVendingMachine()
+                }
+            }.show()
+        } else {
+            dlgStatus(requireContext(), "no internet").show()
         }
-    }
-    private fun createProductDocuments(vendingMachineId: String) {
-        val productsCollection = machinesRef.document(vendingMachineId).collection("Products")
-
-        for (i in 1..3) {
-            val productId = getRandomId()
-            val productName = "Item $i"
-            val productData = hashMapOf(
-                "ID" to productId,
-                "Name" to productName,
-                "Price" to 1,
-                "Price in Points" to 1,
-                "Quantity" to 0,
-                "Reward Points" to 1,
-                "Slot" to i,
-                "Status" to "0"
-            )
-            productsCollection.document(productId).set(productData, SetOptions.merge())
-        }
-    }
-    private fun getRandomId(): String {
-        val chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
-        val random = Random()
-        val sb = StringBuilder()
-        for (i in 0 until 20) { // Generate a 20-character UUID
-            val index = random.nextInt(chars.length)
-            sb.append(chars[index])
-        }
-        return sb.toString()
-    }
-    private fun generateVendingMachineName(count: Int): String {
-        val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        val vendingMachineCount = count + 1
-
-        return "$currentYear-${vendingMachineCount.toString().padStart(4, '0')}"
-    }
-    private fun getCurrentVendingMachineCount(callback: (Int) -> Unit) {
-
-        machinesRef.get()
-            .addOnSuccessListener {
-                val count = it.size()
-                callback(count)
-            }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        getListOfMachines()
     }
 }

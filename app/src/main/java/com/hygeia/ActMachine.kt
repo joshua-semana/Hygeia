@@ -5,8 +5,8 @@ import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
@@ -25,12 +25,13 @@ import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
+import com.hygeia.objects.Utilities.msg
 import java.util.Date
 
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind: ActMachineBinding
     private lateinit var listOfProducts: ArrayList<DataProductAdmin>
-    private lateinit var loading: Dialog
+    private lateinit var dlgloading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
@@ -40,21 +41,22 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bind = ActMachineBinding.inflate(layoutInflater)
-        loading = Utilities.dlgLoading(this@ActMachine)
+        dlgloading = Utilities.dlgLoading(this@ActMachine)
         setContentView(bind.root)
 
-        with(bind) {
-            //POPULATE
-            populateView()
-            getListOfProducts()
-            bind.switchVendoStatus.isChecked = MachineManager.status == "Online"
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
-            //MAIN FUNCTIONS
+        populateView()
+        getListOfProducts()
+
+        with(bind) {
+            bind.switchVendoStatus.isChecked = MachineManager.status == "Online"
             vendoDetails.setOnClickListener {
                 dlgEditVendoLocation(this@ActMachine) {
                     if (isInternetConnected(applicationContext)) {
                         if (it == ButtonType.PRIMARY) {
-                            loading.show()
+                            dlgloading.show()
                             val historyData = hashMapOf(
                                 "Content" to "Updated machine location information.",
                                 "Date Created" to Timestamp(Date()),
@@ -66,9 +68,13 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                             )
                             historyRef.document().set(historyData)
                             machineRef.document(machineId!!).get().addOnSuccessListener { data ->
-                                lblDescVendoLocation.text =
-                                    "Located at ${data.getString("Location")}"
-                                loading.dismiss()
+                                if (data.getString("Location") == "Location Not Set") {
+                                    lblDescVendoLocation.text = "Location Not Set"
+                                } else {
+                                    lblDescVendoLocation.text =
+                                        "Located at ${data.getString("Location")}"
+                                }
+                                dlgloading.dismiss()
                             }
                         }
                     } else {
@@ -78,43 +84,48 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }
 
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
-                loading.show()
-                if (isChecked) {
-                    machinesRef.document(machineId!!.trim()).update("Status", "Online")
-                        .addOnSuccessListener {
-                            val historyData = hashMapOf(
-                                "Content" to "Updated machine status information, from Offline to Online.",
-                                "Date Created" to Timestamp(Date()),
-                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
-                                "Machine ID" to machineId,
-                                "Machine Name" to name,
-                                "Type" to "Update",
-                                "User Reference" to UserManager.uid
-                            )
-                            historyRef.document().set(historyData).addOnSuccessListener {
-                                MachineManager.status = "Online"
-                                populateView()
-                                loading.dismiss()
+                if (isInternetConnected(this@ActMachine)) {
+                    if (isChecked) {
+                        dlgloading.show()
+                        machinesRef.document(machineId!!.trim()).update("Status", "Online")
+                            .addOnSuccessListener {
+                                val historyData = hashMapOf(
+                                    "Content" to "Updated machine status information, from Offline to Online.",
+                                    "Date Created" to Timestamp(Date()),
+                                    "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                    "Machine ID" to machineId,
+                                    "Machine Name" to name,
+                                    "Type" to "Update",
+                                    "User Reference" to UserManager.uid
+                                )
+                                historyRef.document().set(historyData).addOnSuccessListener {
+                                    MachineManager.status = "Online"
+                                    populateView()
+                                    dlgloading.dismiss()
+                                }
                             }
-                        }
+                    } else {
+                        machinesRef.document(machineId!!.trim()).update("Status", "Offline")
+                            .addOnSuccessListener {
+                                val historyData = hashMapOf(
+                                    "Content" to "Updated machine status information, from Online to Offline.",
+                                    "Date Created" to Timestamp(Date()),
+                                    "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                    "Machine ID" to machineId,
+                                    "Machine Name" to name,
+                                    "Type" to "Update",
+                                    "User Reference" to UserManager.uid
+                                )
+                                historyRef.document().set(historyData).addOnSuccessListener {
+                                    MachineManager.status = "Offline"
+                                    populateView()
+                                    dlgloading.dismiss()
+                                }
+                            }
+                    }
                 } else {
-                    machinesRef.document(machineId!!.trim()).update("Status", "Offline")
-                        .addOnSuccessListener {
-                            val historyData = hashMapOf(
-                                "Content" to "Updated machine status information, from Online to Offline.",
-                                "Date Created" to Timestamp(Date()),
-                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
-                                "Machine ID" to machineId,
-                                "Machine Name" to name,
-                                "Type" to "Update",
-                                "User Reference" to UserManager.uid
-                            )
-                            historyRef.document().set(historyData).addOnSuccessListener {
-                                MachineManager.status = "Offline"
-                                populateView()
-                                loading.dismiss()
-                            }
-                        }
+                    dlgStatus(this@ActMachine, "no internet").show()
+                    switchVendoStatus.isChecked = !switchVendoStatus.isChecked
                 }
             }
 
@@ -123,12 +134,16 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }
 
             btnDelete.setOnClickListener {
-                dlgConfirmation(this@ActMachine, "delete machine") {
-                    if (it == ButtonType.PRIMARY) {
-                        loading.show()
-                        deleteMachine()
-                    }
-                }.show()
+                if (isInternetConnected(this@ActMachine)) {
+                    dlgConfirmation(this@ActMachine, "delete machine") {
+                        if (it == ButtonType.PRIMARY) {
+                            dlgloading.show()
+                            deleteMachine()
+                        }
+                    }.show()
+                } else {
+                    dlgStatus(this@ActMachine, "no internet").show()
+                }
             }
 
             btnBack.setOnClickListener {
@@ -140,8 +155,53 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     @SuppressLint("SetTextI18n")
     private fun populateView() {
         bind.lblDescVendoID.text = "Vendo No. $name"
-        bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+        if (MachineManager.location == "Location Not Set") {
+            bind.lblDescVendoLocation.text = MachineManager.location
+        } else {
+            bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+        }
         bind.lblVendoStatus.text = "Vendo status is currently: \"${MachineManager.status}\""
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getListOfProducts() {
+        bind.cover.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching the products of this machine, please wait..."
+        bind.loading.visibility = View.VISIBLE
+        bind.listViewMachineDetail.layoutManager = LinearLayoutManager(this@ActMachine)
+        listOfProducts = arrayListOf()
+
+        machinesRef.document(MachineManager.uid.toString()).get().apply {
+            addOnSuccessListener { parent ->
+                val productsRef = parent.reference.collection("Products").orderBy("Slot")
+                productsRef.get().apply {
+                    addOnSuccessListener { child ->
+                        bind.cover.visibility = View.GONE
+                        for (item in child.documents) {
+                            val product = DataProductAdmin(
+                                item.id,
+                                item.get("Name").toString(),
+                                item.get("Price").toString(),
+                                item.get("Quantity").toString(),
+                                item.get("Slot").toString().toInt(),
+                                item.get("Status").toString().toInt()
+                            )
+                            listOfProducts.add(product)
+                        }
+                        bind.listViewMachineDetail.adapter = ArrAdpProductAdmin(
+                            listOfProducts, this@ActMachine
+                        )
+                    }
+                    addOnFailureListener {
+                        this@ActMachine.msg("Please try again.")
+                    }
+                }
+            }
+            addOnFailureListener {
+                this@ActMachine.msg("Please try again.")
+            }
+        }
     }
 
     private fun deleteMachine() {
@@ -158,7 +218,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             historyRef.document().set(historyData).addOnSuccessListener {
                 dlgStatus(this@ActMachine, "delete machine").apply {
                     setOnDismissListener {
-                        loading.dismiss()
+                        dlgloading.dismiss()
                         finish()
                     }
                     show()
@@ -167,55 +227,11 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         }
     }
 
-    private fun getListOfProducts() {
-        loading.show()
-        bind.listViewMachineDetail.layoutManager = LinearLayoutManager(this@ActMachine)
-        listOfProducts = arrayListOf()
-
-        machinesRef.document(MachineManager.uid.toString()).get().apply {
-            addOnSuccessListener { parent ->
-
-                val productsRef = parent.reference.collection("Products").orderBy("Slot")
-
-                productsRef.get().apply {
-                    addOnSuccessListener { child ->
-                        for (item in child.documents) {
-                            val productId = item.id
-                            val productName = item.get("Name")
-                            val productPrice = item.get("Price")
-                            val productQuantity = item.get("Quantity")
-                            val productSlot = item.get("Slot")
-                            val productStatus = item.get("Status")
-
-                            val product = DataProductAdmin(
-                                productId,
-                                productName.toString(),
-                                productPrice.toString(),
-                                productQuantity.toString(),
-                                productSlot.toString().toInt(),
-                                productStatus.toString().toInt()
-                            )
-
-                            listOfProducts.add(product)
-                        }
-                        bind.listViewMachineDetail.adapter =
-                            ArrAdpProductAdmin(listOfProducts, this@ActMachine)
-                        loading.dismiss()
-                    }
-                }
-            }
-            addOnFailureListener {
-                Utilities.dlgError(this@ActMachine, it.toString()).show()
-                loading.dismiss()
-            }
-        }
-    }
-
     override fun onProductEditItemClick(productID: String) {
         if (isInternetConnected(applicationContext)) {
             dlgEditProduct(this@ActMachine, productID) {
                 if (it == ButtonType.PRIMARY) {
-                    loading.show()
+                    dlgloading.show()
                     machinesRef.document(machineId!!).get().addOnSuccessListener { parent ->
                         parent.reference.collection("Products").document(productID).get()
                             .addOnSuccessListener { child ->
@@ -243,6 +259,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                                     "User Reference" to UserManager.uid
                                 )
                                 historyRef.document().set(historyData).addOnSuccessListener {
+                                    dlgloading.dismiss()
                                     getListOfProducts()
                                 }
                             }
@@ -259,7 +276,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         if (isInternetConnected(applicationContext)) {
             dlgEditProductPoints(this@ActMachine, productID) {
                 if (it == ButtonType.PRIMARY) {
-                    loading.show()
+                    dlgloading.show()
                     machinesRef.document(machineId!!).get().addOnSuccessListener { parent ->
                         parent.reference.collection("Products").document(productID).get()
                             .addOnSuccessListener { child ->
@@ -283,6 +300,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                                     "User Reference" to UserManager.uid
                                 )
                                 historyRef.document().set(historyData).addOnSuccessListener {
+                                    dlgloading.dismiss()
                                     getListOfProducts()
                                 }
                             }
@@ -291,6 +309,20 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             }.show()
         } else {
             dlgStatus(this@ActMachine, "no internet").show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }

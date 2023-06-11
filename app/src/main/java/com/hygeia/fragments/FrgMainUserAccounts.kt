@@ -1,5 +1,6 @@
 package com.hygeia.fragments
 
+import android.annotation.SuppressLint
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,6 +18,7 @@ import com.hygeia.databinding.FrgMainUserAccountsBinding
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgStatus
+import com.hygeia.objects.Utilities.msg
 
 class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
     private lateinit var bind: FrgMainUserAccountsBinding
@@ -54,8 +56,12 @@ class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun getListOfUsers(query: Query) {
-        loading.show()
+        bind.cover.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching user accounts, please wait..."
+        bind.loading.visibility = View.VISIBLE
         bind.listViewUsers.layoutManager = LinearLayoutManager(requireContext())
         listOfUsers = arrayListOf()
 
@@ -63,32 +69,26 @@ class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
             addOnSuccessListener { data ->
                 listOfUsers.clear()
                 if (!data.isEmpty) {
+                    bind.cover.visibility = View.GONE
                     for (item in data.documents) {
-                        val userId = item.id
-                        val userIdentifier = item.get("phoneNumber")
-                        val userRole = item.get("role")
-                        val userEnable = item.get("isEnabled")
-
-                        val user = DataUsers(
-                            userId,
-                            userIdentifier.toString(),
-                            userRole.toString(),
-                            userEnable.toString()
+                        val items = DataUsers(
+                            item.id,
+                            item.get("phoneNumber").toString(),
+                            item.get("role").toString(),
+                            item.get("isEnabled").toString()
                         )
-
-                        listOfUsers.add(user)
+                        listOfUsers.add(items)
                     }
-                    bind.listViewUsers.adapter =
-                        ArrAdpUsers(listOfUsers, this@FrgMainUserAccounts)
-                    bind.coverListView.visibility = View.GONE
+                    bind.listViewUsers.adapter = ArrAdpUsers(
+                        listOfUsers, this@FrgMainUserAccounts
+                    )
                 } else {
-                    bind.coverListView.visibility = View.VISIBLE
+                    bind.lblMessage.text = "There are no user matching your search input."
+                    bind.loading.visibility = View.GONE
                 }
-                loading.dismiss()
             }
             addOnFailureListener {
-                Utilities.dlgError(requireContext(), it.toString()).show()
-                loading.dismiss()
+                requireContext().msg("Please try again.")
             }
         }
     }

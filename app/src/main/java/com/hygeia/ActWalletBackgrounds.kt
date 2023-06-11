@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import com.google.android.material.card.MaterialCardView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -30,6 +31,9 @@ class ActWalletBackgrounds : AppCompatActivity() {
         bind = ActWalletBackgroundsBinding.inflate(layoutInflater)
         loading = Utilities.dlgLoading(this@ActWalletBackgrounds)
         setContentView(bind.root)
+
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
         with(bind) {
             val cardImageList =
@@ -66,22 +70,31 @@ class ActWalletBackgrounds : AppCompatActivity() {
             }
 
             btnChange.setOnClickListener {
-                if (isInternetConnected(this@ActWalletBackgrounds)) {
-                    dlgConfirmation(this@ActWalletBackgrounds, "change wallpaper") {
-                        loading.show()
-                        if (it == ButtonType.PRIMARY) {
-                            userRef.document(UserManager.uid!!).update(
-                                "walletBackground",
-                                currentCheckedCard?.contentDescription.toString()
-                            ).addOnSuccessListener {
-                                loading.dismiss()
-                                UserManager.updateUserBackground(currentCheckedCard?.contentDescription.toString())
-                                finish()
+                if (UserManager.walletBackground != currentCheckedCard?.contentDescription.toString()) {
+                    if (isInternetConnected(this@ActWalletBackgrounds)) {
+                        dlgConfirmation(this@ActWalletBackgrounds, "change wallpaper") {
+                            loading.show()
+                            if (it == ButtonType.PRIMARY) {
+                                userRef.document(UserManager.uid!!).update(
+                                    "walletBackground",
+                                    currentCheckedCard?.contentDescription.toString()
+                                ).addOnSuccessListener {
+                                    loading.dismiss()
+                                    UserManager.updateUserBackground(currentCheckedCard?.contentDescription.toString())
+                                    finish()
+                                }
                             }
-                        }
-                    }.show()
+                        }.show()
+                    } else {
+                        dlgStatus(this@ActWalletBackgrounds, "no internet").show()
+                    }
                 } else {
-                    dlgStatus(this@ActWalletBackgrounds, "no internet").show()
+                    Toast.makeText(
+                        this@ActWalletBackgrounds,
+                        "There are no changes made.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
                 }
             }
             btnBack.setOnClickListener {
@@ -101,6 +114,20 @@ class ActWalletBackgrounds : AppCompatActivity() {
             val resourceId =
                 resources.getIdentifier(contentDescription as String?, "drawable", packageName)
             bind.cardImageBackground.setBackgroundResource(resourceId)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }

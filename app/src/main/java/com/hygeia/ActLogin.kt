@@ -11,6 +11,10 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.objects.Utilities.clearTextFields
@@ -22,7 +26,6 @@ import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.clearTextError
-import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -71,8 +74,18 @@ class ActLogin : AppCompatActivity() {
             }
 
             btnAutoLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("09654488691")
-                txtPassword.setText("Admin@153")
+//                val database = FirebaseDatabase.getInstance()
+//                val reference = database.getReference("Slot 1")
+//                val data = mapOf<String, Any>("Quantity" to 10)
+//                reference.updateChildren(data)
+//                    .addOnSuccessListener {
+//                        dlgError(this@ActLogin, "Success").show()
+//                    }
+//                    .addOnFailureListener { error ->
+//                        dlgError(this@ActLogin, error.toString()).show()
+//                    }
+                txtEmailOrPhoneNumber.setText("09087788795")
+                txtPassword.setText("Admin1!?")
 
                 btnLogin.performClick()
             }
@@ -176,13 +189,8 @@ class ActLogin : AppCompatActivity() {
                         loading.dismiss()
                         dlgStatus(this@ActLogin,"user disabled").show()
                     } else if (UserManager.isOnline == true) {
-                        userRef.document(uid).update("isOnline", true)
-                            .addOnSuccessListener {
-                                loading.dismiss()
-                                startActivity(Intent(applicationContext, ActMain::class.java))
-                            }
-//                        loading.dismiss()
-//                        dlgStatus(this@ActLogin, "user already active").show()
+                        loading.dismiss()
+                        dlgStatus(this@ActLogin, "user already active").show()
                     }
                 }
             }
@@ -209,13 +217,8 @@ class ActLogin : AppCompatActivity() {
                     loading.dismiss()
                     dlgStatus(this@ActLogin,"user disabled").show()
                 } else if (UserManager.isOnline == true) {
-                    userRef.document(query.documents[0].id).update("isOnline", true)
-                        .addOnSuccessListener {
-                            loading.dismiss()
-                            startActivity(Intent(applicationContext, ActMain::class.java))
-                        }
-//                    loading.dismiss()
-//                    dlgStatus(this@ActLogin, "user already active").show()
+                    loading.dismiss()
+                    dlgStatus(this@ActLogin, "user already active").show()
                 }
             }
         } else {

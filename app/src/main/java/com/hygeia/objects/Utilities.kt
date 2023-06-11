@@ -347,7 +347,7 @@ object Utilities {
         val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
         val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
-        val message = "You have been rewarded with ${number.toInt()} Hygeia Stars! Earn more by using our service.\n\nYour vendo buddy, hygeia, is always at your service!"
+        val message = "You have been rewarded with ${number.toDouble()} Hygeia Stars! Earn more by using our service.\n\nYour vendo buddy, hygeia, is always at your service!"
         lblDlgInfoEmoji.text = Emoji.Star
         lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
         lblDlgInfoBody.text = message

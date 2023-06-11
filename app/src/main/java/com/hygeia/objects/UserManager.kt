@@ -21,6 +21,10 @@ object UserManager {
     var isOnline: Boolean? = null
     var walletBackground: String? = null
 
+    var isOnAnotherActivity: Boolean = false
+
+    private val userRef = FirebaseFirestore.getInstance().collection("User")
+
     fun setUserInformation(userInfo: DocumentSnapshot) {
         with(userInfo) {
             uid = id
@@ -48,4 +52,14 @@ object UserManager {
     fun updateUserBackground(image: String) {
         walletBackground = image
     }
+
+    fun setUserOffline() {
+        userRef.document(uid!!).update("isOnline", false)
+    }
+
+    fun setUserOnline() {
+        userRef.document(uid!!).update("isOnline", true)
+    }
+
+
 }

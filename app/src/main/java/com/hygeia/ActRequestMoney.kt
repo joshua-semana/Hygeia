@@ -3,6 +3,7 @@ package com.hygeia
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.inputmethod.InputMethodManager
 import com.hygeia.objects.UserManager
 import androidx.activity.OnBackPressedCallback
 import com.google.firebase.Timestamp
@@ -33,6 +34,9 @@ class ActRequestMoney : AppCompatActivity() {
         bind = ActRequestMoneyBinding.inflate(layoutInflater)
         loading = Utilities.dlgLoading(this@ActRequestMoney)
         setContentView(bind.root)
+
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
         with(bind) {
             btnContinue.setOnClickListener {
@@ -65,6 +69,14 @@ class ActRequestMoney : AppCompatActivity() {
                 } else {
                     Utilities.dlgStatus(this@ActRequestMoney, "no internet").show()
                 }
+            }
+
+            mainLayout.setOnClickListener {
+                getSystemService(InputMethodManager::class.java).apply {
+                    hideSoftInputFromWindow(currentFocus?.windowToken, 0)
+                }
+                mainLayout.requestFocus()
+                currentFocus?.clearFocus()
             }
         }
 
@@ -147,6 +159,20 @@ class ActRequestMoney : AppCompatActivity() {
             bind.txtPassword.text!!.isNotEmpty() -> false
             bind.txtConfirmPassword.text!!.isNotEmpty() -> false
             else -> true
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
         }
     }
 }

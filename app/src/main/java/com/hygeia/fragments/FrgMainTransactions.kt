@@ -1,6 +1,6 @@
 package com.hygeia.fragments
 
-import android.app.Dialog
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,14 +15,13 @@ import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.DataTransactions
 import com.hygeia.databinding.FrgMainTransactionsBinding
 import com.hygeia.objects.UserManager
-import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgTransactionDetails
+import com.hygeia.objects.Utilities.msg
 
 class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClickListener {
 
     private lateinit var bind: FrgMainTransactionsBinding
     private lateinit var listOfTransactions: ArrayList<DataTransactions>
-    private lateinit var loading: Dialog
 
     private var db = FirebaseFirestore.getInstance()
     private var transactionRef = db.collection("Transactions")
@@ -34,9 +33,6 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
         savedInstanceState: Bundle?,
     ): View {
         bind = FrgMainTransactionsBinding.inflate(inflater, container, false)
-        loading = Utilities.dlgLoading(requireContext())
-
-        listOfTransactions = arrayListOf()
 
         constraintViews()
 
@@ -51,25 +47,89 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
 
             @Suppress("DEPRECATION")
             chipGroup.setOnCheckedChangeListener { _, checkedId ->
-                when(checkedId) {
+                when (checkedId) {
                     R.id.chipSend -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Send Money"))
                     }
+
                     R.id.chipReceive -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Receive Money"))
                     }
+
                     R.id.chipPurchase -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Purchase"))
                     }
+
                     R.id.chipStars -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Purchase Using Star"))
                     }
+
                     R.id.chipRequest -> {
                         getListOfTransactions(query.whereEqualTo("Type", "Request"))
                     }
                 }
             }
-            return root
+        }
+        return bind.root
+    }
+
+    private fun constraintViews() {
+        when (UserManager.role) {
+            "super admin" -> {
+                bind.chipPurchase.visibility = View.GONE
+                bind.chipStars.visibility = View.GONE
+                bind.chipReceive.visibility = View.GONE
+                bind.chipPurchase.visibility = View.GONE
+                bind.chipRequest.visibility = View.VISIBLE
+            }
+
+            "admin" -> {
+                bind.chipRequest.visibility = View.GONE
+            }
+
+            "standard" -> {
+                bind.chipRequest.visibility = View.GONE
+            }
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun getListOfTransactions(query: Query) {
+        bind.coverTransaction.visibility = View.VISIBLE
+
+        bind.lblMessage.text = "Fetching your transaction information, please wait..."
+        bind.loading.visibility = View.VISIBLE
+        bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
+        listOfTransactions = arrayListOf()
+
+        query.orderBy("Date Created", Query.Direction.DESCENDING).get().apply {
+            addOnSuccessListener { data ->
+                listOfTransactions.clear()
+                if (!data.isEmpty) {
+                    bind.coverTransaction.visibility = View.GONE
+                    for (item in data.documents) {
+                        val items = DataTransactions(
+                            item.id,
+                            item.get("Amount"),
+                            item.get("Date Created") as Timestamp,
+                            item.get("Number").toString(),
+                            item.get("Reference Number").toString(),
+                            item.get("Type").toString()
+                        )
+                        listOfTransactions.add(items)
+                    }
+                    bind.listViewTransactionHistory.adapter = ArrAdpTransactions(
+                        listOfTransactions, this@FrgMainTransactions
+                    )
+                } else {
+                    bind.lblMessage.text =
+                        "You currently don't have any transactions.\nTry using our services and you can get rewarded."
+                    bind.loading.visibility = View.GONE
+                }
+            }
+            addOnFailureListener {
+                requireContext().msg("Please try again.")
+            }
         }
     }
 
@@ -78,67 +138,7 @@ class FrgMainTransactions : Fragment(), ArrAdpTransactions.OnTransactionItemClic
         bind.chipGroup.clearCheck()
     }
 
-    private fun constraintViews() {
-        with(bind) {
-            when (UserManager.role) {
-                "super admin" -> {
-                    chipPurchase.visibility = View.GONE
-                    chipStars.visibility = View.GONE
-                    chipReceive.visibility = View.GONE
-                    chipPurchase.visibility = View.GONE
-                    chipRequest.visibility = View.VISIBLE
-                }
-                "admin" -> {
-                    chipRequest.visibility = View.GONE
-                }
-                "standard" -> {
-                    chipRequest.visibility = View.GONE
-                }
-            }
-        }
-    }
-
-    private fun getListOfTransactions(query: Query) {
-        listOfTransactions.clear()
-        loading.show()
-        bind.listViewTransactionHistory.layoutManager = LinearLayoutManager(requireContext())
-
-        query.orderBy("Date Created", Query.Direction.DESCENDING).get().apply {
-            addOnSuccessListener { data ->
-                if (!data.isEmpty) {
-                    bind.coverTransaction.visibility = View.GONE
-
-                    for (item in data.documents) {
-                        val transactionId = item.id
-                        val transactionAmount = item.get("Amount")
-                        val transactionDate: Timestamp = item.get("Date Created") as Timestamp
-                        val transactionNumber = item.get("Number")
-                        val transactionReference = item.get("Reference Number")
-                        val transactionType = item.get("Type")
-
-                        val transaction = DataTransactions(
-                            transactionId,
-                            transactionAmount,
-                            transactionDate,
-                            transactionNumber.toString(),
-                            transactionReference.toString(),
-                            transactionType.toString()
-                        )
-
-                        listOfTransactions.add(transaction)
-                    }
-                    bind.listViewTransactionHistory.adapter =
-                        ArrAdpTransactions(listOfTransactions, this@FrgMainTransactions)
-                } else {
-                    bind.coverTransaction.visibility = View.VISIBLE
-                }
-                loading.dismiss()
-            }
-        }
-    }
-
     override fun onTransactionItemClick(ID: String) {
         dlgTransactionDetails(requireContext(), ID).show()
     }
-
 }

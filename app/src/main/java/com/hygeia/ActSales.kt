@@ -17,6 +17,7 @@ import java.util.Date
 import java.util.Locale
 import androidx.core.util.Pair
 import com.google.firebase.Timestamp
+import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.formatCredits
 
 class ActSales : AppCompatActivity() {
@@ -34,6 +35,9 @@ class ActSales : AppCompatActivity() {
         bind = ActSalesBinding.inflate(layoutInflater)
         loading = Utilities.dlgLoading(this@ActSales)
         setContentView(bind.root)
+
+        UserManager.isOnAnotherActivity = true
+        UserManager.setUserOnline()
 
         populateDescription()
         getTotalEarningsForDay(Timestamp(Calendar.getInstance().time))
@@ -104,7 +108,11 @@ class ActSales : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     private fun populateDescription() {
         bind.lblDescVendoID.text = "Vendo No. ${MachineManager.name}"
-        bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+        if (MachineManager.location == "Location Not Set") {
+            bind.lblDescVendoLocation.text = "Location Not Set"
+        } else {
+            bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
+        }
         bind.lblDate.text = "Date: Today"
     }
 
@@ -190,5 +198,19 @@ class ActSales : AppCompatActivity() {
             set(Calendar.MILLISECOND, 999)
         }
         return Timestamp(calendar.time)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        UserManager.setUserOnline()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        if (isFinishing) {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        } else {
+            if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
+        }
     }
 }
