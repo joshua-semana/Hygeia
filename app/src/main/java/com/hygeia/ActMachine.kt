@@ -1,11 +1,20 @@
 package com.hygeia
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
@@ -28,6 +37,7 @@ import com.hygeia.objects.Utilities.isInternetConnected
 import com.hygeia.objects.Utilities.msg
 import java.util.Date
 
+
 class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClickListener {
     private lateinit var bind: ActMachineBinding
     private lateinit var listOfProducts: ArrayList<DataProductAdmin>
@@ -36,6 +46,9 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
     private var historyRef = db.collection("History")
+
+    private val channelId = "recovery_channel_id"
+    private val notificationId = 1
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,6 +59,8 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
         UserManager.isOnAnotherActivity = true
         UserManager.setUserOnline()
+
+        createNotificationChannel()
 
         populateView()
         getListOfProducts()
@@ -188,6 +203,10 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                                 item.get("Status").toString().toInt()
                             )
                             listOfProducts.add(product)
+
+                            if (product.Quantity.toString().toInt() == 0){
+                                showRestockNotification(product.Name!!)
+                            }
                         }
                         bind.listViewMachineDetail.adapter = ArrAdpProductAdmin(
                             listOfProducts, this@ActMachine
@@ -204,6 +223,36 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         }
     }
 
+    private fun showRestockNotification(productName: String) {
+        val builder = NotificationCompat.Builder(this, channelId)
+            .setSmallIcon(R.drawable.logo_hygeia)
+            .setContentTitle("Product Restock Needed")
+            .setContentText("The product '$productName' in the vending machine has run out and needs to be restocked.")
+            .setAutoCancel(true)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+
+        val notificationManager = NotificationManagerCompat.from(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        notificationManager.notify(notificationId, builder.build())
+    }
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "Product Restock"
+            val descriptionText = "Channel for product restock notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+    }
     private fun deleteMachine() {
         machinesRef.document(machineId!!).update("isEnabled", false).addOnSuccessListener {
             val historyData = hashMapOf(
