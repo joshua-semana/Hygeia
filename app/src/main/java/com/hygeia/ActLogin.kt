@@ -84,8 +84,8 @@ class ActLogin : AppCompatActivity() {
 //                    .addOnFailureListener { error ->
 //                        dlgError(this@ActLogin, error.toString()).show()
 //                    }
-                txtEmailOrPhoneNumber.setText("09087788795")
-                txtPassword.setText("Admin1!?")
+                txtEmailOrPhoneNumber.setText("09654488691")
+                txtPassword.setText("Admin@153")
 
                 btnLogin.performClick()
             }
