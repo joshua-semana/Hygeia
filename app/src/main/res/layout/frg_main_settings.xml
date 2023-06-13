@@ -95,17 +95,19 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/neutral_300" />
+            android:background="@color/neutral_300"
+            android:visibility="gone" />
 
         <Button
             android:id="@+id/btnAboutUs"
             style="@style/Btn_Text_Icon"
-            app:icon="@drawable/ic_info"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:text="@string/btn_about_us"
+            android:visibility="gone"
+            app:icon="@drawable/ic_info"
             tools:ignore="VisualLintButtonSize" />
 
 
