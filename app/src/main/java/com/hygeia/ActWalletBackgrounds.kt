@@ -73,8 +73,8 @@ class ActWalletBackgrounds : AppCompatActivity() {
                 if (UserManager.walletBackground != currentCheckedCard?.contentDescription.toString()) {
                     if (isInternetConnected(this@ActWalletBackgrounds)) {
                         dlgConfirmation(this@ActWalletBackgrounds, "change wallpaper") {
-                            loading.show()
                             if (it == ButtonType.PRIMARY) {
+                                loading.show()
                                 userRef.document(UserManager.uid!!).update(
                                     "walletBackground",
                                     currentCheckedCard?.contentDescription.toString()

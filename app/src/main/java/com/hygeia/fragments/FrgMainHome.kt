@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActRequestMoney
 import com.hygeia.ActSendMoney
@@ -39,6 +40,8 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
     private var userRef = db.collection("User")
     private var transactionRef = db.collection("Transactions")
 
+    private var isVisible = false
+
     @SuppressLint("DiscouragedApi")
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,6 +56,15 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
             UserManager.walletBackground, "drawable", requireContext().packageName
         )
 
+        var prevBalance: Any? = null
+        userRef.document(UserManager.uid!!).addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (prevBalance != null && snapshot?.get("balance") != prevBalance && isVisible) {
+                populateMainHome()
+            }
+            prevBalance = snapshot?.get("balance")
+        }
+
         constraintViews()
         populateMainHome()
         getListOfTransactions()
@@ -60,6 +72,10 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
         with(bind) {
             lblGreetings.text = greeting
             cardWalletBackground.setBackgroundResource(resourceId)
+
+            cardWallet.setOnClickListener {
+                getListOfTransactions()
+            }
 
             lblGreetings.setOnClickListener {
                 dlgInformation(requireContext(), language).show()
@@ -93,7 +109,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
             btnPurchase.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
-                    if (UserManager.balance == 0.0) {
+                    if (UserManager.balance.toString().toDouble() == 0.00) {
                         dlgStatus(requireContext(), "0 funds").show()
                     } else {
                         UserManager.isOnAnotherActivity = true
@@ -108,7 +124,7 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
             btnPurchaseUsingPoints.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
-                    if (UserManager.points == 0.0) {
+                    if (UserManager.points.toString().toDouble() == 0.00) {
                         dlgStatus(requireContext(), "0 points").show()
                     } else {
                         UserManager.isOnAnotherActivity = true
@@ -128,6 +144,15 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                         onBackPressed()
                     }
                 })
+
+            var previousSnapshot: QuerySnapshot? = null
+            transactionRef.addSnapshotListener { snapshot, exception ->
+                if (exception != null) return@addSnapshotListener
+                if (previousSnapshot != null && snapshot!!.size() > previousSnapshot!!.size() && isVisible) {
+                    bind.cardWallet.performClick()
+                }
+                previousSnapshot = snapshot
+            }
         }
         return bind.root
     }
@@ -242,9 +267,20 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
 
     override fun onResume() {
         super.onResume()
+        isVisible = true
         constraintViews()
         populateMainHome()
         getListOfTransactions()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        isVisible = false
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isVisible = false
     }
 
     override fun onTransactionItemClick(ID: String) {

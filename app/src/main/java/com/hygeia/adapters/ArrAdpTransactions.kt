@@ -53,8 +53,12 @@ class ArrAdpTransactions(
                     "Receive Money" -> {
                         image.setImageResource(R.drawable.ic_money_receive)
                         type.text = "Receive money from"
+                        if (Number == "+639088651408") {
+                            number.text = "Hygeia Admin"
+                        } else {
+                            number.text = Number
+                        }
                         amount.text = "+ ${Utilities.formatCredits(Amount)}"
-                        number.text = Number
                     }
                     "Purchase" -> {
                         image.setImageResource(R.drawable.ic_buy)
