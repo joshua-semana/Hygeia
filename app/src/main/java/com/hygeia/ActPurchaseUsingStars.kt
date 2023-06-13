@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.hygeia.adapters.ArrAdpProductsUsingPoints
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
@@ -30,6 +32,10 @@ class ActPurchaseUsingStars : AppCompatActivity(),
     private lateinit var bind: ActPurchaseUsingStarsBinding
     private lateinit var listOfProducts: ArrayList<DataProducts>
     private lateinit var loading: Dialog
+    private lateinit var countDownTimer: CountDownTimer
+
+    private var isVisible = false
+    private var isPurchasing = false
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
@@ -47,6 +53,7 @@ class ActPurchaseUsingStars : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startCountdownTimer()
         bind = ActPurchaseUsingStarsBinding.inflate(layoutInflater)
         loading = Utilities.dlgLoading(this@ActPurchaseUsingStars)
         setContentView(bind.root)
@@ -57,6 +64,39 @@ class ActPurchaseUsingStars : AppCompatActivity(),
         bind.lblHygeiaStarsBalanceNumber.text = Utilities.formatPoints(UserManager.points)
         getListOfProducts()
         updatePurchaseBreakdown()
+
+        machinesRef.document(machineID!!).addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (snapshot?.getString("Status") == "Offline" && isVisible) {
+                this@ActPurchaseUsingStars.msg("Vendo is currently offline.")
+                finish()
+            }
+            if (snapshot?.get("isEnabled") == false && isVisible) {
+                this@ActPurchaseUsingStars.msg("Error: Vendo is not registered.")
+                finish()
+            }
+        }
+
+        var previousSnapshot: QuerySnapshot? = null
+        machinesRef.document(machineID).collection("Products").addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (previousSnapshot != null && snapshot!! != previousSnapshot && isVisible && !isPurchasing) {
+                this@ActPurchaseUsingStars.msg("Items are updating, please try again.")
+                finish()
+            }
+            previousSnapshot = snapshot
+        }
+
+        var prevLocation: String? = null
+        machinesRef.document(machineID).addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (prevLocation != null && snapshot?.getString("Location") != prevLocation && isVisible) {
+                this@ActPurchaseUsingStars.msg("Machine info is updating, please try again.")
+                finish()
+            }
+            prevLocation = snapshot?.getString("Location")
+        }
+
         with(bind) {
             btnPurchase.setOnClickListener {
                 if (Utilities.isInternetConnected(applicationContext)) {
@@ -68,7 +108,10 @@ class ActPurchaseUsingStars : AppCompatActivity(),
                     } else {
                         Utilities.dlgConfirmation(this@ActPurchaseUsingStars, "purchase") {
                             if (it == ButtonType.PRIMARY) {
+                                isPurchasing = true
                                 saveTransaction()
+                            } else {
+                                isPurchasing = false
                             }
                         }.show()
                     }
@@ -85,6 +128,17 @@ class ActPurchaseUsingStars : AppCompatActivity(),
                 }
             })
         }
+    }
+
+    private fun startCountdownTimer() {
+        countDownTimer = object : CountDownTimer(3 * 60 * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) { }
+            override fun onFinish() {
+                this@ActPurchaseUsingStars.msg("You've been kicked out from the machine.")
+                finish()
+            }
+        }
+        countDownTimer.start()
     }
 
     private fun onBackBtnPressed() {
@@ -270,6 +324,7 @@ class ActPurchaseUsingStars : AppCompatActivity(),
 
     override fun onStop() {
         super.onStop()
+        isVisible = false
         if (isFinishing) {
             machinesRef.document(MachineManager.machineId!!).update("User Connected", 0)
             if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
@@ -282,7 +337,18 @@ class ActPurchaseUsingStars : AppCompatActivity(),
 
     override fun onResume() {
         super.onResume()
+        isVisible = true
         machinesRef.document(MachineManager.machineId!!).update("User Connected", 1)
         UserManager.setUserOnline()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        isVisible = false
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer.cancel()
     }
 }

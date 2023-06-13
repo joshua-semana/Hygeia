@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
-import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -15,11 +14,10 @@ import com.hygeia.databinding.ActChangePasswordBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgConfirmation
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 class ActChangePassword : AppCompatActivity() {
     private lateinit var bind: ActChangePasswordBinding
@@ -49,7 +47,11 @@ class ActChangePassword : AppCompatActivity() {
                 if (isInternetConnected(this@ActChangePassword)) {
                     if (inputsAreNotEmpty()) {
                         if (inputsAreCorrect()) {
-                            updatePassword()
+                            dlgConfirmation(this@ActChangePassword, "change password") {
+                                if (it == ButtonType.PRIMARY) {
+                                    updatePassword()
+                                }
+                            }.show()
                         }
                     } else {
                         Utilities.showRequiredTextField(
@@ -85,7 +87,7 @@ class ActChangePassword : AppCompatActivity() {
         if (inputsAreEmpty()) {
             this.finish()
         } else {
-            Utilities.dlgConfirmation(this, "going back") {
+            dlgConfirmation(this, "going back") {
                 if (it == ButtonType.PRIMARY) {
                     this.finish()
                 }
@@ -122,6 +124,9 @@ class ActChangePassword : AppCompatActivity() {
             if (!txtPassword.text.toString().matches(Utilities.passwordPattern)) {
                 inputErrorCount++
                 txtLayoutPassword.error = getString(R.string.error_password_format)
+            } else if (txtPassword.text.toString() == UserManager.password) {
+                inputErrorCount++
+                txtLayoutPassword.error = getString(R.string.error_password_same)
             }
 
             if (txtConfirmPassword.text.toString() != txtPassword.text.toString()) {

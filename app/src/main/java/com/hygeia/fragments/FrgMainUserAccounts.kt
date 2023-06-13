@@ -142,11 +142,19 @@ class FrgMainUserAccounts : Fragment(), ArrAdpUsers.OnUserClickListener {
 
     override fun onUserUpdateStatusClick(userID: String, isEnabled: String) {
         if (isEnabled == "true") {
-            dlgConfirmation(requireContext(), "disable account") {
-                if (it == ButtonType.PRIMARY) {
-                    updateUserStatus(userID, false)
+
+            userRef.document(userID).get().addOnSuccessListener { data ->
+                val balance = data.get("balance") as Double
+                if (balance != 0.00) {
+                    dlgStatus(requireContext(), "unable to disable").show()
+                } else {
+                    dlgConfirmation(requireContext(), "disable account") {
+                        if (it == ButtonType.PRIMARY) {
+                            updateUserStatus(userID, false)
+                        }
+                    }.show()
                 }
-            }.show()
+            }
         } else if (isEnabled == "false") {
             updateUserStatus(userID, true)
         }

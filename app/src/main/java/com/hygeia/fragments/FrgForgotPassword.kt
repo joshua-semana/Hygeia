@@ -26,6 +26,7 @@ import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import androidx.navigation.fragment.findNavController
 
 class FrgForgotPassword : Fragment() {
     private lateinit var bind: FrgForgotPasswordBinding
@@ -94,10 +95,10 @@ class FrgForgotPassword : Fragment() {
                         processOTP()
                     } else {
                         loading.dismiss()
-                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
+                        txtLayoutEmailOrPhoneNumber.error =
+                            getString(R.string.error_email_registered)
                     }
-                }
-                else if (input.matches(phoneNumberPattern)) {
+                } else if (input.matches(phoneNumberPattern)) {
                     getPhoneNumber(input)
                     if (phoneNumber.isNotEmpty()) {
                         getUserPhoneNumber()
@@ -105,12 +106,13 @@ class FrgForgotPassword : Fragment() {
                         processOTP()
                     } else {
                         loading.dismiss()
-                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                        txtLayoutEmailOrPhoneNumber.error =
+                            getString(R.string.error_phone_registered)
                     }
-                }
-                else {
+                } else {
                     loading.dismiss()
-                    txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_password_format)
+                    txtLayoutEmailOrPhoneNumber.error =
+                        getString(R.string.error_email_password_format)
                 }
             }
         }
@@ -167,52 +169,8 @@ class FrgForgotPassword : Fragment() {
             putString("email", emailAddress)
             putString("password", password)
         }
-        val fragment = FrgResetPassword().apply { arguments = bundle }
-        parentFragmentManager.beginTransaction()
-            .setCustomAnimations(
-                androidx.appcompat.R.anim.abc_fade_in,
-                androidx.appcompat.R.anim.abc_fade_out
-            )
-            .replace(R.id.containerForgotPassword, fragment)
-            .addToBackStack(null)
-            .commit()
+        val navController = findNavController()
+        navController.navigate(R.id.action_frgForgotPassword_to_frgResetPassword, bundle)
     }
 
-//    private fun validateInput(email: String) {
-//        auth = Firebase.auth
-//        clearTextError()
-//        with(bind) {
-//            if (email.matches(emailPattern)) {
-//                loading.show()
-//                lifecycleScope.launch(Dispatchers.Main) {
-//                    getEmailAddress(email)
-//                    if (emailAddress.isNotEmpty()) {
-//                        getPhoneNumber()
-//                        getPassword()
-//                        OTPManager.requestOTP(requireActivity(), phoneNumber, auth)
-//                        if (OTPManager.getOTP() != null) {
-//                            OTPManager.verifyOtp(
-//                                requireActivity(),
-//                                requireContext(),
-//                                phoneNumber,
-//                                auth,
-//                                OTPManager.getOTP()
-//                            ) {
-//                                if (it == ButtonType.VERIFIED) {
-//                                    loading.dismiss()
-//                                    sendArguments()
-//                                }
-//                            }.show()
-//                        }
-//                        loading.dismiss()
-//                    } else {
-//                        loading.dismiss()
-//                        txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_registered)
-//                    }
-//                }
-//            } else {
-//                txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_email_format)
-//            }
-//        }
-//    }
 }

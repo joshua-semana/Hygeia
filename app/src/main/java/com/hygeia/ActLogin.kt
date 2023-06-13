@@ -11,10 +11,6 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.hygeia.objects.Utilities.clearTextFields
@@ -26,10 +22,13 @@ import com.hygeia.databinding.ActLoginBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.phoneNumberPattern
 import com.hygeia.objects.Utilities.clearTextError
+import com.hygeia.objects.Utilities.dlgError
+import com.hygeia.objects.Utilities.msg
 import com.hygeia.objects.Utilities.showRequiredTextField
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 class ActLogin : AppCompatActivity() {
     private lateinit var bind: ActLoginBinding
@@ -71,23 +70,6 @@ class ActLogin : AppCompatActivity() {
                 } else {
                     dlgStatus(this@ActLogin, "no internet").show()
                 }
-            }
-
-            btnAutoLogin.setOnClickListener {
-//                val database = FirebaseDatabase.getInstance()
-//                val reference = database.getReference("Slot 1")
-//                val data = mapOf<String, Any>("Quantity" to 10)
-//                reference.updateChildren(data)
-//                    .addOnSuccessListener {
-//                        dlgError(this@ActLogin, "Success").show()
-//                    }
-//                    .addOnFailureListener { error ->
-//                        dlgError(this@ActLogin, error.toString()).show()
-//                    }
-                txtEmailOrPhoneNumber.setText("09654488691")
-                txtPassword.setText("Admin@153")
-
-                btnLogin.performClick()
             }
 
             //ELEMENT BEHAVIOR
@@ -173,57 +155,149 @@ class ActLogin : AppCompatActivity() {
     }
 
     private fun attemptEmailLogin(email: String, password: String) {
-        auth.signInWithEmailAndPassword(email, password).apply {
-            addOnSuccessListener { id ->
-                val uid = id.user!!.uid
-                userRef.document(uid).get().addOnSuccessListener { data ->
-                    UserManager.setUserInformation(data)
-                    clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                    if (UserManager.isEnabled == true && UserManager.isOnline == false) {
-                        userRef.document(uid).update("isOnline", true)
-                            .addOnSuccessListener {
+        isUserLockedOut(email) { isLockedOut ->
+            if (isLockedOut) {
+                loading.dismiss()
+                this@ActLogin.msg("Account locked. Try again later.")
+            } else {
+                auth.signInWithEmailAndPassword(email, password).apply {
+                    addOnSuccessListener { id ->
+                        val uid = id.user!!.uid
+                        userRef.document(uid).get().addOnSuccessListener { data ->
+
+                            val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+                            failedAttemptsRef.document(emailAddress).delete()
+
+                            UserManager.setUserInformation(data)
+                            clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
+                            if (UserManager.isEnabled == true && UserManager.isOnline == false) {
+                                userRef.document(uid).update("isOnline", true)
+                                    .addOnSuccessListener {
+                                        loading.dismiss()
+                                        startActivity(Intent(applicationContext, ActMain::class.java))
+                                    }
+                            } else if (UserManager.isEnabled == false) {
                                 loading.dismiss()
-                                startActivity(Intent(applicationContext, ActMain::class.java))
+                                dlgStatus(this@ActLogin,"user disabled").show()
+                            } else if (UserManager.isOnline == true) {
+                                loading.dismiss()
+                                dlgStatus(this@ActLogin, "user already active").show()
                             }
-                    } else if (UserManager.isEnabled == false) {
+                        }
+                    }
+                    addOnFailureListener {
                         loading.dismiss()
-                        dlgStatus(this@ActLogin,"user disabled").show()
-                    } else if (UserManager.isOnline == true) {
-                        loading.dismiss()
-                        dlgStatus(this@ActLogin, "user already active").show()
+                        handleFailedLoginAttempt(email)
+                        isUserLockedOut(email) { isLockedOut ->
+                            if (isLockedOut) {
+                                loading.dismiss()
+                                this@ActLogin.msg("Account locked. Try again later.")
+                            } else {
+                                bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
+                            }
+                        }
                     }
                 }
-            }
-            addOnFailureListener {
-                loading.dismiss()
-                bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
             }
         }
     }
 
-    private suspend fun attemptPhoneNumberLogin(number: String, password: String) {
-        val query = userRef.whereEqualTo("phoneNumber", number).get().await()
-        if (query.documents[0].getString("password") == password) {
-            userRef.document(query.documents[0].id).get().addOnSuccessListener { data ->
-                UserManager.setUserInformation(data)
-                clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
-                if (UserManager.isEnabled == true && UserManager.isOnline == false) {
-                    userRef.document(query.documents[0].id).update("isOnline", true)
-                        .addOnSuccessListener {
-                            loading.dismiss()
-                            startActivity(Intent(applicationContext, ActMain::class.java))
+    private fun attemptPhoneNumberLogin(number: String, password: String) {
+        userRef.whereEqualTo("phoneNumber", number).get().addOnSuccessListener { data ->
+            for (item in data.documents) {
+                emailAddress = item.get("email").toString()
+            }
+            isUserLockedOut(emailAddress) { isLockedOut ->
+                if (isLockedOut) {
+                    loading.dismiss()
+                    this@ActLogin.msg("Account locked. Try again later.")
+                } else {
+                    lifecycleScope.launch(Dispatchers.IO) {
+                        try {
+                            val querySnapshot = userRef.whereEqualTo("phoneNumber", number).get().await()
+                            if (!querySnapshot.isEmpty) {
+                                val documentSnapshot = querySnapshot.documents[0]
+                                if (documentSnapshot.getString("password") == password) {
+
+                                    val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+                                    failedAttemptsRef.document(emailAddress).delete()
+
+                                    val document = userRef.document(documentSnapshot.id).get().await()
+                                    UserManager.setUserInformation(document)
+                                    withContext(Dispatchers.Main) {
+                                        clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
+                                        if (UserManager.isEnabled == true && UserManager.isOnline == false) {
+                                            userRef.document(documentSnapshot.id).update("isOnline", true).await()
+                                            startActivity(Intent(applicationContext, ActMain::class.java))
+                                            loading.dismiss()
+                                        } else if (UserManager.isEnabled == false) {
+                                            loading.dismiss()
+                                            dlgStatus(this@ActLogin, "user disabled").show()
+                                        } else if (UserManager.isOnline == true) {
+                                            loading.dismiss()
+                                            dlgStatus(this@ActLogin, "user already active").show()
+                                        }
+                                    }
+                                } else {
+                                    withContext(Dispatchers.Main) {
+                                        loading.dismiss()
+                                        handleFailedLoginAttempt(documentSnapshot.getString("email").toString())
+                                        isUserLockedOut(documentSnapshot.getString("email").toString()) { isLockedOut ->
+                                            if (isLockedOut) {
+                                                loading.dismiss()
+                                                this@ActLogin.msg("Account locked. Try again later.")
+                                            } else {
+                                                bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                withContext(Dispatchers.Main) {
+                                    loading.dismiss()
+                                    bind.txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            withContext(Dispatchers.Main) {
+                                loading.dismiss()
+                                dlgError(this@ActLogin, e.toString()).show()
+                            }
                         }
-                } else if (UserManager.isEnabled == false) {
-                    loading.dismiss()
-                    dlgStatus(this@ActLogin,"user disabled").show()
-                } else if (UserManager.isOnline == true) {
-                    loading.dismiss()
-                    dlgStatus(this@ActLogin, "user already active").show()
+                    }
                 }
             }
-        } else {
-            loading.dismiss()
-            bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
+        }
+    }
+
+    private fun handleFailedLoginAttempt(identifier: String) {
+        val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+        val userAttemptsRef = failedAttemptsRef.document(identifier)
+
+        userAttemptsRef.get().addOnSuccessListener { snapshot ->
+            val currentAttempts = snapshot.getLong("attempts") ?: 0
+            val updatedAttempts = currentAttempts + 1
+
+            userAttemptsRef.set(mapOf("attempts" to updatedAttempts))
+                .addOnSuccessListener {
+                    val maxAttempts = 5
+                    if (updatedAttempts >= maxAttempts) {
+                        val lockoutDurationMillis = 2 * 60 * 1000 // 2 minutes
+                        val unlockTimeMillis = System.currentTimeMillis() + lockoutDurationMillis
+                        userAttemptsRef.update("unlockTime", unlockTimeMillis)
+                    }
+                }
+        }
+    }
+
+    private fun isUserLockedOut(email: String, callback: (Boolean) -> Unit) {
+        val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+        val userAttemptsRef = failedAttemptsRef.document(email)
+
+        userAttemptsRef.get().addOnSuccessListener { snapshot ->
+            val unlockTime = snapshot.getLong("unlockTime")
+            val isLockedOut = unlockTime != null && unlockTime > System.currentTimeMillis()
+            callback(isLockedOut)
         }
     }
 }

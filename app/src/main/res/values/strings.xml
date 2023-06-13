@@ -88,7 +88,7 @@
     <string name="title_email">Email</string>
     <string name="title_email_phone_number">Email or Phone Number</string>
     <string name="title_password">Password</string>
-    <string name="title_password_old">Old password</string>
+    <string name="title_password_old">Current password</string>
     <string name="title_password_new">New password</string>
     <string name="title_password_confirm">Confirm password</string>
     <string name="title_otp">One-Time PIN</string>
@@ -118,8 +118,9 @@
     <string name="error_email_taken">This email is already in use.</string>
     <string name="error_password_incorrect">Incorrect password.</string>
     <string name="error_password_format">Password must be at least 8 characters long with combinations of uppercase letters, lowercase letters, numbers, and symbols.</string>
+    <string name="error_password_same">You cannot change your password with the same as your current password.</string>
     <string name="error_password_matched">Passwords do not match.</string>
-    <string name="error_old_password_matched">Old password do not match.</string>
+    <string name="error_old_password_matched">Current password do not match.</string>
     <string name="error_password_criteria">Password does not match the criteria.</string>
     <string name="error_birth_date">Sorry, you must be at least 11 years old to use this application.</string>
     <string name="error_phone_registered">The phone number you entered is not registered in our system.</string>
@@ -219,6 +220,7 @@
     <string name="dlg_body_machine_delete">You have successfully deleted this machine.</string>
     <string name="dlg_title_purchase_loading">Please wait</string>
     <string name="dlg_body_purchase_loading">We are currently processing your order…</string>
+    <string name="dlg_body_account_disable">This account cannot be disabled because it still has a balance.</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
@@ -237,6 +239,7 @@
     <string name="dlg_body_delete_blog">Are you sure you want to delete this post?</string>
     <string name="dlg_body_update_blog">Are you sure you want to update this post?</string>
     <string name="dlg_body_delete_machine">Are you sure you want to delete this vendo machine?</string>
+    <string name="dlg_body_change_password">Are you sure you want to change your password?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>

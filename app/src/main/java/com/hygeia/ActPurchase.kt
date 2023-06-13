@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Dialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +13,7 @@ import com.google.firebase.Timestamp
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 import com.hygeia.adapters.ArrAdpProducts
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataProducts
@@ -19,7 +21,6 @@ import com.hygeia.databinding.ActPurchaseBinding
 import com.hygeia.objects.MachineManager
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities.dlgConfirmation
-import com.hygeia.objects.Utilities.dlgError
 import com.hygeia.objects.Utilities.dlgLoading
 import com.hygeia.objects.Utilities.dlgReward
 import com.hygeia.objects.Utilities.dlgStatus
@@ -35,6 +36,10 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
     private lateinit var bind: ActPurchaseBinding
     private lateinit var listOfProducts: ArrayList<DataProducts>
     private lateinit var loading: Dialog
+    private lateinit var countDownTimer: CountDownTimer
+
+    private var isVisible = false
+    private var isPurchasing = false
 
     private var db = FirebaseFirestore.getInstance()
     private var machinesRef = db.collection("Machines")
@@ -55,6 +60,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        startCountdownTimer()
         bind = ActPurchaseBinding.inflate(layoutInflater)
         loading = dlgLoading(this@ActPurchase)
         setContentView(bind.root)
@@ -65,6 +71,39 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
         //POPULATE
         getListOfProducts()
         updatePurchaseBreakdown()
+
+        machinesRef.document(machineID!!).addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (snapshot?.getString("Status") == "Offline" && isVisible) {
+                this@ActPurchase.msg("Vendo is currently offline.")
+                finish()
+            }
+            if (snapshot?.get("isEnabled") == false && isVisible) {
+                this@ActPurchase.msg("Error: Vendo is not registered.")
+                finish()
+            }
+        }
+
+        var previousSnapshot: QuerySnapshot? = null
+        machinesRef.document(machineID).collection("Products").addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (previousSnapshot != null && snapshot!! != previousSnapshot && isVisible && !isPurchasing) {
+                this@ActPurchase.msg("Items are updating, please try again.")
+                finish()
+            }
+            previousSnapshot = snapshot
+        }
+
+        var prevLocation: String? = null
+        machinesRef.document(machineID).addSnapshotListener { snapshot, exception ->
+            if (exception != null) return@addSnapshotListener
+            if (prevLocation != null && snapshot?.getString("Location") != prevLocation && isVisible) {
+                this@ActPurchase.msg("Machine info is updating, please try again.")
+                finish()
+            }
+            prevLocation = snapshot?.getString("Location")
+        }
+
         with(bind) {
             btnPurchase.setOnClickListener {
                 if (isInternetConnected(applicationContext)) {
@@ -75,7 +114,10 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                     } else {
                         dlgConfirmation(this@ActPurchase, "purchase") {
                             if (it == ButtonType.PRIMARY) {
+                                isPurchasing = true
                                 saveTransaction()
+                            } else {
+                                isPurchasing = false
                             }
                         }.show()
                     }
@@ -92,6 +134,17 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
                 }
             })
         }
+    }
+
+    private fun startCountdownTimer() {
+        countDownTimer = object : CountDownTimer(3 * 60 * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) { }
+            override fun onFinish() {
+                this@ActPurchase.msg("You've been kicked out from the machine.")
+                finish()
+            }
+        }
+        countDownTimer.start()
     }
 
     private fun onBackBtnPressed() {
@@ -292,6 +345,7 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     override fun onStop() {
         super.onStop()
+        isVisible = false
         if (isFinishing) {
             machinesRef.document(MachineManager.machineId!!).update("User Connected", 0)
             if (UserManager.isOnAnotherActivity) UserManager.setUserOffline()
@@ -304,9 +358,18 @@ class ActPurchase : AppCompatActivity(), ArrAdpProducts.OnProductItemClickListen
 
     override fun onResume() {
         super.onResume()
+        isVisible = true
         machinesRef.document(MachineManager.machineId!!).update("User Connected", 1)
         UserManager.setUserOnline()
     }
 
+    override fun onPause() {
+        super.onPause()
+        isVisible = false
+    }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        countDownTimer.cancel()
+    }
 }

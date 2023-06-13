@@ -35,7 +35,7 @@ import java.util.Locale
 object Utilities {
     val emailPattern = "(?i)^[A-Z\\d._%+-]+@[A-Z\\d.-]+\\.[A-Z]{2,}\$".toRegex()
     val phoneNumberPattern = "^\\+639\\d{9}\$|^09\\d{9}\$".toRegex()
-    val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-]).{8,}\$".toRegex()
+    val passwordPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?\\d)(?=.*?[#?!@\$%^&*-_]).{8,}\$".toRegex()
 
     private val transactionRef = FirebaseFirestore.getInstance().collection("Transactions")
 
@@ -287,6 +287,13 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
+        if (content == "unable to disable") {
+            lblDlgInfoEmoji.text = Emoji.Edit
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_negative_3)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_account_disable)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
+        }
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
@@ -465,6 +472,11 @@ object Utilities {
             "delete machine" -> {
                 lblDlgConfirmBody.text = context.getString(R.string.dlg_body_delete_machine)
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, delete"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "change password" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_change_password)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, change"
                 btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
             }
             "log out" -> {
