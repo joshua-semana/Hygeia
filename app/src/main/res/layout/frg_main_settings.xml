@@ -68,12 +68,12 @@
         <Button
             android:id="@+id/btnChangePassword"
             style="@style/Btn_Text_Icon"
-            app:icon="@drawable/ic_key"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:text="@string/btn_change_password"
+            app:icon="@drawable/ic_password"
             tools:ignore="VisualLintButtonSize" />
 
         <View
@@ -84,12 +84,28 @@
         <Button
             android:id="@+id/btnChangeWalletBackground"
             style="@style/Btn_Text_Icon"
-            app:icon="@drawable/ic_picture"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             android:text="@string/btn_change_wallet_background"
+            app:icon="@drawable/ic_background"
+            tools:ignore="VisualLintButtonSize" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/neutral_300" />
+
+        <Button
+            android:id="@+id/btnMyQr"
+            style="@style/Btn_Text_Icon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:text="@string/btn_my_qr"
+            app:icon="@drawable/ic_qr"
             tools:ignore="VisualLintButtonSize" />
 
         <View
