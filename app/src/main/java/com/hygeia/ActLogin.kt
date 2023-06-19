@@ -54,8 +54,6 @@ class ActLogin : AppCompatActivity() {
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
-                txtEmailOrPhoneNumber.setText("joshuadrummer14@gmail.com")
-                txtPassword.setText("Admin1!?")
                 if (isInternetConnected(applicationContext)) {
                     if (inputsAreNotEmpty()) {
                         validateInputs(
