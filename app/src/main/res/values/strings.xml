@@ -35,6 +35,7 @@
     <string name="h1_blog">Hygeia Blog</string>
     <string name="h1_blog_add">New Blog Post</string>
     <string name="h1_blog_edit">Edit Blog Post</string>
+    <string name="h1_vouchers">Vouchers</string>
     <string name="h4_all_transactions">Transaction History</string>
     <string name="h6_personal_information">Personal Information</string>
     <string name="h6_account_information">Contact Information</string>
@@ -83,6 +84,7 @@
     <string name="desc_blog_edit">You can change the type of the blog by choosing from one of the options below:</string>
     <string name="desc_blog_visible">Blog post visibility</string>
     <string name="desc_vendo_history">Here are all the updates and changes made by the administrators for this vendo machine.</string>
+    <string name="desc_voucher">Here are all your redeemed voucher.</string>
 
     <!--FIELDS TITLE-->
     <string name="title_email">Email</string>
@@ -99,6 +101,7 @@
     <string name="title_birth_date">Birth date</string>
     <string name="title_phone_number">Phone number</string>
     <string name="title_amount">Amount</string>
+    <string name="title_voucher_code">Code</string>
     <string name="title_location">Location</string>
     <string name="title_product_name">Product Name</string>
     <string name="title_product_price">Product Price</string>
@@ -146,17 +149,20 @@
     <string name="btn_purchase">Purchase</string>
     <string name="btn_purchase_using_points">Use Stars</string>
     <string name="btn_request_money">Request</string>
+    <string name="btn_vouchers">Vouchers</string>
     <string name="btn_log_out">Log Out</string>
     <string name="btn_view_information">View my info</string>
     <string name="btn_change_password">Change password</string>
     <string name="btn_change_wallet_background">Change wallet background</string>
     <string name="btn_about_us">About Hygeia</string>
     <string name="btn_change">Change</string>
-    <string name="btn_my_qr">My QR</string>
+    <string name="btn_my_qr">Show my QR</string>
     <string name="btn_post">Post</string>
     <string name="btn_update_post">Update Post</string>
     <string name="btn_delete_post">Delete Post</string>
     <string name="btn_delete_machine">Delete Machine</string>
+    <string name="btn_create_voucher">Create Voucher</string>
+    <string name="btn_claim_voucher">Claim Voucher</string>
 
     <string name="btn_text_terms_and_conditions">By continuing, you accept our <a href="">terms and conditions</a>\nand <a href="">privacy policy</a>.</string>
 
@@ -221,6 +227,7 @@
     <string name="dlg_title_purchase_loading">Please wait</string>
     <string name="dlg_body_purchase_loading">We are currently processing your order…</string>
     <string name="dlg_body_account_disable">This account cannot be disabled because it still has a balance.</string>
+    <string name="dlg_body_claim_voucher">You have successfully claimed a voucher!</string>
 
     <string name="dlg_title_confirmation">Hold on a moment!</string>
     <string name="dlg_body_going_back">Are you sure you want to go back? Any unsaved changes will be lost.</string>
@@ -240,6 +247,8 @@
     <string name="dlg_body_update_blog">Are you sure you want to update this post?</string>
     <string name="dlg_body_delete_machine">Are you sure you want to delete this vendo machine?</string>
     <string name="dlg_body_change_password">Are you sure you want to change your password?</string>
+    <string name="dlg_body_create_voucher">Are you sure you want to create this voucher?</string>
+    <string name="dlg_body_cancel_voucher">Are you sure you want to cancel this voucher?</string>
 
     <string name="dlg_title_otp">Account verification</string>
     <string name="dlg_body_otp">As part of our verification process, please enter the One-Time Pin (OTP) that has been sent to your phone number.</string>
@@ -261,31 +270,12 @@
     <string name="chip_information">Information</string>
     <string name="chip_update">Update</string>
     <string name="chip_hidden">Hidden</string>
+    <string name="chip_created">Created</string>
+    <string name="chip_redeemed">Redeemed</string>
+    <string name="chip_cancelled">Cancelled</string>
 
     <!--NEW-->
-    <string name="hint_email_or_number">Enter email or phone number</string>
-    <string name="hint_phone_number">Enter phone number</string>
-    <string name="hint_amount">Enter amount</string>
-    <string name="hint_message">Enter message</string>
-    <string name="hint_message_optional">Enter message (Optional)</string>
-
-    <string name="btn_hint_send_money">Send</string>
-    <string name="btn_hint_request_money">Request</string>
-    <string name="btn_hint_add_money">Top Up</string>
-
     <string name="page_title_notifications">Notifications</string>
-
-    <string name="title_enter_required">Please enter the required details</string>
-    <string name="title_home_balance">Your balance</string>
-    <string name="title_home_transactions">Latest transactions</string>
-    <string name="title_send_money_balance">Available balance</string>
-    <string name="title_top_up_balance">Your current balance</string>
-    <string name="title_top_up_enter_amount">Please enter the amount you want to top up</string>
-
-    <string name="data_balance">₱1,000.00</string>
-    <string name="data_balance_unit">₱</string>
-    <string name="data_balance_amount">1,000</string>
-    <string name="data_balance_decimal">.00</string>
 
     <!--BOTTOM MENU NAVIGATION-->
     <string name="nav_home">Home</string>

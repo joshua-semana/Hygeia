@@ -140,9 +140,9 @@
         app:layout_constraintTop_toBottomOf="@+id/cardWallet" />
 
     <ImageButton
-        android:id="@+id/btnMyQr"
+        android:id="@+id/btnVoucher"
         style="@style/Circle_Lg_50"
-        android:src="@drawable/ic_qr"
+        android:src="@drawable/ic_vouchers"
         app:layout_constraintBottom_toBottomOf="@+id/btnSendMoney"
         app:layout_constraintEnd_toStartOf="@+id/btnSendMoney"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,7 +155,7 @@
         android:layout_marginTop="@dimen/elmnt_gap_xl"
         android:src="@drawable/ic_money_send"
         app:layout_constraintEnd_toStartOf="@+id/btnPurchase"
-        app:layout_constraintStart_toEndOf="@+id/btnMyQr"
+        app:layout_constraintStart_toEndOf="@+id/btnVoucher"
         app:layout_constraintTop_toBottomOf="@+id/lblActions"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
@@ -163,21 +163,20 @@
         android:id="@+id/btnPurchase"
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_buy"
-        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
+        app:layout_constraintBottom_toBottomOf="@+id/btnVoucher"
         app:layout_constraintEnd_toStartOf="@+id/btnPurchaseUsingPoints"
         app:layout_constraintStart_toEndOf="@+id/btnSendMoney"
-        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
+        app:layout_constraintTop_toTopOf="@+id/btnVoucher"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
-
 
     <ImageButton
         android:id="@+id/btnPurchaseUsingPoints"
         style="@style/Circle_Lg_50"
         android:src="@drawable/ic_use_points"
-        app:layout_constraintBottom_toBottomOf="@+id/btnMyQr"
+        app:layout_constraintBottom_toBottomOf="@+id/btnVoucher"
         app:layout_constraintEnd_toStartOf="@+id/btnRequestMoney"
         app:layout_constraintStart_toEndOf="@+id/btnPurchase"
-        app:layout_constraintTop_toTopOf="@+id/btnMyQr"
+        app:layout_constraintTop_toTopOf="@+id/btnVoucher"
         tools:ignore="ContentDescription,SpeakableTextPresentCheck,ImageContrastCheck" />
 
     <ImageButton
@@ -192,14 +191,14 @@
         tools:visibility="gone" />
 
     <TextView
-        android:id="@+id/lblMyQr"
+        android:id="@+id/lblVoucher"
         style="@style/Text_Regular"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/elmnt_gap_md"
-        android:text="@string/btn_my_qr"
-        app:layout_constraintEnd_toEndOf="@+id/btnMyQr"
-        app:layout_constraintStart_toStartOf="@+id/btnMyQr"
+        android:text="@string/btn_vouchers"
+        app:layout_constraintEnd_toEndOf="@+id/btnVoucher"
+        app:layout_constraintStart_toStartOf="@+id/btnVoucher"
         app:layout_constraintTop_toBottomOf="@+id/btnSendMoney"
         tools:ignore="TextContrastCheck" />
 

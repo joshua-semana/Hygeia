@@ -54,6 +54,8 @@ class ActLogin : AppCompatActivity() {
         with(bind) {
             //MAIN FUNCTIONS
             btnLogin.setOnClickListener {
+                txtEmailOrPhoneNumber.setText("joshuadrummer14@gmail.com")
+                txtPassword.setText("Admin1!?")
                 if (isInternetConnected(applicationContext)) {
                     if (inputsAreNotEmpty()) {
                         validateInputs(
@@ -165,7 +167,8 @@ class ActLogin : AppCompatActivity() {
                         val uid = id.user!!.uid
                         userRef.document(uid).get().addOnSuccessListener { data ->
 
-                            val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+                            val failedAttemptsRef =
+                                FirebaseFirestore.getInstance().collection("failedAttempts")
                             failedAttemptsRef.document(emailAddress).delete()
 
                             UserManager.setUserInformation(data)
@@ -174,11 +177,16 @@ class ActLogin : AppCompatActivity() {
                                 userRef.document(uid).update("isOnline", true)
                                     .addOnSuccessListener {
                                         loading.dismiss()
-                                        startActivity(Intent(applicationContext, ActMain::class.java))
+                                        startActivity(
+                                            Intent(
+                                                applicationContext,
+                                                ActMain::class.java
+                                            )
+                                        )
                                     }
                             } else if (UserManager.isEnabled == false) {
                                 loading.dismiss()
-                                dlgStatus(this@ActLogin,"user disabled").show()
+                                dlgStatus(this@ActLogin, "user disabled").show()
                             } else if (UserManager.isOnline == true) {
                                 loading.dismiss()
                                 dlgStatus(this@ActLogin, "user already active").show()
@@ -193,7 +201,8 @@ class ActLogin : AppCompatActivity() {
                                 loading.dismiss()
                                 this@ActLogin.msg("Account locked. Try again later.")
                             } else {
-                                bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
+                                bind.txtLayoutPassword.error =
+                                    getString(R.string.error_password_incorrect)
                             }
                         }
                     }
@@ -214,21 +223,33 @@ class ActLogin : AppCompatActivity() {
                 } else {
                     lifecycleScope.launch(Dispatchers.IO) {
                         try {
-                            val querySnapshot = userRef.whereEqualTo("phoneNumber", number).get().await()
+                            val querySnapshot =
+                                userRef.whereEqualTo("phoneNumber", number).get().await()
                             if (!querySnapshot.isEmpty) {
                                 val documentSnapshot = querySnapshot.documents[0]
                                 if (documentSnapshot.getString("password") == password) {
 
-                                    val failedAttemptsRef = FirebaseFirestore.getInstance().collection("failedAttempts")
+                                    val failedAttemptsRef =
+                                        FirebaseFirestore.getInstance().collection("failedAttempts")
                                     failedAttemptsRef.document(emailAddress).delete()
 
-                                    val document = userRef.document(documentSnapshot.id).get().await()
+                                    val document =
+                                        userRef.document(documentSnapshot.id).get().await()
                                     UserManager.setUserInformation(document)
                                     withContext(Dispatchers.Main) {
-                                        clearTextFields(bind.txtEmailOrPhoneNumber, bind.txtPassword)
+                                        clearTextFields(
+                                            bind.txtEmailOrPhoneNumber,
+                                            bind.txtPassword
+                                        )
                                         if (UserManager.isEnabled == true && UserManager.isOnline == false) {
-                                            userRef.document(documentSnapshot.id).update("isOnline", true).await()
-                                            startActivity(Intent(applicationContext, ActMain::class.java))
+                                            userRef.document(documentSnapshot.id)
+                                                .update("isOnline", true).await()
+                                            startActivity(
+                                                Intent(
+                                                    applicationContext,
+                                                    ActMain::class.java
+                                                )
+                                            )
                                             loading.dismiss()
                                         } else if (UserManager.isEnabled == false) {
                                             loading.dismiss()
@@ -241,13 +262,18 @@ class ActLogin : AppCompatActivity() {
                                 } else {
                                     withContext(Dispatchers.Main) {
                                         loading.dismiss()
-                                        handleFailedLoginAttempt(documentSnapshot.getString("email").toString())
-                                        isUserLockedOut(documentSnapshot.getString("email").toString()) { isLockedOut ->
+                                        handleFailedLoginAttempt(
+                                            documentSnapshot.getString("email").toString()
+                                        )
+                                        isUserLockedOut(
+                                            documentSnapshot.getString("email").toString()
+                                        ) { isLockedOut ->
                                             if (isLockedOut) {
                                                 loading.dismiss()
                                                 this@ActLogin.msg("Account locked. Try again later.")
                                             } else {
-                                                bind.txtLayoutPassword.error = getString(R.string.error_password_incorrect)
+                                                bind.txtLayoutPassword.error =
+                                                    getString(R.string.error_password_incorrect)
                                             }
                                         }
                                     }
@@ -255,7 +281,8 @@ class ActLogin : AppCompatActivity() {
                             } else {
                                 withContext(Dispatchers.Main) {
                                     loading.dismiss()
-                                    bind.txtLayoutEmailOrPhoneNumber.error = getString(R.string.error_phone_registered)
+                                    bind.txtLayoutEmailOrPhoneNumber.error =
+                                        getString(R.string.error_phone_registered)
                                 }
                             }
                         } catch (e: Exception) {

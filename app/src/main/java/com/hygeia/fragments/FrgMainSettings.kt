@@ -15,6 +15,7 @@ import com.hygeia.databinding.FrgMainSettingsBinding
 import com.hygeia.objects.UserManager
 import com.hygeia.objects.Utilities
 import com.hygeia.objects.Utilities.dlgInformation
+import com.hygeia.objects.Utilities.dlgMyQrCode
 import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
 
@@ -45,6 +46,10 @@ class FrgMainSettings : Fragment() {
                 } else {
                     dlgStatus(requireContext(), "no internet").show()
                 }
+            }
+
+            btnMyQr.setOnClickListener {
+                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
             }
 
             btnAboutUs.setOnClickListener {

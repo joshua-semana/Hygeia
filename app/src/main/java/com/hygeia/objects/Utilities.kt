@@ -54,8 +54,8 @@ object Utilities {
     )
     fun formatCredits(balance: Any?): String {
         return when (balance) {
-            0 -> "₱0.00"
-            else -> DecimalFormat("₱#,##0.00").format(balance)
+            0 -> "H 0.00"
+            else -> DecimalFormat("H #,##0.00").format(balance)
         }
     }
 
@@ -294,6 +294,14 @@ object Utilities {
             btnDlgInfoPrimary.text = context.getString(R.string.btn_okay)
         }
 
+        if (content == "claim voucher") {
+            lblDlgInfoEmoji.text = Emoji.Success
+            lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
+            lblDlgInfoBody.text = context.getString(R.string.dlg_body_claim_voucher)
+            btnDlgInfoPrimary.text = context.getString(R.string.btn_great)
+        }
+
+
         btnDlgInfoPrimary.setOnClickListener {
             dialog.dismiss()
         }
@@ -354,7 +362,7 @@ object Utilities {
         val lblDlgInfoBody = dialog.findViewById<TextView>(R.id.lblDlgInfoBody)
         val btnDlgInfoPrimary = dialog.findViewById<Button>(R.id.btnDlgInfoPrimary)
 
-        val message = "You have been rewarded with ${number.toDouble()} Hygeia Stars! Earn more by using our service.\n\nYour vendo buddy, hygeia, is always at your service!"
+        val message = "You have been rewarded with $number Hygeia Stars! Earn more by using our service.\n\nYour vendo buddy, hygeia, is always at your service!"
         lblDlgInfoEmoji.text = Emoji.Star
         lblDlgInfoTitle.text = context.getString(R.string.dlg_title_positive_1)
         lblDlgInfoBody.text = message
@@ -479,6 +487,16 @@ object Utilities {
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, change"
                 btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
             }
+            "create voucher" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_create_voucher)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, create"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
+            "cancel voucher" -> {
+                lblDlgConfirmBody.text = context.getString(R.string.dlg_body_cancel_voucher)
+                btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, cancel"
+                btnDlgConfirmPrimary.setBackgroundColor(context.getColor(R.color.accent_500))
+            }
             "log out" -> {
                 lblDlgConfirmBody.text = context.getString(R.string.dlg_body_log_out)
                 btnDlgConfirmPrimary.text = "${btnDlgConfirmPrimary.text}, log out"
@@ -599,7 +617,7 @@ object Utilities {
         return dialog
     }
 
-    fun generateQRCode(data: String): Bitmap? {
+    private fun generateQRCode(data: String): Bitmap? {
         val hints: MutableMap<EncodeHintType, Any> = EnumMap(EncodeHintType::class.java)
         hints[EncodeHintType.ERROR_CORRECTION] = ErrorCorrectionLevel.H
         hints[EncodeHintType.MARGIN] = 1 // Adjust the margin as needed

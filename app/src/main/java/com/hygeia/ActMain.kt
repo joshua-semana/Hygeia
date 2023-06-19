@@ -24,7 +24,7 @@ class ActMain : AppCompatActivity() {
     private var machineRef = db.collection("Machines")
 
     private val channelId = "recovery_channel_id"
-    private val notificationId = 1
+    private var notificationId = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,22 +32,29 @@ class ActMain : AppCompatActivity() {
         setContentView(bind.root)
 
         createNotificationChannel()
-
-        machineRef.document("H0aATlx5WgNrn6C0YmgT").collection("Products")
-            .addSnapshotListener { snapshot, exception ->
-                if (exception != null) return@addSnapshotListener
-
-                for (document in snapshot!!.documents) {
-                    val data = document.get("Quantity")
-                    if (data.toString() == "0") {
-                        val name = document.get("Name").toString()
+        
+        machineRef.whereEqualTo("isEnabled", true).addSnapshotListener { value, _ ->
+            for (machine in value!!.documents) {
+                val productsRef = machine.reference.collection("Products").whereLessThan("Quantity", 5)
+                productsRef.addSnapshotListener { childValue, _ ->
+                    for (product in childValue!!.documents) {
+                        val machineName = machine.get("Name").toString()
+                        val machineLocation = machine.get("Location").toString()
+                        val productName = product.get("Name").toString()
+                        val productQuantity = product.get("Quantity").toString()
+                        val alertMessage = "The stock of item \"$productName\" in Vendo No. $machineName located at $machineLocation is running low. The current stock level is $productQuantity. Please take immediate action to restock this item to ensure availability for customers."
                         if (UserManager.role == "admin") {
-                            showRestockNotification(name)
+                            notificationId++
+                            showRestockNotification(alertMessage)
                         }
                     }
                 }
             }
+        }
 
+        machineRef.whereEqualTo("isEnabled", true).get().addOnSuccessListener { machines ->
+
+        }
 
         with(bind) {
 
@@ -74,18 +81,21 @@ class ActMain : AppCompatActivity() {
         }
     }
 
-    private fun showRestockNotification(productName: String) {
+    private fun showRestockNotification(message: String) {
+        val expandedNotificationStyle = NotificationCompat.BigTextStyle()
+            .bigText(message)
+
         val builder = NotificationCompat.Builder(this, channelId)
             .setSmallIcon(R.drawable.logo_hygeia)
-            .setContentTitle("Product Restock Needed")
-            .setContentText("The $productName in Vendo No. 2023-0003 needs to be restocked.")
+            .setContentTitle("Inventory Alert")
+            .setContentText(message)
+            .setStyle(expandedNotificationStyle)
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
         val notificationManager = NotificationManagerCompat.from(this@ActMain)
         if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.POST_NOTIFICATIONS
+                this, Manifest.permission.POST_NOTIFICATIONS
             ) != PackageManager.PERMISSION_GRANTED
         ) {
             return

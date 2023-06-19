@@ -16,6 +16,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.hygeia.ActQrCodeScanner
 import com.hygeia.ActRequestMoney
 import com.hygeia.ActSendMoney
+import com.hygeia.ActVouchers
 import com.hygeia.adapters.ArrAdpTransactions
 import com.hygeia.classes.ButtonType
 import com.hygeia.classes.DataTransactions
@@ -85,9 +86,18 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 dlgInformation(requireContext(), "introduce stars").show()
             }
 
-            btnMyQr.setOnClickListener {
-                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
+            btnVoucher.setOnClickListener {
+                if (isInternetConnected(requireContext())) {
+                    UserManager.isOnAnotherActivity = true
+                    startActivity(Intent(requireContext(), ActVouchers::class.java))
+                } else {
+                    dlgStatus(requireContext(), "no internet").show()
+                }
             }
+
+//            btnMyQr.setOnClickListener {
+//                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
+//            }
 
             btnSendMoney.setOnClickListener {
                 if (isInternetConnected(requireContext())) {
@@ -164,8 +174,8 @@ class FrgMainHome : Fragment(), ArrAdpTransactions.OnTransactionItemClickListene
                 bind.lblPurchaseUsingPoints.visibility = View.GONE
                 bind.btnPurchase.visibility = View.GONE
                 bind.lblPurchase.visibility = View.GONE
-                bind.btnMyQr.visibility = View.GONE
-                bind.lblMyQr.visibility = View.GONE
+                bind.btnVoucher.visibility = View.GONE
+                bind.lblVoucher.visibility = View.GONE
                 bind.btnRequestMoney.visibility = View.VISIBLE
                 bind.lblRequestMoney.visibility = View.VISIBLE
                 bind.cardPoints.visibility = View.GONE
