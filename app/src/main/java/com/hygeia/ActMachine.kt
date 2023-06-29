@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.hygeia.adapters.ArrAdpProductAdmin
 import com.hygeia.classes.ButtonType
@@ -37,6 +41,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
     private var machinesRef = db.collection("Machines")
     private var historyRef = db.collection("History")
 
+    private var isAlarmed = "On"
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +55,19 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
 
         populateView()
         getListOfProducts()
+
+        val alarmRef = FirebaseDatabase.getInstance().getReference("isAlarmed")
+        val alarmRefEventListener = object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                when (dataSnapshot.value.toString()) {
+                    "true" -> isAlarmed = "On"
+                    "false" -> isAlarmed = "Off"
+                }
+                bind.switchVendoAlarm.isChecked = dataSnapshot.value.toString().toBoolean()
+            }
+            override fun onCancelled(databaseError: DatabaseError) { }
+        }
+        alarmRef.addValueEventListener(alarmRefEventListener)
 
         with(bind) {
             bind.switchVendoStatus.isChecked = MachineManager.status == "Online"
@@ -87,7 +105,6 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
             switchVendoStatus.setOnCheckedChangeListener { _, isChecked ->
                 if (isInternetConnected(this@ActMachine)) {
                     if (isChecked) {
-                        dlgloading.show()
                         machinesRef.document(machineId!!.trim()).update("Status", "Online")
                             .addOnSuccessListener {
                                 val historyData = hashMapOf(
@@ -102,7 +119,6 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                                 historyRef.document().set(historyData).addOnSuccessListener {
                                     MachineManager.status = "Online"
                                     populateView()
-                                    dlgloading.dismiss()
                                 }
                             }
                     } else {
@@ -120,13 +136,59 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
                                 historyRef.document().set(historyData).addOnSuccessListener {
                                     MachineManager.status = "Offline"
                                     populateView()
-                                    dlgloading.dismiss()
                                 }
                             }
                     }
                 } else {
                     dlgStatus(this@ActMachine, "no internet").show()
                     switchVendoStatus.isChecked = !switchVendoStatus.isChecked
+                }
+            }
+
+            switchVendoAlarm.setOnCheckedChangeListener { _, isChecked ->
+                if(isInternetConnected(this@ActMachine)) {
+                    if(isChecked)
+                    {
+                        val database = FirebaseDatabase.getInstance()
+                        val reference = database.getReference("isAlarmed")
+                        reference.setValue(true).addOnSuccessListener {
+                            val historyData = hashMapOf(
+                                "Content" to "Updated machine alarm status, from On to Off.",
+                                "Date Created" to Timestamp(Date()),
+                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                "Machine ID" to machineId,
+                                "Machine Name" to name,
+                                "Type" to "Update",
+                                "User Reference" to UserManager.uid
+                            )
+                            historyRef.document().set(historyData).addOnSuccessListener {
+                                isAlarmed = "On"
+                                populateView()
+                            }
+                        }
+                    } else {
+                        val database = FirebaseDatabase.getInstance()
+                        val reference = database.getReference("isAlarmed")
+                        reference.setValue(false).addOnSuccessListener {
+                            val historyData = hashMapOf(
+                                "Content" to "Updated machine alarm status, from Off to On.",
+                                "Date Created" to Timestamp(Date()),
+                                "Full Name" to "${UserManager.firstname} ${UserManager.lastname}",
+                                "Machine ID" to machineId,
+                                "Machine Name" to name,
+                                "Type" to "Update",
+                                "User Reference" to UserManager.uid
+                            )
+                            historyRef.document().set(historyData).addOnSuccessListener {
+                                isAlarmed = "Off"
+                                populateView()
+                            }
+                        }
+                    }
+
+                } else {
+                    dlgStatus(this@ActMachine, "no internet").show()
+                    switchVendoAlarm.isChecked = !switchVendoAlarm.isChecked
                 }
             }
 
@@ -161,6 +223,7 @@ class ActMachine : AppCompatActivity(), ArrAdpProductAdmin.OnProductEditItemClic
         } else {
             bind.lblDescVendoLocation.text = "Located at ${MachineManager.location}"
         }
+        bind.lblAlarmStatus.text = "Alarm is currently: \"$isAlarmed\""
         bind.lblVendoStatus.text = "Vendo status is currently: \"${MachineManager.status}\""
     }
 
