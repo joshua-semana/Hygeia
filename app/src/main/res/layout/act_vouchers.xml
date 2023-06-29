@@ -170,7 +170,7 @@
         android:layout_height="1dp"
         android:layout_marginStart="@dimen/mx"
         android:layout_marginEnd="@dimen/mx"
-        android:layout_marginBottom="200dp"
+        android:layout_marginBottom="170dp"
         android:background="@color/neutral_300"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

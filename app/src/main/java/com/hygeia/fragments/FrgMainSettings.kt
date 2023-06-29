@@ -20,62 +20,62 @@ import com.hygeia.objects.Utilities.dlgStatus
 import com.hygeia.objects.Utilities.isInternetConnected
 
 class FrgMainSettings : Fragment() {
-    private lateinit var bind: FrgMainSettingsBinding
-    private var db = FirebaseFirestore.getInstance()
-    private var userRef = db.collection("User")
+private lateinit var bind: FrgMainSettingsBinding
+private var db = FirebaseFirestore.getInstance()
+private var userRef = db.collection("User")
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        bind = FrgMainSettingsBinding.inflate(inflater, container, false)
+override fun onCreateView(
+inflater: LayoutInflater, container: ViewGroup?,
+savedInstanceState: Bundle?,
+): View {
+bind = FrgMainSettingsBinding.inflate(inflater, container, false)
 
-        val fullname = "${UserManager.firstname} ${UserManager.lastname}"
-        val phonenumber = UserManager.phoneNumber
+val fullname = "${UserManager.firstname} ${UserManager.lastname}"
+val phonenumber = UserManager.phoneNumber
 
-        with(bind) {
-            lblUserFullName.text = fullname
-            lblPhoneNumber.text = phonenumber
+with(bind) {
+lblUserFullName.text = fullname
+lblPhoneNumber.text = phonenumber
 
-            btnViewMyInfo.setOnClickListener {
-                startActivity(Intent(requireContext(), ActUserInfo::class.java))
-            }
-            btnChangePassword.setOnClickListener {
-                if (isInternetConnected(requireContext())) {
-                    startActivity(Intent(requireContext(), ActChangePassword::class.java))
-                } else {
-                    dlgStatus(requireContext(), "no internet").show()
-                }
-            }
+btnViewMyInfo.setOnClickListener {
+startActivity(Intent(requireContext(), ActUserInfo::class.java))
+}
+btnChangePassword.setOnClickListener {
+if (isInternetConnected(requireContext())) {
+startActivity(Intent(requireContext(), ActChangePassword::class.java))
+} else {
+dlgStatus(requireContext(), "no internet").show()
+}
+}
 
-            btnMyQr.setOnClickListener {
-                dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
-            }
+btnMyQr.setOnClickListener {
+dlgMyQrCode(requireContext(), UserManager.phoneNumber.toString()).show()
+}
 
-            btnAboutUs.setOnClickListener {
-                dlgInformation(requireContext(), "about us").show()
-            }
+btnAboutUs.setOnClickListener {
+dlgInformation(requireContext(), "about us").show()
+}
 
-            btnChangeWalletBackground.setOnClickListener {
-                startActivity(Intent(requireContext(), ActWalletBackgrounds::class.java))
-            }
+btnChangeWalletBackground.setOnClickListener {
+startActivity(Intent(requireContext(), ActWalletBackgrounds::class.java))
+}
 
-            btnLogOut.setOnClickListener {
-                if (isInternetConnected(requireContext())) {
-                    Utilities.dlgConfirmation(requireContext(), "log out") {
-                        if (it == ButtonType.PRIMARY) {
-                            userRef.document(UserManager.uid!!).update("isOnline", false)
-                                .addOnSuccessListener {
-                                    requireActivity().finish()
-                                }
-                        }
-                    }.show()
-                } else {
-                    dlgStatus(requireContext(), "no internet").show()
-                }
-            }
-            return root
-        }
-    }
+btnLogOut.setOnClickListener {
+if (isInternetConnected(requireContext())) {
+Utilities.dlgConfirmation(requireContext(), "log out") {
+if (it == ButtonType.PRIMARY) {
+userRef.document(UserManager.uid!!).update("isOnline", false)
+.addOnSuccessListener {
+requireActivity().finish()
+}
+}
+}.show()
+} else {
+dlgStatus(requireContext(), "no internet").show()
+}
+}
+return root
+}
+}
 
 }

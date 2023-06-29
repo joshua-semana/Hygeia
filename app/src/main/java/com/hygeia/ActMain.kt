@@ -52,10 +52,6 @@ class ActMain : AppCompatActivity() {
             }
         }
 
-        machineRef.whereEqualTo("isEnabled", true).get().addOnSuccessListener { machines ->
-
-        }
-
         with(bind) {
 
             val navHostFragment = supportFragmentManager.findFragmentById(R.id.containerMain) as NavHostFragment

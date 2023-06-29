@@ -74,7 +74,7 @@ class ActVouchers : AppCompatActivity(), ArrAdpVoucher.OnItemClickListener {
                 if (bind.txtAmount.text!!.isNotEmpty()) {
                     val amount = bind.txtAmount.text.toString().toDoubleOrNull()
                     if (amount != null && amount != 0.0 && amount > 0.99) {
-                        if (UserManager.balance.toString().toDouble() > amount) {
+                        if (UserManager.balance.toString().toDouble() >= amount) {
                             dlgConfirmation(this@ActVouchers, "create voucher") {
                                 if (it == ButtonType.PRIMARY) {
                                     createVoucher()
